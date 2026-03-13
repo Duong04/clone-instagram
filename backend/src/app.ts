@@ -1,5 +1,7 @@
 import express from 'express'
 import routes from '~/routes/index.route'
+import errorHandler from '~/middlewares/error.middleware'
+
 const app = express()
 
 app.use(express.json())
@@ -9,5 +11,7 @@ app.get('/api', (req, res) => {
     message: 'API is running 🚀'
   })
 })
+
+app.use(errorHandler)
 
 export default app
