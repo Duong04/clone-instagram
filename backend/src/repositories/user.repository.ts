@@ -1,16 +1,16 @@
-import UserModel from '~/models/user.model'
+import { prisma } from '~/config/database'
 
 class UserRepository {
   async findByEmail(email: string) {
-    return UserModel.findOne({ email })
+    return prisma.user.findUnique({ where: { email } })
   }
 
-  async create(data: object) {
-    return UserModel.create(data)
+  async create(data: { username: string; name: string; email: string; password: string }) {
+    return prisma.user.create({ data })
   }
 
   async findById(id: string) {
-    return UserModel.findById(id)
+    return prisma.user.findUnique({ where: { id } })
   }
 }
 

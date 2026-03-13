@@ -1,7 +1,10 @@
-export interface User {
+import type { User } from '~/generated/prisma/client.js'
+
+export type RegisterInput = {
+  username: string
   name: string
   email: string
   password: string
-  createdAt?: Date
-  updatedAt?: Date
 }
+
+export type { User }

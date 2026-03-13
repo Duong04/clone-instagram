@@ -4,7 +4,7 @@ const app = express()
 
 app.use(express.json())
 app.use('/api/v1', routes)
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.json({
     message: 'API is running 🚀'
   })

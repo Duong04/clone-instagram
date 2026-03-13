@@ -1,11 +1,11 @@
 import userRepository from '~/repositories/user.repository'
 import bcrypt from 'bcryptjs'
 import { generateAccessToken, generateRefreshToken } from '~/utils/jwt'
-import { User } from '~/types/user.type'
+import { RegisterInput } from '~/types/user.type'
 import { redis } from '~/config/redis'
 
 class AuthService {
-  async register(data: User) {
+  async register(data: RegisterInput) {
     const userExist = await userRepository.findByEmail(data.email)
 
     if (userExist) {
@@ -20,7 +20,7 @@ class AuthService {
     })
 
     return {
-      id: user._id,
+      id: user.id,
       email: user.email,
       name: user.name
     }
@@ -39,13 +39,12 @@ class AuthService {
       throw new Error('Invalid credentials')
     }
 
-    const accessToken = generateAccessToken(user._id.toString())
-
-    const refreshToken = await generateRefreshToken(user._id.toString())
+    const accessToken = generateAccessToken(user.id)
+    const refreshToken = await generateRefreshToken(user.id)
 
     return {
       user: {
-        id: user._id,
+        id: user.id,
         email: user.email,
         name: user.name
       },
@@ -62,11 +61,11 @@ class AuthService {
     }
 
     return {
-      id: user._id,
+      id: user.id,
       email: user.email,
       name: user.name,
-      created_at: user.createdAt,
-      updated_at: user.updatedAt
+      created_at: user.created_at,
+      updated_at: user.updated_at
     }
   }
 
@@ -77,7 +76,6 @@ class AuthService {
       throw new Error('Invalid refresh token')
     }
 
-    // rotation
     await redis.del(`refresh:${refreshToken}`)
 
     const user = await userRepository.findById(userId)
@@ -91,7 +89,7 @@ class AuthService {
 
     return {
       user: {
-        id: user._id,
+        id: user.id,
         email: user.email,
         name: user.name
       },
@@ -102,10 +100,7 @@ class AuthService {
 
   async logout(refreshToken: string) {
     await redis.del(`refresh:${refreshToken}`)
-
-    return {
-      message: 'Logged out'
-    }
+    return { message: 'Logged out' }
   }
 }
 

@@ -1,0 +1,436 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id         String   @id @default(uuid())
+  username   String   @unique
+  email      String   @unique
+  password   String
+  name       String
+  bio        String?
+  avatar_id  String?
+  website    String?
+  is_private Boolean  @default(false)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  avatar             Media?              @relation("UserAvatar", fields: [avatar_id], references: [id])
+  settings           UserSetting?
+  sessions           UserSession[]
+  device_tokens      DeviceToken[]
+  posts              Post[]
+  post_views         PostView[]
+  post_saves         PostSave[]
+  post_likes         PostLike[]
+  post_mentions      PostMention[]
+  comments           Comment[]
+  comment_likes      CommentLike[]
+  stories            Story[]
+  story_views        StoryView[]
+  reels              Reel[]
+  reel_likes         ReelLike[]
+  reel_views         ReelView[]
+  followers          Follow[]            @relation("Following")
+  following          Follow[]            @relation("Follower")
+  conversations      ConversationUser[]
+  messages           Message[]
+  notifications      Notification[]      @relation("NotificationUser")
+  actor_notifications Notification[]     @relation("NotificationActor")
+  feeds              Feed[]
+  search_history     SearchHistory[]
+  blocked_by         UserBlock[]         @relation("BlockedUser")
+  blocking           UserBlock[]         @relation("BlockingUser")
+  reports            Report[]
+
+  @@map("users")
+}
+
+model UserSetting {
+  id               String  @id @default(uuid())
+  user_id          String  @unique
+  allow_tag        Boolean @default(true)
+  allow_message    Boolean @default(true)
+  allow_comment    Boolean @default(true)
+  show_activity    Boolean @default(true)
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("user_settings")
+}
+
+model UserSession {
+  id          String   @id @default(uuid())
+  user_id     String
+  device      String?
+  ip_address  String?
+  last_active DateTime @default(now())
+  created_at  DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("user_sessions")
+}
+
+model DeviceToken {
+  id       String  @id @default(uuid())
+  user_id  String
+  token    String
+  platform String
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("device_tokens")
+}
+
+model Media {
+  id         String   @id @default(uuid())
+  url        String
+  media_type String
+  width      Int?
+  height     Int?
+  duration   Int?
+  created_at DateTime @default(now())
+
+  user_avatars  User[]        @relation("UserAvatar")
+  post_media    PostMedia[]
+  story         Story[]
+  reel          Reel[]
+  messages      Message[]
+
+  @@map("media")
+}
+
+model Post {
+  id                String   @id @default(uuid())
+  user_id           String
+  caption           String?
+  location          String?
+  comments_disabled Boolean  @default(false)
+  like_count        Int      @default(0)
+  comment_count     Int      @default(0)
+  created_at        DateTime @default(now())
+
+  user      User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  media     PostMedia[]
+  views     PostView[]
+  saves     PostSave[]
+  likes     PostLike[]
+  comments  Comment[]
+  hashtags  PostHashtag[]
+  mentions  PostMention[]
+  feeds     Feed[]
+
+  @@map("posts")
+}
+
+model PostMedia {
+  id       String @id @default(uuid())
+  post_id  String
+  media_id String
+  position Int    @default(0)
+
+  post  Post  @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  media Media @relation(fields: [media_id], references: [id])
+
+  @@map("post_media")
+}
+
+model PostView {
+  id        String   @id @default(uuid())
+  post_id   String
+  user_id   String
+  viewed_at DateTime @default(now())
+
+  post Post @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([post_id, user_id])
+  @@map("post_views")
+}
+
+model PostSave {
+  id         String   @id @default(uuid())
+  post_id    String
+  user_id    String
+  created_at DateTime @default(now())
+
+  post Post @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([post_id, user_id])
+  @@map("post_saves")
+}
+
+model PostLike {
+  id      String @id @default(uuid())
+  post_id String
+  user_id String
+
+  post Post @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([post_id, user_id])
+  @@map("post_likes")
+}
+
+model Hashtag {
+  id    String @id @default(uuid())
+  name  String @unique
+
+  posts PostHashtag[]
+
+  @@map("hashtags")
+}
+
+model PostHashtag {
+  id         String @id @default(uuid())
+  post_id    String
+  hashtag_id String
+
+  post    Post    @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  hashtag Hashtag @relation(fields: [hashtag_id], references: [id])
+
+  @@unique([post_id, hashtag_id])
+  @@map("post_hashtags")
+}
+
+model PostMention {
+  id      String @id @default(uuid())
+  post_id String
+  user_id String
+
+  post Post @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([post_id, user_id])
+  @@map("post_mentions")
+}
+
+model Comment {
+  id         String   @id @default(uuid())
+  post_id    String
+  user_id    String
+  parent_id  String?
+  content    String
+  like_count Int      @default(0)
+  created_at DateTime @default(now())
+
+  post     Post          @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  user     User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  parent   Comment?      @relation("CommentReplies", fields: [parent_id], references: [id])
+  replies  Comment[]     @relation("CommentReplies")
+  likes    CommentLike[]
+
+  @@map("comments")
+}
+
+model CommentLike {
+  id         String @id @default(uuid())
+  comment_id String
+  user_id    String
+
+  comment Comment @relation(fields: [comment_id], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([comment_id, user_id])
+  @@map("comment_likes")
+}
+
+model Follow {
+  id           String   @id @default(uuid())
+  follower_id  String
+  following_id String
+  status       String   @default("accepted") // accepted | pending
+  created_at   DateTime @default(now())
+
+  follower  User @relation("Follower", fields: [follower_id], references: [id], onDelete: Cascade)
+  following User @relation("Following", fields: [following_id], references: [id], onDelete: Cascade)
+
+  @@unique([follower_id, following_id])
+  @@map("follows")
+}
+
+model Story {
+  id         String   @id @default(uuid())
+  user_id    String
+  media_id   String
+  expires_at DateTime
+
+  user   User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  media  Media       @relation(fields: [media_id], references: [id])
+  views  StoryView[]
+
+  @@map("stories")
+}
+
+model StoryView {
+  id        String   @id @default(uuid())
+  story_id  String
+  user_id   String
+  viewed_at DateTime @default(now())
+
+  story Story @relation(fields: [story_id], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([story_id, user_id])
+  @@map("story_views")
+}
+
+model Reel {
+  id            String   @id @default(uuid())
+  user_id       String
+  media_id      String
+  caption       String?
+  like_count    Int      @default(0)
+  comment_count Int      @default(0)
+  created_at    DateTime @default(now())
+
+  user   User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  media  Media      @relation(fields: [media_id], references: [id])
+  likes  ReelLike[]
+  views  ReelView[]
+
+  @@map("reels")
+}
+
+model ReelLike {
+  id      String @id @default(uuid())
+  reel_id String
+  user_id String
+
+  reel Reel @relation(fields: [reel_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([reel_id, user_id])
+  @@map("reel_likes")
+}
+
+model ReelView {
+  id      String @id @default(uuid())
+  reel_id String
+  user_id String
+
+  reel Reel @relation(fields: [reel_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([reel_id, user_id])
+  @@map("reel_views")
+}
+
+model Conversation {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+
+  users    ConversationUser[]
+  messages Message[]
+
+  @@map("conversations")
+}
+
+model ConversationUser {
+  id              String @id @default(uuid())
+  conversation_id String
+  user_id         String
+
+  conversation Conversation @relation(fields: [conversation_id], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([conversation_id, user_id])
+  @@map("conversation_users")
+}
+
+model Message {
+  id              String   @id @default(uuid())
+  conversation_id String
+  sender_id       String
+  content         String?
+  media_id        String?
+  message_type    String   @default("text") // text | image | video
+  created_at      DateTime @default(now())
+
+  conversation Conversation @relation(fields: [conversation_id], references: [id], onDelete: Cascade)
+  sender       User         @relation(fields: [sender_id], references: [id], onDelete: Cascade)
+  media        Media?       @relation(fields: [media_id], references: [id])
+
+  @@map("messages")
+}
+
+model Notification {
+  id          String   @id @default(uuid())
+  user_id     String
+  actor_id    String
+  type        String   // like | comment | follow | mention | tag
+  entity_type String?  // post | comment | reel | story
+  entity_id   String?
+  is_read     Boolean  @default(false)
+  created_at  DateTime @default(now())
+
+  user  User @relation("NotificationUser", fields: [user_id], references: [id], onDelete: Cascade)
+  actor User @relation("NotificationActor", fields: [actor_id], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model Feed {
+  id         String   @id @default(uuid())
+  user_id    String
+  post_id    String
+  score      Float    @default(0)
+  created_at DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [post_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, post_id])
+  @@map("feeds")
+}
+
+model SearchHistory {
+  id         String   @id @default(uuid())
+  user_id    String
+  keyword    String
+  created_at DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("search_history")
+}
+
+model UserBlock {
+  id              String @id @default(uuid())
+  user_id         String
+  blocked_user_id String
+
+  user         User @relation("BlockingUser", fields: [user_id], references: [id], onDelete: Cascade)
+  blocked_user User @relation("BlockedUser", fields: [blocked_user_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, blocked_user_id])
+  @@map("user_blocks")
+}
+
+model Report {
+  id          String  @id @default(uuid())
+  reporter_id String
+  target_type String  // post | comment | user | reel
+  target_id   String
+  reason      String?
+
+  reporter User @relation(fields: [reporter_id], references: [id], onDelete: Cascade)
+
+  @@map("reports")
+}
