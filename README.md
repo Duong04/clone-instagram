@@ -217,6 +217,11 @@ docker exec -it instagram_redis redis-cli
 
 ---
 
+# 👨‍💻 Author
+
+Developed by **Nguyen Thanh Duong (SugarDev)**
+
+---
 ## 📄 License
 
 This project is for educational purposes only.
