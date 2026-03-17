@@ -15,7 +15,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
   id         String   @id @default(uuid())
   username   String   @unique
@@ -30,6 +29,7 @@ model User {
   updated_at DateTime @updatedAt
 
   avatar             Media?              @relation("UserAvatar", fields: [avatar_id], references: [id])
+  accounts Account[]
   settings           UserSetting?
   sessions           UserSession[]
   device_tokens      DeviceToken[]
@@ -58,6 +58,25 @@ model User {
   reports            Report[]
 
   @@map("users")
+}
+
+model Account {
+  id                 String  @id @default(uuid())
+  user_id            String
+  provider           String
+  provider_account_id String
+  access_token       String?
+  refresh_token      String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+
+  user User @relation(fields: [user_id], references: [id])
+
+  @@unique([provider, provider_account_id])
+  @@index([user_id])
+  @@map("accounts")
 }
 
 model UserSetting {

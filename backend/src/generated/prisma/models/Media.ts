@@ -466,14 +466,6 @@ export type MediaUpdateOneWithoutUser_avatarsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MediaUpdateToOneWithWhereWithoutUser_avatarsInput, Prisma.MediaUpdateWithoutUser_avatarsInput>, Prisma.MediaUncheckedUpdateWithoutUser_avatarsInput>
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type MediaCreateNestedOneWithoutPost_mediaInput = {
   create?: Prisma.XOR<Prisma.MediaCreateWithoutPost_mediaInput, Prisma.MediaUncheckedCreateWithoutPost_mediaInput>
   connectOrCreate?: Prisma.MediaCreateOrConnectWithoutPost_mediaInput

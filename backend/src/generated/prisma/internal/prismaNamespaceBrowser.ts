@@ -50,6 +50,7 @@ export const AnyNull = runtime.objectEnumValues.instances.AnyNull
 
 export const ModelName = {
   User: 'User',
+  Account: 'Account',
   UserSetting: 'UserSetting',
   UserSession: 'UserSession',
   DeviceToken: 'DeviceToken',
@@ -111,6 +112,22 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const AccountScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  provider: 'provider',
+  provider_account_id: 'provider_account_id',
+  access_token: 'access_token',
+  refresh_token: 'refresh_token',
+  expires_at: 'expires_at',
+  token_type: 'token_type',
+  scope: 'scope',
+  id_token: 'id_token'
+} as const
+
+export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
 
 
 export const UserSettingScalarFieldEnum = {

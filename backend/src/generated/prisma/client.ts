@@ -52,6 +52,11 @@ path.join(process.cwd(), "src/generated/prisma/libquery_engine-linux-musl-openss
  */
 export type User = Prisma.UserModel
 /**
+ * Model Account
+ * 
+ */
+export type Account = Prisma.AccountModel
+/**
  * Model UserSetting
  * 
  */

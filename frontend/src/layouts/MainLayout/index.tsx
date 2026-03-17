@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import { AnimatePresence, motion } from "motion/react";
 import { Sidebar } from "./Sidebar";
 import { BottomNav } from './BottomNav';
@@ -9,7 +9,6 @@ import { cn } from "~/shared/utils/cn.ts";
 export default function MainLayout() {
     const location = useLocation();
     const isReelsPage = location.pathname === "/reels";
-    const isMessagesPage = location.pathname === "/messages";
     const isFeedPage = location.pathname === "/";
 
     return (

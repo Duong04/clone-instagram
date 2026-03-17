@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal } from "lucide-react";
-import type { Post } from '~/types';
+import type { Post } from '~/shared/types';
 import { cn } from "~/shared/utils/cn";
 import { motion, AnimatePresence } from "motion/react";
 

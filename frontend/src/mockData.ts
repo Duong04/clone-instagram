@@ -1,4 +1,4 @@
-import type { Post, User, Story, Chat } from "./types";
+import type { Post, User, Story, Chat } from "./shared/types";
 
 export const MOCK_USER: User = {
   id: "me",

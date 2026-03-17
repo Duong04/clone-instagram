@@ -1,5 +1,5 @@
 import React from "react";
-import type { Story } from "~/types";
+import type { Story } from "~/shared/types";
 import { motion } from "motion/react";
 
 interface StoryCircleProps {
