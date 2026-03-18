@@ -31,7 +31,10 @@ export default defineConfig([
           printWidth: 120,
           jsxSingleQuote: true
         }
-      ]
+      ],
+      '@typescript-eslint/no-unused-vars': ['error', { 
+        argsIgnorePattern: '^_' 
+      }]
     },
     ignores: ['**/node_modules/', '**/dist/']
   },

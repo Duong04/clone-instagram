@@ -2,14 +2,15 @@ import { ZodError } from 'zod'
 import { sendError } from '~/utils/response'
 import { Request, Response, NextFunction } from 'express'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const errorHandler = (err: unknown, req: Request, res: Response, next: NextFunction): void => {
-  if (err instanceof ZodError) {
+const errorHandler = (err: unknown, req: Request, res: Response, _next: NextFunction): void => {
+  console.log('=== ERROR HANDLER HIT ===') 
+  if (err instanceof ZodError || (err as ZodError)?.issues !== undefined) {
+    const zodErr = err as ZodError
     sendError({
       res,
       message: 'Validation failed',
       statusCode: 400,
-      errors: err.issues.map((e) => ({
+      errors: zodErr.issues.map((e) => ({
         field: e.path.join('.'),
         message: e.message
       }))

@@ -15,6 +15,43 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ===== ENUMS =====
+
+enum FollowStatus {
+  accepted
+  pending
+}
+
+enum MessageType {
+  text
+  image
+  video
+}
+
+enum NotificationType {
+  like
+  comment
+  follow
+  mention
+  tag
+}
+
+enum EntityType {
+  post
+  comment
+  reel
+  story
+}
+
+enum ReportTargetType {
+  post
+  comment
+  user
+  reel
+}
+
+// ===== MODELS =====
+
 model User {
   id         String   @id @default(uuid())
   username   String   @unique
@@ -24,53 +61,54 @@ model User {
   bio        String?
   avatar_id  String?
   website    String?
+  is_active  Boolean  @default(false)
   is_private Boolean  @default(false)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  avatar             Media?              @relation("UserAvatar", fields: [avatar_id], references: [id])
-  accounts Account[]
-  settings           UserSetting?
-  sessions           UserSession[]
-  device_tokens      DeviceToken[]
-  posts              Post[]
-  post_views         PostView[]
-  post_saves         PostSave[]
-  post_likes         PostLike[]
-  post_mentions      PostMention[]
-  comments           Comment[]
-  comment_likes      CommentLike[]
-  stories            Story[]
-  story_views        StoryView[]
-  reels              Reel[]
-  reel_likes         ReelLike[]
-  reel_views         ReelView[]
-  followers          Follow[]            @relation("Following")
-  following          Follow[]            @relation("Follower")
-  conversations      ConversationUser[]
-  messages           Message[]
-  notifications      Notification[]      @relation("NotificationUser")
+  avatar              Media?             @relation("UserAvatar", fields: [avatar_id], references: [id])
+  accounts            Account[]
+  settings            UserSetting?
+  sessions            UserSession[]
+  device_tokens       DeviceToken[]
+  posts               Post[]
+  post_views          PostView[]
+  post_saves          PostSave[]
+  post_likes          PostLike[]
+  post_mentions       PostMention[]
+  comments            Comment[]
+  comment_likes       CommentLike[]
+  stories             Story[]
+  story_views         StoryView[]
+  reels               Reel[]
+  reel_likes          ReelLike[]
+  reel_views          ReelView[]
+  followers           Follow[]           @relation("Following")
+  following           Follow[]           @relation("Follower")
+  conversations       ConversationUser[]
+  messages            Message[]
+  notifications       Notification[]     @relation("NotificationUser")
   actor_notifications Notification[]     @relation("NotificationActor")
-  feeds              Feed[]
-  search_history     SearchHistory[]
-  blocked_by         UserBlock[]         @relation("BlockedUser")
-  blocking           UserBlock[]         @relation("BlockingUser")
-  reports            Report[]
+  feeds               Feed[]
+  search_history      SearchHistory[]
+  blocked_by          UserBlock[]        @relation("BlockedUser")
+  blocking            UserBlock[]        @relation("BlockingUser")
+  reports             Report[]
 
   @@map("users")
 }
 
 model Account {
-  id                 String  @id @default(uuid())
-  user_id            String
-  provider           String
+  id                  String  @id @default(uuid())
+  user_id             String
+  provider            String
   provider_account_id String
-  access_token       String?
-  refresh_token      String?
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?
+  access_token        String?
+  refresh_token       String?
+  expires_at          Int?
+  token_type          String?
+  scope               String?
+  id_token            String?
 
   user User @relation(fields: [user_id], references: [id])
 
@@ -80,12 +118,12 @@ model Account {
 }
 
 model UserSetting {
-  id               String  @id @default(uuid())
-  user_id          String  @unique
-  allow_tag        Boolean @default(true)
-  allow_message    Boolean @default(true)
-  allow_comment    Boolean @default(true)
-  show_activity    Boolean @default(true)
+  id             String  @id @default(uuid())
+  user_id        String  @unique
+  allow_tag      Boolean @default(true)
+  allow_message  Boolean @default(true)
+  allow_comment  Boolean @default(true)
+  show_activity  Boolean @default(true)
 
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
@@ -106,7 +144,7 @@ model UserSession {
 }
 
 model DeviceToken {
-  id       String  @id @default(uuid())
+  id       String @id @default(uuid())
   user_id  String
   token    String
   platform String
@@ -125,11 +163,11 @@ model Media {
   duration   Int?
   created_at DateTime @default(now())
 
-  user_avatars  User[]        @relation("UserAvatar")
-  post_media    PostMedia[]
-  story         Story[]
-  reel          Reel[]
-  messages      Message[]
+  user_avatars User[]      @relation("UserAvatar")
+  post_media   PostMedia[]
+  story        Story[]
+  reel         Reel[]
+  messages     Message[]
 
   @@map("media")
 }
@@ -144,15 +182,15 @@ model Post {
   comment_count     Int      @default(0)
   created_at        DateTime @default(now())
 
-  user      User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  media     PostMedia[]
-  views     PostView[]
-  saves     PostSave[]
-  likes     PostLike[]
-  comments  Comment[]
-  hashtags  PostHashtag[]
-  mentions  PostMention[]
-  feeds     Feed[]
+  user     User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  media    PostMedia[]
+  views    PostView[]
+  saves    PostSave[]
+  likes    PostLike[]
+  comments Comment[]
+  hashtags PostHashtag[]
+  mentions PostMention[]
+  feeds    Feed[]
 
   @@map("posts")
 }
@@ -208,8 +246,8 @@ model PostLike {
 }
 
 model Hashtag {
-  id    String @id @default(uuid())
-  name  String @unique
+  id   String @id @default(uuid())
+  name String @unique
 
   posts PostHashtag[]
 
@@ -249,11 +287,11 @@ model Comment {
   like_count Int      @default(0)
   created_at DateTime @default(now())
 
-  post     Post          @relation(fields: [post_id], references: [id], onDelete: Cascade)
-  user     User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  parent   Comment?      @relation("CommentReplies", fields: [parent_id], references: [id])
-  replies  Comment[]     @relation("CommentReplies")
-  likes    CommentLike[]
+  post    Post          @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  user    User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  parent  Comment?      @relation("CommentReplies", fields: [parent_id], references: [id])
+  replies Comment[]     @relation("CommentReplies")
+  likes   CommentLike[]
 
   @@map("comments")
 }
@@ -271,11 +309,11 @@ model CommentLike {
 }
 
 model Follow {
-  id           String   @id @default(uuid())
+  id           String       @id @default(uuid())
   follower_id  String
   following_id String
-  status       String   @default("accepted") // accepted | pending
-  created_at   DateTime @default(now())
+  status       FollowStatus @default(accepted)
+  created_at   DateTime     @default(now())
 
   follower  User @relation("Follower", fields: [follower_id], references: [id], onDelete: Cascade)
   following User @relation("Following", fields: [following_id], references: [id], onDelete: Cascade)
@@ -290,9 +328,9 @@ model Story {
   media_id   String
   expires_at DateTime
 
-  user   User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  media  Media       @relation(fields: [media_id], references: [id])
-  views  StoryView[]
+  user  User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  media Media       @relation(fields: [media_id], references: [id])
+  views StoryView[]
 
   @@map("stories")
 }
@@ -319,10 +357,10 @@ model Reel {
   comment_count Int      @default(0)
   created_at    DateTime @default(now())
 
-  user   User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  media  Media      @relation(fields: [media_id], references: [id])
-  likes  ReelLike[]
-  views  ReelView[]
+  user  User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  media Media      @relation(fields: [media_id], references: [id])
+  likes ReelLike[]
+  views ReelView[]
 
   @@map("reels")
 }
@@ -374,13 +412,13 @@ model ConversationUser {
 }
 
 model Message {
-  id              String   @id @default(uuid())
+  id              String      @id @default(uuid())
   conversation_id String
   sender_id       String
   content         String?
   media_id        String?
-  message_type    String   @default("text") // text | image | video
-  created_at      DateTime @default(now())
+  message_type    MessageType @default(text)
+  created_at      DateTime    @default(now())
 
   conversation Conversation @relation(fields: [conversation_id], references: [id], onDelete: Cascade)
   sender       User         @relation(fields: [sender_id], references: [id], onDelete: Cascade)
@@ -390,14 +428,14 @@ model Message {
 }
 
 model Notification {
-  id          String   @id @default(uuid())
+  id          String           @id @default(uuid())
   user_id     String
   actor_id    String
-  type        String   // like | comment | follow | mention | tag
-  entity_type String?  // post | comment | reel | story
+  type        NotificationType
+  entity_type EntityType?
   entity_id   String?
-  is_read     Boolean  @default(false)
-  created_at  DateTime @default(now())
+  is_read     Boolean          @default(false)
+  created_at  DateTime         @default(now())
 
   user  User @relation("NotificationUser", fields: [user_id], references: [id], onDelete: Cascade)
   actor User @relation("NotificationActor", fields: [actor_id], references: [id], onDelete: Cascade)
@@ -443,9 +481,9 @@ model UserBlock {
 }
 
 model Report {
-  id          String  @id @default(uuid())
+  id          String           @id @default(uuid())
   reporter_id String
-  target_type String  // post | comment | user | reel
+  target_type ReportTargetType
   target_id   String
   reason      String?
 

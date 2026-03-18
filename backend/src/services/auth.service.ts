@@ -6,23 +6,31 @@ import { redis } from '~/config/redis'
 
 class AuthService {
   async register(data: RegisterInput) {
-    const userExist = await userRepository.findByEmail(data.email)
+    const [userExist, userNameExist] = await Promise.all([
+      userRepository.findByEmail(data.email),
+      userRepository.findByUsername(data.username)
+    ])
 
-    if (userExist) {
-      throw new Error('Email already exists')
-    }
+    if (userExist) throw new Error('Email already exists')
+    if (userNameExist) throw new Error('Username already exists')
 
     const hashedPassword = await bcrypt.hash(data.password, 10)
 
     const user = await userRepository.create({
       ...data,
+      is_active: true,
+      avatar: {
+        connect: { id: 'default-avatar' }
+      },
       password: hashedPassword
     })
 
     return {
       id: user.id,
       email: user.email,
-      name: user.name
+      name: user.name,
+      username: user.username,
+      avatar: user.avatar
     }
   }
 
@@ -46,7 +54,9 @@ class AuthService {
       user: {
         id: user.id,
         email: user.email,
-        name: user.name
+        name: user.name,
+        username: user.username,
+        avatar: user.avatar
       },
       accessToken,
       refreshToken
@@ -64,8 +74,8 @@ class AuthService {
       id: user.id,
       email: user.email,
       name: user.name,
-      created_at: user.created_at,
-      updated_at: user.updated_at
+      username: user.username,
+      avatar: user.avatar
     }
   }
 
@@ -91,7 +101,9 @@ class AuthService {
       user: {
         id: user.id,
         email: user.email,
-        name: user.name
+        name: user.name,
+        username: user.username,
+        avatar: user.avatar
       },
       accessToken: newAccessToken,
       refreshToken: newRefreshToken

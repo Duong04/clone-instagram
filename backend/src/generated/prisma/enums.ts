@@ -9,7 +9,49 @@
 * 🟢 You can import this file directly.
 */
 
+export const FollowStatus = {
+  accepted: 'accepted',
+  pending: 'pending'
+} as const
+
+export type FollowStatus = (typeof FollowStatus)[keyof typeof FollowStatus]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const MessageType = {
+  text: 'text',
+  image: 'image',
+  video: 'video'
+} as const
+
+export type MessageType = (typeof MessageType)[keyof typeof MessageType]
+
+
+export const NotificationType = {
+  like: 'like',
+  comment: 'comment',
+  follow: 'follow',
+  mention: 'mention',
+  tag: 'tag'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const EntityType = {
+  post: 'post',
+  comment: 'comment',
+  reel: 'reel',
+  story: 'story'
+} as const
+
+export type EntityType = (typeof EntityType)[keyof typeof EntityType]
+
+
+export const ReportTargetType = {
+  post: 'post',
+  comment: 'comment',
+  user: 'user',
+  reel: 'reel'
+} as const
+
+export type ReportTargetType = (typeof ReportTargetType)[keyof typeof ReportTargetType]

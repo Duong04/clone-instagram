@@ -1,16 +1,38 @@
 import { prisma } from '~/config/database'
+import type { Prisma } from '~/generated/prisma/client'
 
 class UserRepository {
   async findByEmail(email: string) {
-    return prisma.user.findUnique({ where: { email } })
+    return prisma.user.findUnique({
+      where: { email },
+      include: {
+        avatar: true
+      }
+    })
   }
 
-  async create(data: { username: string; name: string; email: string; password: string }) {
-    return prisma.user.create({ data })
+  async findByUsername(username: string) {
+    return prisma.user.findUnique({
+      where: { username }
+    })
+  }
+
+  async create(data: Prisma.UserCreateInput) {
+    return prisma.user.create({
+      data,
+      include: {
+        avatar: true
+      }
+    })
   }
 
   async findById(id: string) {
-    return prisma.user.findUnique({ where: { id } })
+    return prisma.user.findUnique({
+      where: { id },
+      include: {
+        avatar: true
+      }
+    })
   }
 }
 

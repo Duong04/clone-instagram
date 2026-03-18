@@ -106,6 +106,7 @@ export const UserScalarFieldEnum = {
   bio: 'bio',
   avatar_id: 'avatar_id',
   website: 'website',
+  is_active: 'is_active',
   is_private: 'is_private',
   created_at: 'created_at',
   updated_at: 'updated_at'

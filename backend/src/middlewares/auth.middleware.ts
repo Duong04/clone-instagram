@@ -1,11 +1,16 @@
 import { Request, Response, NextFunction } from 'express'
 import { verifyAccessToken } from '~/utils/jwt'
+import { sendError } from '~/utils/response'
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.headers.authorization?.split(' ')[1]
+  const token = req.cookies.access_token
 
   if (!token) {
-    return res.status(401).json({ message: 'Unauthorized' })
+    return sendError({
+      res,
+      message: 'Unauthorized',
+      statusCode: 401
+    })
   }
 
   try {
@@ -15,8 +20,10 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
 
     next()
   } catch {
-    return res.status(401).json({
-      message: 'Invalid token'
+    return sendError({
+      res,
+      message: 'Invalid token',
+      statusCode: 401
     })
   }
 }
