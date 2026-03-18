@@ -1,4 +1,3 @@
-import React from "react";
 import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal, Music } from "lucide-react";
 
 export const ReelsPage = () => {

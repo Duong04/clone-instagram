@@ -1,6 +1,3 @@
-import React from "react";
-
-
 export const Footer = () => {
   return (
     <footer className="absolute bottom-8 left-0 right-0 text-zinc-600 text-[10px] uppercase tracking-[0.2em] font-bold flex justify-center gap-8 px-4">

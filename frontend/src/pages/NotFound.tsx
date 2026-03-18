@@ -1,4 +1,3 @@
-import React from "react";
 import { NavLink } from "react-router-dom";
 import { motion } from "motion/react";
 import { Home, ArrowLeft, Search } from "lucide-react";

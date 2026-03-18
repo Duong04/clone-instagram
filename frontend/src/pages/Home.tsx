@@ -1,4 +1,3 @@
-import React from "react";
 import { PostCard } from "~/shared/components/cards/PostCard";
 import { StoryCircle } from "~/shared/components/cards/StoryCircle";
 import { MOCK_POSTS, MOCK_STORIES, MOCK_USER } from "~/mockData";

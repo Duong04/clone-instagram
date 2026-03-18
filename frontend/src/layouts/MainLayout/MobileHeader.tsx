@@ -1,4 +1,3 @@
-import React from "react";
 import { Heart, MessageCircle } from "lucide-react";
 import { NavLink } from "react-router-dom";
 

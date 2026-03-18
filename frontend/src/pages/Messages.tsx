@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "motion/react";
 import {
   Edit,
@@ -7,8 +7,7 @@ import {
   Video,
   Image as ImageIcon,
   Heart,
-  Smile,
-  Send,
+  Smile
 } from "lucide-react";
 import { MOCK_CHATS, MOCK_USER } from "../mockData";
 import { cn } from "~/shared/utils/cn";

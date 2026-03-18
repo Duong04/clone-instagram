@@ -1,4 +1,3 @@
-import React from "react";
 import { NavLink } from "react-router-dom";
 import { motion } from "motion/react";
 import { ShieldAlert, Lock, Home, ArrowLeft } from "lucide-react";
