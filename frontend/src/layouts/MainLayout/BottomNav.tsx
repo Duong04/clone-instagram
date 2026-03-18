@@ -1,12 +1,12 @@
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom"
 import { 
   Home, 
   Search, 
   PlaySquare, 
   PlusSquare
-} from "lucide-react";
-import { cn } from "~/shared/utils/cn.ts";
-import { motion } from "motion/react";
+} from "lucide-react"
+import { cn } from "~/shared/utils/cn.ts"
+import { motion } from "motion/react"
 
 const bottomNavItems = [
   { icon: Home, label: "Home", path: "/" },

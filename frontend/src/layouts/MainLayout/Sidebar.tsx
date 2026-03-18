@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom"
 import {
   Home,
   Search,
@@ -9,9 +9,10 @@ import {
   PlusSquare,
   Menu,
   Instagram,
-} from "lucide-react";
-import { cn } from "~/shared/utils/cn.ts";
-import { motion } from "motion/react";
+} from "lucide-react"
+import { cn } from "~/shared/utils/cn.ts"
+import { motion } from "motion/react"
+import { useAuthStore } from "~/features/auth/store/authStore"
 
 const navItems = [
   { icon: Home, label: "Home", path: "/" },
@@ -24,6 +25,7 @@ const navItems = [
 ];
 
 export const Sidebar = () => {
+  const { user } = useAuthStore()
   return (
     <div className="fixed left-0 top-0 h-full w-[72px] xl:w-60 border-r border-zinc-200 bg-white px-3 py-8 hidden md:flex flex-col z-50 transition-all duration-500 ease-in-out">
       <div className="mb-10 px-3">
@@ -88,10 +90,10 @@ export const Sidebar = () => {
           {({ isActive }) => (
             <>
               <img
-                src="https://i.pinimg.com/736x/7a/30/f4/7a30f422e3692265d6e2f4a331b59514.jpg"
+                src={user?.avatar_url}
                 alt="Profile"
                 className={cn(
-                  "w-7 h-7 rounded-full border border-zinc-200 transition-all duration-300 group-hover:scale-110",
+                  "w-7 h-7 rounded-full object-cover border border-zinc-200 transition-all duration-300 group-hover:scale-110",
                   isActive && "ring-2 ring-black ring-offset-2",
                 )}
                 referrerPolicy="no-referrer"

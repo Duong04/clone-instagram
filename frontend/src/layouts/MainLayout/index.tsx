@@ -1,10 +1,10 @@
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom"
 import { Outlet } from 'react-router-dom'
-import { AnimatePresence, motion } from "motion/react";
-import { Sidebar } from "./Sidebar";
-import { BottomNav } from './BottomNav';
-import { MobileHeader } from "./MobileHeader";
-import { cn } from "~/shared/utils/cn.ts";
+import { AnimatePresence, motion } from "motion/react"
+import { Sidebar } from "./Sidebar"
+import { BottomNav } from './BottomNav'
+import { MobileHeader } from "./MobileHeader"
+import { cn } from "~/shared/utils/cn.ts"
 
 export default function MainLayout() {
     const location = useLocation();

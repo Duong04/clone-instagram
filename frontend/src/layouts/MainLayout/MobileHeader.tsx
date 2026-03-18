@@ -1,5 +1,5 @@
-import { Heart, MessageCircle } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { Heart, MessageCircle } from "lucide-react"
+import { NavLink } from "react-router-dom"
 
 export const MobileHeader = () => {
   return (

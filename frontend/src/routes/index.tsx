@@ -1,4 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom'
+import { ProtectedRoute } from '~/features/auth/components/ProtectedRoute'
+import { PublicRoute } from '~/features/auth/components/PublicRoute'
 import AuthLayout from '~/layouts/AuthLayout'
 import MainLayout from '~/layouts/MainLayout'
 import { ExplorePage } from '~/pages/Explore'
@@ -13,7 +15,11 @@ import { RegisterPage } from '~/pages/Register'
 
 export const router = createBrowserRouter([
   {
-    element: <MainLayout />,
+    element: (
+      <ProtectedRoute>
+        <MainLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: '/',
@@ -38,7 +44,11 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    element: <AuthLayout />,
+    element: (
+      <PublicRoute>
+        <AuthLayout />
+      </PublicRoute>
+    ),
     children: [
       {
         path: '/register',

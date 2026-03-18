@@ -30,7 +30,7 @@ class AuthService {
       email: user.email,
       name: user.name,
       username: user.username,
-      avatar: user.avatar
+      avatar_url: user.avatar?.url
     }
   }
 
@@ -56,7 +56,7 @@ class AuthService {
         email: user.email,
         name: user.name,
         username: user.username,
-        avatar: user.avatar
+        avatar_url: user.avatar?.url
       },
       accessToken,
       refreshToken
@@ -75,7 +75,7 @@ class AuthService {
       email: user.email,
       name: user.name,
       username: user.username,
-      avatar: user.avatar
+      avatar_url: user.avatar?.url
     }
   }
 
@@ -103,7 +103,7 @@ class AuthService {
         email: user.email,
         name: user.name,
         username: user.username,
-        avatar: user.avatar
+        avatar_url: user.avatar?.url
       },
       accessToken: newAccessToken,
       refreshToken: newRefreshToken
