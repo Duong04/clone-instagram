@@ -171,6 +171,7 @@ model DeviceToken {
 
 model Media {
   id         String   @id @default(uuid())
+  public_id  String   @unique
   url        String
   media_type String
   width      Int?

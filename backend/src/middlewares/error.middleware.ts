@@ -3,7 +3,6 @@ import { sendError } from '~/utils/response'
 import { Request, Response, NextFunction } from 'express'
 
 const errorHandler = (err: unknown, req: Request, res: Response, _next: NextFunction): void => {
-  console.log('=== ERROR HANDLER HIT ===') 
   if (err instanceof ZodError || (err as ZodError)?.issues !== undefined) {
     const zodErr = err as ZodError
     sendError({

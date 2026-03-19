@@ -29,6 +29,7 @@ export type StoryMinAggregateOutputType = {
   user_id: string | null
   media_id: string | null
   expires_at: Date | null
+  created_at: Date | null
 }
 
 export type StoryMaxAggregateOutputType = {
@@ -36,6 +37,7 @@ export type StoryMaxAggregateOutputType = {
   user_id: string | null
   media_id: string | null
   expires_at: Date | null
+  created_at: Date | null
 }
 
 export type StoryCountAggregateOutputType = {
@@ -43,6 +45,7 @@ export type StoryCountAggregateOutputType = {
   user_id: number
   media_id: number
   expires_at: number
+  created_at: number
   _all: number
 }
 
@@ -52,6 +55,7 @@ export type StoryMinAggregateInputType = {
   user_id?: true
   media_id?: true
   expires_at?: true
+  created_at?: true
 }
 
 export type StoryMaxAggregateInputType = {
@@ -59,6 +63,7 @@ export type StoryMaxAggregateInputType = {
   user_id?: true
   media_id?: true
   expires_at?: true
+  created_at?: true
 }
 
 export type StoryCountAggregateInputType = {
@@ -66,6 +71,7 @@ export type StoryCountAggregateInputType = {
   user_id?: true
   media_id?: true
   expires_at?: true
+  created_at?: true
   _all?: true
 }
 
@@ -146,6 +152,7 @@ export type StoryGroupByOutputType = {
   user_id: string
   media_id: string
   expires_at: Date
+  created_at: Date
   _count: StoryCountAggregateOutputType | null
   _min: StoryMinAggregateOutputType | null
   _max: StoryMaxAggregateOutputType | null
@@ -174,9 +181,9 @@ export type StoryWhereInput = {
   user_id?: Prisma.StringFilter<"Story"> | string
   media_id?: Prisma.StringFilter<"Story"> | string
   expires_at?: Prisma.DateTimeFilter<"Story"> | Date | string
+  created_at?: Prisma.DateTimeFilter<"Story"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   media?: Prisma.XOR<Prisma.MediaScalarRelationFilter, Prisma.MediaWhereInput>
-  views?: Prisma.StoryViewListRelationFilter
 }
 
 export type StoryOrderByWithRelationInput = {
@@ -184,9 +191,9 @@ export type StoryOrderByWithRelationInput = {
   user_id?: Prisma.SortOrder
   media_id?: Prisma.SortOrder
   expires_at?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   media?: Prisma.MediaOrderByWithRelationInput
-  views?: Prisma.StoryViewOrderByRelationAggregateInput
 }
 
 export type StoryWhereUniqueInput = Prisma.AtLeast<{
@@ -197,9 +204,9 @@ export type StoryWhereUniqueInput = Prisma.AtLeast<{
   user_id?: Prisma.StringFilter<"Story"> | string
   media_id?: Prisma.StringFilter<"Story"> | string
   expires_at?: Prisma.DateTimeFilter<"Story"> | Date | string
+  created_at?: Prisma.DateTimeFilter<"Story"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   media?: Prisma.XOR<Prisma.MediaScalarRelationFilter, Prisma.MediaWhereInput>
-  views?: Prisma.StoryViewListRelationFilter
 }, "id">
 
 export type StoryOrderByWithAggregationInput = {
@@ -207,6 +214,7 @@ export type StoryOrderByWithAggregationInput = {
   user_id?: Prisma.SortOrder
   media_id?: Prisma.SortOrder
   expires_at?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
   _count?: Prisma.StoryCountOrderByAggregateInput
   _max?: Prisma.StoryMaxOrderByAggregateInput
   _min?: Prisma.StoryMinOrderByAggregateInput
@@ -220,14 +228,15 @@ export type StoryScalarWhereWithAggregatesInput = {
   user_id?: Prisma.StringWithAggregatesFilter<"Story"> | string
   media_id?: Prisma.StringWithAggregatesFilter<"Story"> | string
   expires_at?: Prisma.DateTimeWithAggregatesFilter<"Story"> | Date | string
+  created_at?: Prisma.DateTimeWithAggregatesFilter<"Story"> | Date | string
 }
 
 export type StoryCreateInput = {
   id?: string
   expires_at: Date | string
+  created_at?: Date | string
   user: Prisma.UserCreateNestedOneWithoutStoriesInput
   media: Prisma.MediaCreateNestedOneWithoutStoryInput
-  views?: Prisma.StoryViewCreateNestedManyWithoutStoryInput
 }
 
 export type StoryUncheckedCreateInput = {
@@ -235,15 +244,15 @@ export type StoryUncheckedCreateInput = {
   user_id: string
   media_id: string
   expires_at: Date | string
-  views?: Prisma.StoryViewUncheckedCreateNestedManyWithoutStoryInput
+  created_at?: Date | string
 }
 
 export type StoryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   expires_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutStoriesNestedInput
   media?: Prisma.MediaUpdateOneRequiredWithoutStoryNestedInput
-  views?: Prisma.StoryViewUpdateManyWithoutStoryNestedInput
 }
 
 export type StoryUncheckedUpdateInput = {
@@ -251,7 +260,7 @@ export type StoryUncheckedUpdateInput = {
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   media_id?: Prisma.StringFieldUpdateOperationsInput | string
   expires_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  views?: Prisma.StoryViewUncheckedUpdateManyWithoutStoryNestedInput
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StoryCreateManyInput = {
@@ -259,11 +268,13 @@ export type StoryCreateManyInput = {
   user_id: string
   media_id: string
   expires_at: Date | string
+  created_at?: Date | string
 }
 
 export type StoryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   expires_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StoryUncheckedUpdateManyInput = {
@@ -271,6 +282,7 @@ export type StoryUncheckedUpdateManyInput = {
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   media_id?: Prisma.StringFieldUpdateOperationsInput | string
   expires_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StoryListRelationFilter = {
@@ -288,6 +300,7 @@ export type StoryCountOrderByAggregateInput = {
   user_id?: Prisma.SortOrder
   media_id?: Prisma.SortOrder
   expires_at?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
 }
 
 export type StoryMaxOrderByAggregateInput = {
@@ -295,6 +308,7 @@ export type StoryMaxOrderByAggregateInput = {
   user_id?: Prisma.SortOrder
   media_id?: Prisma.SortOrder
   expires_at?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
 }
 
 export type StoryMinOrderByAggregateInput = {
@@ -302,11 +316,7 @@ export type StoryMinOrderByAggregateInput = {
   user_id?: Prisma.SortOrder
   media_id?: Prisma.SortOrder
   expires_at?: Prisma.SortOrder
-}
-
-export type StoryScalarRelationFilter = {
-  is?: Prisma.StoryWhereInput
-  isNot?: Prisma.StoryWhereInput
+  created_at?: Prisma.SortOrder
 }
 
 export type StoryCreateNestedManyWithoutUserInput = {
@@ -393,32 +403,18 @@ export type StoryUncheckedUpdateManyWithoutMediaNestedInput = {
   deleteMany?: Prisma.StoryScalarWhereInput | Prisma.StoryScalarWhereInput[]
 }
 
-export type StoryCreateNestedOneWithoutViewsInput = {
-  create?: Prisma.XOR<Prisma.StoryCreateWithoutViewsInput, Prisma.StoryUncheckedCreateWithoutViewsInput>
-  connectOrCreate?: Prisma.StoryCreateOrConnectWithoutViewsInput
-  connect?: Prisma.StoryWhereUniqueInput
-}
-
-export type StoryUpdateOneRequiredWithoutViewsNestedInput = {
-  create?: Prisma.XOR<Prisma.StoryCreateWithoutViewsInput, Prisma.StoryUncheckedCreateWithoutViewsInput>
-  connectOrCreate?: Prisma.StoryCreateOrConnectWithoutViewsInput
-  upsert?: Prisma.StoryUpsertWithoutViewsInput
-  connect?: Prisma.StoryWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.StoryUpdateToOneWithWhereWithoutViewsInput, Prisma.StoryUpdateWithoutViewsInput>, Prisma.StoryUncheckedUpdateWithoutViewsInput>
-}
-
 export type StoryCreateWithoutUserInput = {
   id?: string
   expires_at: Date | string
+  created_at?: Date | string
   media: Prisma.MediaCreateNestedOneWithoutStoryInput
-  views?: Prisma.StoryViewCreateNestedManyWithoutStoryInput
 }
 
 export type StoryUncheckedCreateWithoutUserInput = {
   id?: string
   media_id: string
   expires_at: Date | string
-  views?: Prisma.StoryViewUncheckedCreateNestedManyWithoutStoryInput
+  created_at?: Date | string
 }
 
 export type StoryCreateOrConnectWithoutUserInput = {
@@ -455,20 +451,21 @@ export type StoryScalarWhereInput = {
   user_id?: Prisma.StringFilter<"Story"> | string
   media_id?: Prisma.StringFilter<"Story"> | string
   expires_at?: Prisma.DateTimeFilter<"Story"> | Date | string
+  created_at?: Prisma.DateTimeFilter<"Story"> | Date | string
 }
 
 export type StoryCreateWithoutMediaInput = {
   id?: string
   expires_at: Date | string
+  created_at?: Date | string
   user: Prisma.UserCreateNestedOneWithoutStoriesInput
-  views?: Prisma.StoryViewCreateNestedManyWithoutStoryInput
 }
 
 export type StoryUncheckedCreateWithoutMediaInput = {
   id?: string
   user_id: string
   expires_at: Date | string
-  views?: Prisma.StoryViewUncheckedCreateNestedManyWithoutStoryInput
+  created_at?: Date | string
 }
 
 export type StoryCreateOrConnectWithoutMediaInput = {
@@ -497,131 +494,62 @@ export type StoryUpdateManyWithWhereWithoutMediaInput = {
   data: Prisma.XOR<Prisma.StoryUpdateManyMutationInput, Prisma.StoryUncheckedUpdateManyWithoutMediaInput>
 }
 
-export type StoryCreateWithoutViewsInput = {
-  id?: string
-  expires_at: Date | string
-  user: Prisma.UserCreateNestedOneWithoutStoriesInput
-  media: Prisma.MediaCreateNestedOneWithoutStoryInput
-}
-
-export type StoryUncheckedCreateWithoutViewsInput = {
-  id?: string
-  user_id: string
-  media_id: string
-  expires_at: Date | string
-}
-
-export type StoryCreateOrConnectWithoutViewsInput = {
-  where: Prisma.StoryWhereUniqueInput
-  create: Prisma.XOR<Prisma.StoryCreateWithoutViewsInput, Prisma.StoryUncheckedCreateWithoutViewsInput>
-}
-
-export type StoryUpsertWithoutViewsInput = {
-  update: Prisma.XOR<Prisma.StoryUpdateWithoutViewsInput, Prisma.StoryUncheckedUpdateWithoutViewsInput>
-  create: Prisma.XOR<Prisma.StoryCreateWithoutViewsInput, Prisma.StoryUncheckedCreateWithoutViewsInput>
-  where?: Prisma.StoryWhereInput
-}
-
-export type StoryUpdateToOneWithWhereWithoutViewsInput = {
-  where?: Prisma.StoryWhereInput
-  data: Prisma.XOR<Prisma.StoryUpdateWithoutViewsInput, Prisma.StoryUncheckedUpdateWithoutViewsInput>
-}
-
-export type StoryUpdateWithoutViewsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  expires_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutStoriesNestedInput
-  media?: Prisma.MediaUpdateOneRequiredWithoutStoryNestedInput
-}
-
-export type StoryUncheckedUpdateWithoutViewsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  user_id?: Prisma.StringFieldUpdateOperationsInput | string
-  media_id?: Prisma.StringFieldUpdateOperationsInput | string
-  expires_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
 export type StoryCreateManyUserInput = {
   id?: string
   media_id: string
   expires_at: Date | string
+  created_at?: Date | string
 }
 
 export type StoryUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   expires_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   media?: Prisma.MediaUpdateOneRequiredWithoutStoryNestedInput
-  views?: Prisma.StoryViewUpdateManyWithoutStoryNestedInput
 }
 
 export type StoryUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   media_id?: Prisma.StringFieldUpdateOperationsInput | string
   expires_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  views?: Prisma.StoryViewUncheckedUpdateManyWithoutStoryNestedInput
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StoryUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   media_id?: Prisma.StringFieldUpdateOperationsInput | string
   expires_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StoryCreateManyMediaInput = {
   id?: string
   user_id: string
   expires_at: Date | string
+  created_at?: Date | string
 }
 
 export type StoryUpdateWithoutMediaInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   expires_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutStoriesNestedInput
-  views?: Prisma.StoryViewUpdateManyWithoutStoryNestedInput
 }
 
 export type StoryUncheckedUpdateWithoutMediaInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   expires_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  views?: Prisma.StoryViewUncheckedUpdateManyWithoutStoryNestedInput
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type StoryUncheckedUpdateManyWithoutMediaInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   expires_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-
-/**
- * Count Type StoryCountOutputType
- */
-
-export type StoryCountOutputType = {
-  views: number
-}
-
-export type StoryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  views?: boolean | StoryCountOutputTypeCountViewsArgs
-}
-
-/**
- * StoryCountOutputType without action
- */
-export type StoryCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the StoryCountOutputType
-   */
-  select?: Prisma.StoryCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * StoryCountOutputType without action
- */
-export type StoryCountOutputTypeCountViewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.StoryViewWhereInput
-}
 
 
 export type StorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -629,10 +557,9 @@ export type StorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   user_id?: boolean
   media_id?: boolean
   expires_at?: boolean
+  created_at?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   media?: boolean | Prisma.MediaDefaultArgs<ExtArgs>
-  views?: boolean | Prisma.Story$viewsArgs<ExtArgs>
-  _count?: boolean | Prisma.StoryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["story"]>
 
 export type StorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -640,6 +567,7 @@ export type StorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   user_id?: boolean
   media_id?: boolean
   expires_at?: boolean
+  created_at?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   media?: boolean | Prisma.MediaDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["story"]>
@@ -649,6 +577,7 @@ export type StorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   user_id?: boolean
   media_id?: boolean
   expires_at?: boolean
+  created_at?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   media?: boolean | Prisma.MediaDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["story"]>
@@ -658,14 +587,13 @@ export type StorySelectScalar = {
   user_id?: boolean
   media_id?: boolean
   expires_at?: boolean
+  created_at?: boolean
 }
 
-export type StoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "media_id" | "expires_at", ExtArgs["result"]["story"]>
+export type StoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "media_id" | "expires_at" | "created_at", ExtArgs["result"]["story"]>
 export type StoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   media?: boolean | Prisma.MediaDefaultArgs<ExtArgs>
-  views?: boolean | Prisma.Story$viewsArgs<ExtArgs>
-  _count?: boolean | Prisma.StoryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type StoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -681,13 +609,13 @@ export type $StoryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
     media: Prisma.$MediaPayload<ExtArgs>
-    views: Prisma.$StoryViewPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     user_id: string
     media_id: string
     expires_at: Date
+    created_at: Date
   }, ExtArgs["result"]["story"]>
   composites: {}
 }
@@ -1084,7 +1012,6 @@ export interface Prisma__StoryClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   media<T extends Prisma.MediaDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MediaDefaultArgs<ExtArgs>>): Prisma.Prisma__MediaClient<runtime.Types.Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  views<T extends Prisma.Story$viewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Story$viewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StoryViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1118,6 +1045,7 @@ export interface StoryFieldRefs {
   readonly user_id: Prisma.FieldRef<"Story", 'String'>
   readonly media_id: Prisma.FieldRef<"Story", 'String'>
   readonly expires_at: Prisma.FieldRef<"Story", 'DateTime'>
+  readonly created_at: Prisma.FieldRef<"Story", 'DateTime'>
 }
     
 
@@ -1511,30 +1439,6 @@ export type StoryDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Stories to delete.
    */
   limit?: number
-}
-
-/**
- * Story.views
- */
-export type Story$viewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the StoryView
-   */
-  select?: Prisma.StoryViewSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the StoryView
-   */
-  omit?: Prisma.StoryViewOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.StoryViewInclude<ExtArgs> | null
-  where?: Prisma.StoryViewWhereInput
-  orderBy?: Prisma.StoryViewOrderByWithRelationInput | Prisma.StoryViewOrderByWithRelationInput[]
-  cursor?: Prisma.StoryViewWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.StoryViewScalarFieldEnum | Prisma.StoryViewScalarFieldEnum[]
 }
 
 /**

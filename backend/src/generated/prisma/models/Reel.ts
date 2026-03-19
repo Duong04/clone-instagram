@@ -41,9 +41,12 @@ export type ReelMinAggregateOutputType = {
   user_id: string | null
   media_id: string | null
   caption: string | null
+  location: string | null
   like_count: number | null
   comment_count: number | null
+  comments_disabled: boolean | null
   created_at: Date | null
+  deleted_at: Date | null
 }
 
 export type ReelMaxAggregateOutputType = {
@@ -51,9 +54,12 @@ export type ReelMaxAggregateOutputType = {
   user_id: string | null
   media_id: string | null
   caption: string | null
+  location: string | null
   like_count: number | null
   comment_count: number | null
+  comments_disabled: boolean | null
   created_at: Date | null
+  deleted_at: Date | null
 }
 
 export type ReelCountAggregateOutputType = {
@@ -61,9 +67,12 @@ export type ReelCountAggregateOutputType = {
   user_id: number
   media_id: number
   caption: number
+  location: number
   like_count: number
   comment_count: number
+  comments_disabled: number
   created_at: number
+  deleted_at: number
   _all: number
 }
 
@@ -83,9 +92,12 @@ export type ReelMinAggregateInputType = {
   user_id?: true
   media_id?: true
   caption?: true
+  location?: true
   like_count?: true
   comment_count?: true
+  comments_disabled?: true
   created_at?: true
+  deleted_at?: true
 }
 
 export type ReelMaxAggregateInputType = {
@@ -93,9 +105,12 @@ export type ReelMaxAggregateInputType = {
   user_id?: true
   media_id?: true
   caption?: true
+  location?: true
   like_count?: true
   comment_count?: true
+  comments_disabled?: true
   created_at?: true
+  deleted_at?: true
 }
 
 export type ReelCountAggregateInputType = {
@@ -103,9 +118,12 @@ export type ReelCountAggregateInputType = {
   user_id?: true
   media_id?: true
   caption?: true
+  location?: true
   like_count?: true
   comment_count?: true
+  comments_disabled?: true
   created_at?: true
+  deleted_at?: true
   _all?: true
 }
 
@@ -200,9 +218,12 @@ export type ReelGroupByOutputType = {
   user_id: string
   media_id: string
   caption: string | null
+  location: string | null
   like_count: number
   comment_count: number
+  comments_disabled: boolean
   created_at: Date
+  deleted_at: Date | null
   _count: ReelCountAggregateOutputType | null
   _avg: ReelAvgAggregateOutputType | null
   _sum: ReelSumAggregateOutputType | null
@@ -233,13 +254,14 @@ export type ReelWhereInput = {
   user_id?: Prisma.StringFilter<"Reel"> | string
   media_id?: Prisma.StringFilter<"Reel"> | string
   caption?: Prisma.StringNullableFilter<"Reel"> | string | null
+  location?: Prisma.StringNullableFilter<"Reel"> | string | null
   like_count?: Prisma.IntFilter<"Reel"> | number
   comment_count?: Prisma.IntFilter<"Reel"> | number
+  comments_disabled?: Prisma.BoolFilter<"Reel"> | boolean
   created_at?: Prisma.DateTimeFilter<"Reel"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"Reel"> | Date | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   media?: Prisma.XOR<Prisma.MediaScalarRelationFilter, Prisma.MediaWhereInput>
-  likes?: Prisma.ReelLikeListRelationFilter
-  views?: Prisma.ReelViewListRelationFilter
 }
 
 export type ReelOrderByWithRelationInput = {
@@ -247,13 +269,14 @@ export type ReelOrderByWithRelationInput = {
   user_id?: Prisma.SortOrder
   media_id?: Prisma.SortOrder
   caption?: Prisma.SortOrderInput | Prisma.SortOrder
+  location?: Prisma.SortOrderInput | Prisma.SortOrder
   like_count?: Prisma.SortOrder
   comment_count?: Prisma.SortOrder
+  comments_disabled?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   media?: Prisma.MediaOrderByWithRelationInput
-  likes?: Prisma.ReelLikeOrderByRelationAggregateInput
-  views?: Prisma.ReelViewOrderByRelationAggregateInput
 }
 
 export type ReelWhereUniqueInput = Prisma.AtLeast<{
@@ -264,13 +287,14 @@ export type ReelWhereUniqueInput = Prisma.AtLeast<{
   user_id?: Prisma.StringFilter<"Reel"> | string
   media_id?: Prisma.StringFilter<"Reel"> | string
   caption?: Prisma.StringNullableFilter<"Reel"> | string | null
+  location?: Prisma.StringNullableFilter<"Reel"> | string | null
   like_count?: Prisma.IntFilter<"Reel"> | number
   comment_count?: Prisma.IntFilter<"Reel"> | number
+  comments_disabled?: Prisma.BoolFilter<"Reel"> | boolean
   created_at?: Prisma.DateTimeFilter<"Reel"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"Reel"> | Date | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   media?: Prisma.XOR<Prisma.MediaScalarRelationFilter, Prisma.MediaWhereInput>
-  likes?: Prisma.ReelLikeListRelationFilter
-  views?: Prisma.ReelViewListRelationFilter
 }, "id">
 
 export type ReelOrderByWithAggregationInput = {
@@ -278,9 +302,12 @@ export type ReelOrderByWithAggregationInput = {
   user_id?: Prisma.SortOrder
   media_id?: Prisma.SortOrder
   caption?: Prisma.SortOrderInput | Prisma.SortOrder
+  location?: Prisma.SortOrderInput | Prisma.SortOrder
   like_count?: Prisma.SortOrder
   comment_count?: Prisma.SortOrder
+  comments_disabled?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ReelCountOrderByAggregateInput
   _avg?: Prisma.ReelAvgOrderByAggregateInput
   _max?: Prisma.ReelMaxOrderByAggregateInput
@@ -296,21 +323,25 @@ export type ReelScalarWhereWithAggregatesInput = {
   user_id?: Prisma.StringWithAggregatesFilter<"Reel"> | string
   media_id?: Prisma.StringWithAggregatesFilter<"Reel"> | string
   caption?: Prisma.StringNullableWithAggregatesFilter<"Reel"> | string | null
+  location?: Prisma.StringNullableWithAggregatesFilter<"Reel"> | string | null
   like_count?: Prisma.IntWithAggregatesFilter<"Reel"> | number
   comment_count?: Prisma.IntWithAggregatesFilter<"Reel"> | number
+  comments_disabled?: Prisma.BoolWithAggregatesFilter<"Reel"> | boolean
   created_at?: Prisma.DateTimeWithAggregatesFilter<"Reel"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"Reel"> | Date | string | null
 }
 
 export type ReelCreateInput = {
   id?: string
   caption?: string | null
+  location?: string | null
   like_count?: number
   comment_count?: number
+  comments_disabled?: boolean
   created_at?: Date | string
+  deleted_at?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutReelsInput
   media: Prisma.MediaCreateNestedOneWithoutReelInput
-  likes?: Prisma.ReelLikeCreateNestedManyWithoutReelInput
-  views?: Prisma.ReelViewCreateNestedManyWithoutReelInput
 }
 
 export type ReelUncheckedCreateInput = {
@@ -318,23 +349,25 @@ export type ReelUncheckedCreateInput = {
   user_id: string
   media_id: string
   caption?: string | null
+  location?: string | null
   like_count?: number
   comment_count?: number
+  comments_disabled?: boolean
   created_at?: Date | string
-  likes?: Prisma.ReelLikeUncheckedCreateNestedManyWithoutReelInput
-  views?: Prisma.ReelViewUncheckedCreateNestedManyWithoutReelInput
+  deleted_at?: Date | string | null
 }
 
 export type ReelUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   like_count?: Prisma.IntFieldUpdateOperationsInput | number
   comment_count?: Prisma.IntFieldUpdateOperationsInput | number
+  comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutReelsNestedInput
   media?: Prisma.MediaUpdateOneRequiredWithoutReelNestedInput
-  likes?: Prisma.ReelLikeUpdateManyWithoutReelNestedInput
-  views?: Prisma.ReelViewUpdateManyWithoutReelNestedInput
 }
 
 export type ReelUncheckedUpdateInput = {
@@ -342,11 +375,12 @@ export type ReelUncheckedUpdateInput = {
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   media_id?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   like_count?: Prisma.IntFieldUpdateOperationsInput | number
   comment_count?: Prisma.IntFieldUpdateOperationsInput | number
+  comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  likes?: Prisma.ReelLikeUncheckedUpdateManyWithoutReelNestedInput
-  views?: Prisma.ReelViewUncheckedUpdateManyWithoutReelNestedInput
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ReelCreateManyInput = {
@@ -354,17 +388,23 @@ export type ReelCreateManyInput = {
   user_id: string
   media_id: string
   caption?: string | null
+  location?: string | null
   like_count?: number
   comment_count?: number
+  comments_disabled?: boolean
   created_at?: Date | string
+  deleted_at?: Date | string | null
 }
 
 export type ReelUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   like_count?: Prisma.IntFieldUpdateOperationsInput | number
   comment_count?: Prisma.IntFieldUpdateOperationsInput | number
+  comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ReelUncheckedUpdateManyInput = {
@@ -372,9 +412,12 @@ export type ReelUncheckedUpdateManyInput = {
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   media_id?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   like_count?: Prisma.IntFieldUpdateOperationsInput | number
   comment_count?: Prisma.IntFieldUpdateOperationsInput | number
+  comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ReelListRelationFilter = {
@@ -392,9 +435,12 @@ export type ReelCountOrderByAggregateInput = {
   user_id?: Prisma.SortOrder
   media_id?: Prisma.SortOrder
   caption?: Prisma.SortOrder
+  location?: Prisma.SortOrder
   like_count?: Prisma.SortOrder
   comment_count?: Prisma.SortOrder
+  comments_disabled?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
 }
 
 export type ReelAvgOrderByAggregateInput = {
@@ -407,9 +453,12 @@ export type ReelMaxOrderByAggregateInput = {
   user_id?: Prisma.SortOrder
   media_id?: Prisma.SortOrder
   caption?: Prisma.SortOrder
+  location?: Prisma.SortOrder
   like_count?: Prisma.SortOrder
   comment_count?: Prisma.SortOrder
+  comments_disabled?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
 }
 
 export type ReelMinOrderByAggregateInput = {
@@ -417,19 +466,17 @@ export type ReelMinOrderByAggregateInput = {
   user_id?: Prisma.SortOrder
   media_id?: Prisma.SortOrder
   caption?: Prisma.SortOrder
+  location?: Prisma.SortOrder
   like_count?: Prisma.SortOrder
   comment_count?: Prisma.SortOrder
+  comments_disabled?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
+  deleted_at?: Prisma.SortOrder
 }
 
 export type ReelSumOrderByAggregateInput = {
   like_count?: Prisma.SortOrder
   comment_count?: Prisma.SortOrder
-}
-
-export type ReelScalarRelationFilter = {
-  is?: Prisma.ReelWhereInput
-  isNot?: Prisma.ReelWhereInput
 }
 
 export type ReelCreateNestedManyWithoutUserInput = {
@@ -516,54 +563,28 @@ export type ReelUncheckedUpdateManyWithoutMediaNestedInput = {
   deleteMany?: Prisma.ReelScalarWhereInput | Prisma.ReelScalarWhereInput[]
 }
 
-export type ReelCreateNestedOneWithoutLikesInput = {
-  create?: Prisma.XOR<Prisma.ReelCreateWithoutLikesInput, Prisma.ReelUncheckedCreateWithoutLikesInput>
-  connectOrCreate?: Prisma.ReelCreateOrConnectWithoutLikesInput
-  connect?: Prisma.ReelWhereUniqueInput
-}
-
-export type ReelUpdateOneRequiredWithoutLikesNestedInput = {
-  create?: Prisma.XOR<Prisma.ReelCreateWithoutLikesInput, Prisma.ReelUncheckedCreateWithoutLikesInput>
-  connectOrCreate?: Prisma.ReelCreateOrConnectWithoutLikesInput
-  upsert?: Prisma.ReelUpsertWithoutLikesInput
-  connect?: Prisma.ReelWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ReelUpdateToOneWithWhereWithoutLikesInput, Prisma.ReelUpdateWithoutLikesInput>, Prisma.ReelUncheckedUpdateWithoutLikesInput>
-}
-
-export type ReelCreateNestedOneWithoutViewsInput = {
-  create?: Prisma.XOR<Prisma.ReelCreateWithoutViewsInput, Prisma.ReelUncheckedCreateWithoutViewsInput>
-  connectOrCreate?: Prisma.ReelCreateOrConnectWithoutViewsInput
-  connect?: Prisma.ReelWhereUniqueInput
-}
-
-export type ReelUpdateOneRequiredWithoutViewsNestedInput = {
-  create?: Prisma.XOR<Prisma.ReelCreateWithoutViewsInput, Prisma.ReelUncheckedCreateWithoutViewsInput>
-  connectOrCreate?: Prisma.ReelCreateOrConnectWithoutViewsInput
-  upsert?: Prisma.ReelUpsertWithoutViewsInput
-  connect?: Prisma.ReelWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ReelUpdateToOneWithWhereWithoutViewsInput, Prisma.ReelUpdateWithoutViewsInput>, Prisma.ReelUncheckedUpdateWithoutViewsInput>
-}
-
 export type ReelCreateWithoutUserInput = {
   id?: string
   caption?: string | null
+  location?: string | null
   like_count?: number
   comment_count?: number
+  comments_disabled?: boolean
   created_at?: Date | string
+  deleted_at?: Date | string | null
   media: Prisma.MediaCreateNestedOneWithoutReelInput
-  likes?: Prisma.ReelLikeCreateNestedManyWithoutReelInput
-  views?: Prisma.ReelViewCreateNestedManyWithoutReelInput
 }
 
 export type ReelUncheckedCreateWithoutUserInput = {
   id?: string
   media_id: string
   caption?: string | null
+  location?: string | null
   like_count?: number
   comment_count?: number
+  comments_disabled?: boolean
   created_at?: Date | string
-  likes?: Prisma.ReelLikeUncheckedCreateNestedManyWithoutReelInput
-  views?: Prisma.ReelViewUncheckedCreateNestedManyWithoutReelInput
+  deleted_at?: Date | string | null
 }
 
 export type ReelCreateOrConnectWithoutUserInput = {
@@ -600,31 +621,36 @@ export type ReelScalarWhereInput = {
   user_id?: Prisma.StringFilter<"Reel"> | string
   media_id?: Prisma.StringFilter<"Reel"> | string
   caption?: Prisma.StringNullableFilter<"Reel"> | string | null
+  location?: Prisma.StringNullableFilter<"Reel"> | string | null
   like_count?: Prisma.IntFilter<"Reel"> | number
   comment_count?: Prisma.IntFilter<"Reel"> | number
+  comments_disabled?: Prisma.BoolFilter<"Reel"> | boolean
   created_at?: Prisma.DateTimeFilter<"Reel"> | Date | string
+  deleted_at?: Prisma.DateTimeNullableFilter<"Reel"> | Date | string | null
 }
 
 export type ReelCreateWithoutMediaInput = {
   id?: string
   caption?: string | null
+  location?: string | null
   like_count?: number
   comment_count?: number
+  comments_disabled?: boolean
   created_at?: Date | string
+  deleted_at?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutReelsInput
-  likes?: Prisma.ReelLikeCreateNestedManyWithoutReelInput
-  views?: Prisma.ReelViewCreateNestedManyWithoutReelInput
 }
 
 export type ReelUncheckedCreateWithoutMediaInput = {
   id?: string
   user_id: string
   caption?: string | null
+  location?: string | null
   like_count?: number
   comment_count?: number
+  comments_disabled?: boolean
   created_at?: Date | string
-  likes?: Prisma.ReelLikeUncheckedCreateNestedManyWithoutReelInput
-  views?: Prisma.ReelViewUncheckedCreateNestedManyWithoutReelInput
+  deleted_at?: Date | string | null
 }
 
 export type ReelCreateOrConnectWithoutMediaInput = {
@@ -653,244 +679,102 @@ export type ReelUpdateManyWithWhereWithoutMediaInput = {
   data: Prisma.XOR<Prisma.ReelUpdateManyMutationInput, Prisma.ReelUncheckedUpdateManyWithoutMediaInput>
 }
 
-export type ReelCreateWithoutLikesInput = {
-  id?: string
-  caption?: string | null
-  like_count?: number
-  comment_count?: number
-  created_at?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutReelsInput
-  media: Prisma.MediaCreateNestedOneWithoutReelInput
-  views?: Prisma.ReelViewCreateNestedManyWithoutReelInput
-}
-
-export type ReelUncheckedCreateWithoutLikesInput = {
-  id?: string
-  user_id: string
-  media_id: string
-  caption?: string | null
-  like_count?: number
-  comment_count?: number
-  created_at?: Date | string
-  views?: Prisma.ReelViewUncheckedCreateNestedManyWithoutReelInput
-}
-
-export type ReelCreateOrConnectWithoutLikesInput = {
-  where: Prisma.ReelWhereUniqueInput
-  create: Prisma.XOR<Prisma.ReelCreateWithoutLikesInput, Prisma.ReelUncheckedCreateWithoutLikesInput>
-}
-
-export type ReelUpsertWithoutLikesInput = {
-  update: Prisma.XOR<Prisma.ReelUpdateWithoutLikesInput, Prisma.ReelUncheckedUpdateWithoutLikesInput>
-  create: Prisma.XOR<Prisma.ReelCreateWithoutLikesInput, Prisma.ReelUncheckedCreateWithoutLikesInput>
-  where?: Prisma.ReelWhereInput
-}
-
-export type ReelUpdateToOneWithWhereWithoutLikesInput = {
-  where?: Prisma.ReelWhereInput
-  data: Prisma.XOR<Prisma.ReelUpdateWithoutLikesInput, Prisma.ReelUncheckedUpdateWithoutLikesInput>
-}
-
-export type ReelUpdateWithoutLikesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  like_count?: Prisma.IntFieldUpdateOperationsInput | number
-  comment_count?: Prisma.IntFieldUpdateOperationsInput | number
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutReelsNestedInput
-  media?: Prisma.MediaUpdateOneRequiredWithoutReelNestedInput
-  views?: Prisma.ReelViewUpdateManyWithoutReelNestedInput
-}
-
-export type ReelUncheckedUpdateWithoutLikesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  user_id?: Prisma.StringFieldUpdateOperationsInput | string
-  media_id?: Prisma.StringFieldUpdateOperationsInput | string
-  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  like_count?: Prisma.IntFieldUpdateOperationsInput | number
-  comment_count?: Prisma.IntFieldUpdateOperationsInput | number
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  views?: Prisma.ReelViewUncheckedUpdateManyWithoutReelNestedInput
-}
-
-export type ReelCreateWithoutViewsInput = {
-  id?: string
-  caption?: string | null
-  like_count?: number
-  comment_count?: number
-  created_at?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutReelsInput
-  media: Prisma.MediaCreateNestedOneWithoutReelInput
-  likes?: Prisma.ReelLikeCreateNestedManyWithoutReelInput
-}
-
-export type ReelUncheckedCreateWithoutViewsInput = {
-  id?: string
-  user_id: string
-  media_id: string
-  caption?: string | null
-  like_count?: number
-  comment_count?: number
-  created_at?: Date | string
-  likes?: Prisma.ReelLikeUncheckedCreateNestedManyWithoutReelInput
-}
-
-export type ReelCreateOrConnectWithoutViewsInput = {
-  where: Prisma.ReelWhereUniqueInput
-  create: Prisma.XOR<Prisma.ReelCreateWithoutViewsInput, Prisma.ReelUncheckedCreateWithoutViewsInput>
-}
-
-export type ReelUpsertWithoutViewsInput = {
-  update: Prisma.XOR<Prisma.ReelUpdateWithoutViewsInput, Prisma.ReelUncheckedUpdateWithoutViewsInput>
-  create: Prisma.XOR<Prisma.ReelCreateWithoutViewsInput, Prisma.ReelUncheckedCreateWithoutViewsInput>
-  where?: Prisma.ReelWhereInput
-}
-
-export type ReelUpdateToOneWithWhereWithoutViewsInput = {
-  where?: Prisma.ReelWhereInput
-  data: Prisma.XOR<Prisma.ReelUpdateWithoutViewsInput, Prisma.ReelUncheckedUpdateWithoutViewsInput>
-}
-
-export type ReelUpdateWithoutViewsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  like_count?: Prisma.IntFieldUpdateOperationsInput | number
-  comment_count?: Prisma.IntFieldUpdateOperationsInput | number
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutReelsNestedInput
-  media?: Prisma.MediaUpdateOneRequiredWithoutReelNestedInput
-  likes?: Prisma.ReelLikeUpdateManyWithoutReelNestedInput
-}
-
-export type ReelUncheckedUpdateWithoutViewsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  user_id?: Prisma.StringFieldUpdateOperationsInput | string
-  media_id?: Prisma.StringFieldUpdateOperationsInput | string
-  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  like_count?: Prisma.IntFieldUpdateOperationsInput | number
-  comment_count?: Prisma.IntFieldUpdateOperationsInput | number
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  likes?: Prisma.ReelLikeUncheckedUpdateManyWithoutReelNestedInput
-}
-
 export type ReelCreateManyUserInput = {
   id?: string
   media_id: string
   caption?: string | null
+  location?: string | null
   like_count?: number
   comment_count?: number
+  comments_disabled?: boolean
   created_at?: Date | string
+  deleted_at?: Date | string | null
 }
 
 export type ReelUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   like_count?: Prisma.IntFieldUpdateOperationsInput | number
   comment_count?: Prisma.IntFieldUpdateOperationsInput | number
+  comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   media?: Prisma.MediaUpdateOneRequiredWithoutReelNestedInput
-  likes?: Prisma.ReelLikeUpdateManyWithoutReelNestedInput
-  views?: Prisma.ReelViewUpdateManyWithoutReelNestedInput
 }
 
 export type ReelUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   media_id?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   like_count?: Prisma.IntFieldUpdateOperationsInput | number
   comment_count?: Prisma.IntFieldUpdateOperationsInput | number
+  comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  likes?: Prisma.ReelLikeUncheckedUpdateManyWithoutReelNestedInput
-  views?: Prisma.ReelViewUncheckedUpdateManyWithoutReelNestedInput
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ReelUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   media_id?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   like_count?: Prisma.IntFieldUpdateOperationsInput | number
   comment_count?: Prisma.IntFieldUpdateOperationsInput | number
+  comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ReelCreateManyMediaInput = {
   id?: string
   user_id: string
   caption?: string | null
+  location?: string | null
   like_count?: number
   comment_count?: number
+  comments_disabled?: boolean
   created_at?: Date | string
+  deleted_at?: Date | string | null
 }
 
 export type ReelUpdateWithoutMediaInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   like_count?: Prisma.IntFieldUpdateOperationsInput | number
   comment_count?: Prisma.IntFieldUpdateOperationsInput | number
+  comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutReelsNestedInput
-  likes?: Prisma.ReelLikeUpdateManyWithoutReelNestedInput
-  views?: Prisma.ReelViewUpdateManyWithoutReelNestedInput
 }
 
 export type ReelUncheckedUpdateWithoutMediaInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   like_count?: Prisma.IntFieldUpdateOperationsInput | number
   comment_count?: Prisma.IntFieldUpdateOperationsInput | number
+  comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  likes?: Prisma.ReelLikeUncheckedUpdateManyWithoutReelNestedInput
-  views?: Prisma.ReelViewUncheckedUpdateManyWithoutReelNestedInput
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ReelUncheckedUpdateManyWithoutMediaInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   like_count?: Prisma.IntFieldUpdateOperationsInput | number
   comment_count?: Prisma.IntFieldUpdateOperationsInput | number
+  comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
-
-/**
- * Count Type ReelCountOutputType
- */
-
-export type ReelCountOutputType = {
-  likes: number
-  views: number
-}
-
-export type ReelCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  likes?: boolean | ReelCountOutputTypeCountLikesArgs
-  views?: boolean | ReelCountOutputTypeCountViewsArgs
-}
-
-/**
- * ReelCountOutputType without action
- */
-export type ReelCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ReelCountOutputType
-   */
-  select?: Prisma.ReelCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * ReelCountOutputType without action
- */
-export type ReelCountOutputTypeCountLikesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ReelLikeWhereInput
-}
-
-/**
- * ReelCountOutputType without action
- */
-export type ReelCountOutputTypeCountViewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ReelViewWhereInput
-}
 
 
 export type ReelSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -898,14 +782,14 @@ export type ReelSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   user_id?: boolean
   media_id?: boolean
   caption?: boolean
+  location?: boolean
   like_count?: boolean
   comment_count?: boolean
+  comments_disabled?: boolean
   created_at?: boolean
+  deleted_at?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   media?: boolean | Prisma.MediaDefaultArgs<ExtArgs>
-  likes?: boolean | Prisma.Reel$likesArgs<ExtArgs>
-  views?: boolean | Prisma.Reel$viewsArgs<ExtArgs>
-  _count?: boolean | Prisma.ReelCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["reel"]>
 
 export type ReelSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -913,9 +797,12 @@ export type ReelSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   user_id?: boolean
   media_id?: boolean
   caption?: boolean
+  location?: boolean
   like_count?: boolean
   comment_count?: boolean
+  comments_disabled?: boolean
   created_at?: boolean
+  deleted_at?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   media?: boolean | Prisma.MediaDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["reel"]>
@@ -925,9 +812,12 @@ export type ReelSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   user_id?: boolean
   media_id?: boolean
   caption?: boolean
+  location?: boolean
   like_count?: boolean
   comment_count?: boolean
+  comments_disabled?: boolean
   created_at?: boolean
+  deleted_at?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   media?: boolean | Prisma.MediaDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["reel"]>
@@ -937,18 +827,18 @@ export type ReelSelectScalar = {
   user_id?: boolean
   media_id?: boolean
   caption?: boolean
+  location?: boolean
   like_count?: boolean
   comment_count?: boolean
+  comments_disabled?: boolean
   created_at?: boolean
+  deleted_at?: boolean
 }
 
-export type ReelOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "media_id" | "caption" | "like_count" | "comment_count" | "created_at", ExtArgs["result"]["reel"]>
+export type ReelOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "media_id" | "caption" | "location" | "like_count" | "comment_count" | "comments_disabled" | "created_at" | "deleted_at", ExtArgs["result"]["reel"]>
 export type ReelInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   media?: boolean | Prisma.MediaDefaultArgs<ExtArgs>
-  likes?: boolean | Prisma.Reel$likesArgs<ExtArgs>
-  views?: boolean | Prisma.Reel$viewsArgs<ExtArgs>
-  _count?: boolean | Prisma.ReelCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ReelIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -964,17 +854,18 @@ export type $ReelPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
     media: Prisma.$MediaPayload<ExtArgs>
-    likes: Prisma.$ReelLikePayload<ExtArgs>[]
-    views: Prisma.$ReelViewPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     user_id: string
     media_id: string
     caption: string | null
+    location: string | null
     like_count: number
     comment_count: number
+    comments_disabled: boolean
     created_at: Date
+    deleted_at: Date | null
   }, ExtArgs["result"]["reel"]>
   composites: {}
 }
@@ -1371,8 +1262,6 @@ export interface Prisma__ReelClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   media<T extends Prisma.MediaDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MediaDefaultArgs<ExtArgs>>): Prisma.Prisma__MediaClient<runtime.Types.Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  likes<T extends Prisma.Reel$likesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Reel$likesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReelLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  views<T extends Prisma.Reel$viewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Reel$viewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReelViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1406,9 +1295,12 @@ export interface ReelFieldRefs {
   readonly user_id: Prisma.FieldRef<"Reel", 'String'>
   readonly media_id: Prisma.FieldRef<"Reel", 'String'>
   readonly caption: Prisma.FieldRef<"Reel", 'String'>
+  readonly location: Prisma.FieldRef<"Reel", 'String'>
   readonly like_count: Prisma.FieldRef<"Reel", 'Int'>
   readonly comment_count: Prisma.FieldRef<"Reel", 'Int'>
+  readonly comments_disabled: Prisma.FieldRef<"Reel", 'Boolean'>
   readonly created_at: Prisma.FieldRef<"Reel", 'DateTime'>
+  readonly deleted_at: Prisma.FieldRef<"Reel", 'DateTime'>
 }
     
 
@@ -1802,54 +1694,6 @@ export type ReelDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Reels to delete.
    */
   limit?: number
-}
-
-/**
- * Reel.likes
- */
-export type Reel$likesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ReelLike
-   */
-  select?: Prisma.ReelLikeSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ReelLike
-   */
-  omit?: Prisma.ReelLikeOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ReelLikeInclude<ExtArgs> | null
-  where?: Prisma.ReelLikeWhereInput
-  orderBy?: Prisma.ReelLikeOrderByWithRelationInput | Prisma.ReelLikeOrderByWithRelationInput[]
-  cursor?: Prisma.ReelLikeWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ReelLikeScalarFieldEnum | Prisma.ReelLikeScalarFieldEnum[]
-}
-
-/**
- * Reel.views
- */
-export type Reel$viewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ReelView
-   */
-  select?: Prisma.ReelViewSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ReelView
-   */
-  omit?: Prisma.ReelViewOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ReelViewInclude<ExtArgs> | null
-  where?: Prisma.ReelViewWhereInput
-  orderBy?: Prisma.ReelViewOrderByWithRelationInput | Prisma.ReelViewOrderByWithRelationInput[]
-  cursor?: Prisma.ReelViewWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ReelViewScalarFieldEnum | Prisma.ReelViewScalarFieldEnum[]
 }
 
 /**

@@ -37,7 +37,8 @@ export type FeedSumAggregateOutputType = {
 export type FeedMinAggregateOutputType = {
   id: string | null
   user_id: string | null
-  post_id: string | null
+  target_type: $Enums.ContentType | null
+  target_id: string | null
   score: number | null
   created_at: Date | null
 }
@@ -45,7 +46,8 @@ export type FeedMinAggregateOutputType = {
 export type FeedMaxAggregateOutputType = {
   id: string | null
   user_id: string | null
-  post_id: string | null
+  target_type: $Enums.ContentType | null
+  target_id: string | null
   score: number | null
   created_at: Date | null
 }
@@ -53,7 +55,8 @@ export type FeedMaxAggregateOutputType = {
 export type FeedCountAggregateOutputType = {
   id: number
   user_id: number
-  post_id: number
+  target_type: number
+  target_id: number
   score: number
   created_at: number
   _all: number
@@ -71,7 +74,8 @@ export type FeedSumAggregateInputType = {
 export type FeedMinAggregateInputType = {
   id?: true
   user_id?: true
-  post_id?: true
+  target_type?: true
+  target_id?: true
   score?: true
   created_at?: true
 }
@@ -79,7 +83,8 @@ export type FeedMinAggregateInputType = {
 export type FeedMaxAggregateInputType = {
   id?: true
   user_id?: true
-  post_id?: true
+  target_type?: true
+  target_id?: true
   score?: true
   created_at?: true
 }
@@ -87,7 +92,8 @@ export type FeedMaxAggregateInputType = {
 export type FeedCountAggregateInputType = {
   id?: true
   user_id?: true
-  post_id?: true
+  target_type?: true
+  target_id?: true
   score?: true
   created_at?: true
   _all?: true
@@ -182,7 +188,8 @@ export type FeedGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type FeedGroupByOutputType = {
   id: string
   user_id: string
-  post_id: string
+  target_type: $Enums.ContentType
+  target_id: string
   score: number
   created_at: Date
   _count: FeedCountAggregateOutputType | null
@@ -213,41 +220,42 @@ export type FeedWhereInput = {
   NOT?: Prisma.FeedWhereInput | Prisma.FeedWhereInput[]
   id?: Prisma.StringFilter<"Feed"> | string
   user_id?: Prisma.StringFilter<"Feed"> | string
-  post_id?: Prisma.StringFilter<"Feed"> | string
+  target_type?: Prisma.EnumContentTypeFilter<"Feed"> | $Enums.ContentType
+  target_id?: Prisma.StringFilter<"Feed"> | string
   score?: Prisma.FloatFilter<"Feed"> | number
   created_at?: Prisma.DateTimeFilter<"Feed"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  post?: Prisma.XOR<Prisma.PostScalarRelationFilter, Prisma.PostWhereInput>
 }
 
 export type FeedOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
-  post_id?: Prisma.SortOrder
+  target_type?: Prisma.SortOrder
+  target_id?: Prisma.SortOrder
   score?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
-  post?: Prisma.PostOrderByWithRelationInput
 }
 
 export type FeedWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  user_id_post_id?: Prisma.FeedUser_idPost_idCompoundUniqueInput
+  user_id_target_type_target_id?: Prisma.FeedUser_idTarget_typeTarget_idCompoundUniqueInput
   AND?: Prisma.FeedWhereInput | Prisma.FeedWhereInput[]
   OR?: Prisma.FeedWhereInput[]
   NOT?: Prisma.FeedWhereInput | Prisma.FeedWhereInput[]
   user_id?: Prisma.StringFilter<"Feed"> | string
-  post_id?: Prisma.StringFilter<"Feed"> | string
+  target_type?: Prisma.EnumContentTypeFilter<"Feed"> | $Enums.ContentType
+  target_id?: Prisma.StringFilter<"Feed"> | string
   score?: Prisma.FloatFilter<"Feed"> | number
   created_at?: Prisma.DateTimeFilter<"Feed"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  post?: Prisma.XOR<Prisma.PostScalarRelationFilter, Prisma.PostWhereInput>
-}, "id" | "user_id_post_id">
+}, "id" | "user_id_target_type_target_id">
 
 export type FeedOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
-  post_id?: Prisma.SortOrder
+  target_type?: Prisma.SortOrder
+  target_id?: Prisma.SortOrder
   score?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   _count?: Prisma.FeedCountOrderByAggregateInput
@@ -263,39 +271,44 @@ export type FeedScalarWhereWithAggregatesInput = {
   NOT?: Prisma.FeedScalarWhereWithAggregatesInput | Prisma.FeedScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Feed"> | string
   user_id?: Prisma.StringWithAggregatesFilter<"Feed"> | string
-  post_id?: Prisma.StringWithAggregatesFilter<"Feed"> | string
+  target_type?: Prisma.EnumContentTypeWithAggregatesFilter<"Feed"> | $Enums.ContentType
+  target_id?: Prisma.StringWithAggregatesFilter<"Feed"> | string
   score?: Prisma.FloatWithAggregatesFilter<"Feed"> | number
   created_at?: Prisma.DateTimeWithAggregatesFilter<"Feed"> | Date | string
 }
 
 export type FeedCreateInput = {
   id?: string
+  target_type: $Enums.ContentType
+  target_id: string
   score?: number
   created_at?: Date | string
   user: Prisma.UserCreateNestedOneWithoutFeedsInput
-  post: Prisma.PostCreateNestedOneWithoutFeedsInput
 }
 
 export type FeedUncheckedCreateInput = {
   id?: string
   user_id: string
-  post_id: string
+  target_type: $Enums.ContentType
+  target_id: string
   score?: number
   created_at?: Date | string
 }
 
 export type FeedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  target_type?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+  target_id?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.FloatFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutFeedsNestedInput
-  post?: Prisma.PostUpdateOneRequiredWithoutFeedsNestedInput
 }
 
 export type FeedUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
-  post_id?: Prisma.StringFieldUpdateOperationsInput | string
+  target_type?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+  target_id?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.FloatFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -303,13 +316,16 @@ export type FeedUncheckedUpdateInput = {
 export type FeedCreateManyInput = {
   id?: string
   user_id: string
-  post_id: string
+  target_type: $Enums.ContentType
+  target_id: string
   score?: number
   created_at?: Date | string
 }
 
 export type FeedUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  target_type?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+  target_id?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.FloatFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -317,7 +333,8 @@ export type FeedUpdateManyMutationInput = {
 export type FeedUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
-  post_id?: Prisma.StringFieldUpdateOperationsInput | string
+  target_type?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+  target_id?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.FloatFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -332,15 +349,17 @@ export type FeedOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type FeedUser_idPost_idCompoundUniqueInput = {
+export type FeedUser_idTarget_typeTarget_idCompoundUniqueInput = {
   user_id: string
-  post_id: string
+  target_type: $Enums.ContentType
+  target_id: string
 }
 
 export type FeedCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
-  post_id?: Prisma.SortOrder
+  target_type?: Prisma.SortOrder
+  target_id?: Prisma.SortOrder
   score?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
 }
@@ -352,7 +371,8 @@ export type FeedAvgOrderByAggregateInput = {
 export type FeedMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
-  post_id?: Prisma.SortOrder
+  target_type?: Prisma.SortOrder
+  target_id?: Prisma.SortOrder
   score?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
 }
@@ -360,7 +380,8 @@ export type FeedMaxOrderByAggregateInput = {
 export type FeedMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
-  post_id?: Prisma.SortOrder
+  target_type?: Prisma.SortOrder
+  target_id?: Prisma.SortOrder
   score?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
 }
@@ -411,48 +432,6 @@ export type FeedUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.FeedScalarWhereInput | Prisma.FeedScalarWhereInput[]
 }
 
-export type FeedCreateNestedManyWithoutPostInput = {
-  create?: Prisma.XOR<Prisma.FeedCreateWithoutPostInput, Prisma.FeedUncheckedCreateWithoutPostInput> | Prisma.FeedCreateWithoutPostInput[] | Prisma.FeedUncheckedCreateWithoutPostInput[]
-  connectOrCreate?: Prisma.FeedCreateOrConnectWithoutPostInput | Prisma.FeedCreateOrConnectWithoutPostInput[]
-  createMany?: Prisma.FeedCreateManyPostInputEnvelope
-  connect?: Prisma.FeedWhereUniqueInput | Prisma.FeedWhereUniqueInput[]
-}
-
-export type FeedUncheckedCreateNestedManyWithoutPostInput = {
-  create?: Prisma.XOR<Prisma.FeedCreateWithoutPostInput, Prisma.FeedUncheckedCreateWithoutPostInput> | Prisma.FeedCreateWithoutPostInput[] | Prisma.FeedUncheckedCreateWithoutPostInput[]
-  connectOrCreate?: Prisma.FeedCreateOrConnectWithoutPostInput | Prisma.FeedCreateOrConnectWithoutPostInput[]
-  createMany?: Prisma.FeedCreateManyPostInputEnvelope
-  connect?: Prisma.FeedWhereUniqueInput | Prisma.FeedWhereUniqueInput[]
-}
-
-export type FeedUpdateManyWithoutPostNestedInput = {
-  create?: Prisma.XOR<Prisma.FeedCreateWithoutPostInput, Prisma.FeedUncheckedCreateWithoutPostInput> | Prisma.FeedCreateWithoutPostInput[] | Prisma.FeedUncheckedCreateWithoutPostInput[]
-  connectOrCreate?: Prisma.FeedCreateOrConnectWithoutPostInput | Prisma.FeedCreateOrConnectWithoutPostInput[]
-  upsert?: Prisma.FeedUpsertWithWhereUniqueWithoutPostInput | Prisma.FeedUpsertWithWhereUniqueWithoutPostInput[]
-  createMany?: Prisma.FeedCreateManyPostInputEnvelope
-  set?: Prisma.FeedWhereUniqueInput | Prisma.FeedWhereUniqueInput[]
-  disconnect?: Prisma.FeedWhereUniqueInput | Prisma.FeedWhereUniqueInput[]
-  delete?: Prisma.FeedWhereUniqueInput | Prisma.FeedWhereUniqueInput[]
-  connect?: Prisma.FeedWhereUniqueInput | Prisma.FeedWhereUniqueInput[]
-  update?: Prisma.FeedUpdateWithWhereUniqueWithoutPostInput | Prisma.FeedUpdateWithWhereUniqueWithoutPostInput[]
-  updateMany?: Prisma.FeedUpdateManyWithWhereWithoutPostInput | Prisma.FeedUpdateManyWithWhereWithoutPostInput[]
-  deleteMany?: Prisma.FeedScalarWhereInput | Prisma.FeedScalarWhereInput[]
-}
-
-export type FeedUncheckedUpdateManyWithoutPostNestedInput = {
-  create?: Prisma.XOR<Prisma.FeedCreateWithoutPostInput, Prisma.FeedUncheckedCreateWithoutPostInput> | Prisma.FeedCreateWithoutPostInput[] | Prisma.FeedUncheckedCreateWithoutPostInput[]
-  connectOrCreate?: Prisma.FeedCreateOrConnectWithoutPostInput | Prisma.FeedCreateOrConnectWithoutPostInput[]
-  upsert?: Prisma.FeedUpsertWithWhereUniqueWithoutPostInput | Prisma.FeedUpsertWithWhereUniqueWithoutPostInput[]
-  createMany?: Prisma.FeedCreateManyPostInputEnvelope
-  set?: Prisma.FeedWhereUniqueInput | Prisma.FeedWhereUniqueInput[]
-  disconnect?: Prisma.FeedWhereUniqueInput | Prisma.FeedWhereUniqueInput[]
-  delete?: Prisma.FeedWhereUniqueInput | Prisma.FeedWhereUniqueInput[]
-  connect?: Prisma.FeedWhereUniqueInput | Prisma.FeedWhereUniqueInput[]
-  update?: Prisma.FeedUpdateWithWhereUniqueWithoutPostInput | Prisma.FeedUpdateWithWhereUniqueWithoutPostInput[]
-  updateMany?: Prisma.FeedUpdateManyWithWhereWithoutPostInput | Prisma.FeedUpdateManyWithWhereWithoutPostInput[]
-  deleteMany?: Prisma.FeedScalarWhereInput | Prisma.FeedScalarWhereInput[]
-}
-
 export type FloatFieldUpdateOperationsInput = {
   set?: number
   increment?: number
@@ -463,14 +442,16 @@ export type FloatFieldUpdateOperationsInput = {
 
 export type FeedCreateWithoutUserInput = {
   id?: string
+  target_type: $Enums.ContentType
+  target_id: string
   score?: number
   created_at?: Date | string
-  post: Prisma.PostCreateNestedOneWithoutFeedsInput
 }
 
 export type FeedUncheckedCreateWithoutUserInput = {
   id?: string
-  post_id: string
+  target_type: $Enums.ContentType
+  target_id: string
   score?: number
   created_at?: Date | string
 }
@@ -507,103 +488,40 @@ export type FeedScalarWhereInput = {
   NOT?: Prisma.FeedScalarWhereInput | Prisma.FeedScalarWhereInput[]
   id?: Prisma.StringFilter<"Feed"> | string
   user_id?: Prisma.StringFilter<"Feed"> | string
-  post_id?: Prisma.StringFilter<"Feed"> | string
+  target_type?: Prisma.EnumContentTypeFilter<"Feed"> | $Enums.ContentType
+  target_id?: Prisma.StringFilter<"Feed"> | string
   score?: Prisma.FloatFilter<"Feed"> | number
   created_at?: Prisma.DateTimeFilter<"Feed"> | Date | string
 }
 
-export type FeedCreateWithoutPostInput = {
-  id?: string
-  score?: number
-  created_at?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutFeedsInput
-}
-
-export type FeedUncheckedCreateWithoutPostInput = {
-  id?: string
-  user_id: string
-  score?: number
-  created_at?: Date | string
-}
-
-export type FeedCreateOrConnectWithoutPostInput = {
-  where: Prisma.FeedWhereUniqueInput
-  create: Prisma.XOR<Prisma.FeedCreateWithoutPostInput, Prisma.FeedUncheckedCreateWithoutPostInput>
-}
-
-export type FeedCreateManyPostInputEnvelope = {
-  data: Prisma.FeedCreateManyPostInput | Prisma.FeedCreateManyPostInput[]
-  skipDuplicates?: boolean
-}
-
-export type FeedUpsertWithWhereUniqueWithoutPostInput = {
-  where: Prisma.FeedWhereUniqueInput
-  update: Prisma.XOR<Prisma.FeedUpdateWithoutPostInput, Prisma.FeedUncheckedUpdateWithoutPostInput>
-  create: Prisma.XOR<Prisma.FeedCreateWithoutPostInput, Prisma.FeedUncheckedCreateWithoutPostInput>
-}
-
-export type FeedUpdateWithWhereUniqueWithoutPostInput = {
-  where: Prisma.FeedWhereUniqueInput
-  data: Prisma.XOR<Prisma.FeedUpdateWithoutPostInput, Prisma.FeedUncheckedUpdateWithoutPostInput>
-}
-
-export type FeedUpdateManyWithWhereWithoutPostInput = {
-  where: Prisma.FeedScalarWhereInput
-  data: Prisma.XOR<Prisma.FeedUpdateManyMutationInput, Prisma.FeedUncheckedUpdateManyWithoutPostInput>
-}
-
 export type FeedCreateManyUserInput = {
   id?: string
-  post_id: string
+  target_type: $Enums.ContentType
+  target_id: string
   score?: number
   created_at?: Date | string
 }
 
 export type FeedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  target_type?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+  target_id?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.FloatFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  post?: Prisma.PostUpdateOneRequiredWithoutFeedsNestedInput
 }
 
 export type FeedUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  post_id?: Prisma.StringFieldUpdateOperationsInput | string
+  target_type?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+  target_id?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.FloatFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type FeedUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  post_id?: Prisma.StringFieldUpdateOperationsInput | string
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type FeedCreateManyPostInput = {
-  id?: string
-  user_id: string
-  score?: number
-  created_at?: Date | string
-}
-
-export type FeedUpdateWithoutPostInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutFeedsNestedInput
-}
-
-export type FeedUncheckedUpdateWithoutPostInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  user_id?: Prisma.StringFieldUpdateOperationsInput | string
-  score?: Prisma.FloatFieldUpdateOperationsInput | number
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type FeedUncheckedUpdateManyWithoutPostInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  user_id?: Prisma.StringFieldUpdateOperationsInput | string
+  target_type?: Prisma.EnumContentTypeFieldUpdateOperationsInput | $Enums.ContentType
+  target_id?: Prisma.StringFieldUpdateOperationsInput | string
   score?: Prisma.FloatFieldUpdateOperationsInput | number
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -613,65 +531,63 @@ export type FeedUncheckedUpdateManyWithoutPostInput = {
 export type FeedSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   user_id?: boolean
-  post_id?: boolean
+  target_type?: boolean
+  target_id?: boolean
   score?: boolean
   created_at?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  post?: boolean | Prisma.PostDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["feed"]>
 
 export type FeedSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   user_id?: boolean
-  post_id?: boolean
+  target_type?: boolean
+  target_id?: boolean
   score?: boolean
   created_at?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  post?: boolean | Prisma.PostDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["feed"]>
 
 export type FeedSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   user_id?: boolean
-  post_id?: boolean
+  target_type?: boolean
+  target_id?: boolean
   score?: boolean
   created_at?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  post?: boolean | Prisma.PostDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["feed"]>
 
 export type FeedSelectScalar = {
   id?: boolean
   user_id?: boolean
-  post_id?: boolean
+  target_type?: boolean
+  target_id?: boolean
   score?: boolean
   created_at?: boolean
 }
 
-export type FeedOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "post_id" | "score" | "created_at", ExtArgs["result"]["feed"]>
+export type FeedOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "target_type" | "target_id" | "score" | "created_at", ExtArgs["result"]["feed"]>
 export type FeedInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  post?: boolean | Prisma.PostDefaultArgs<ExtArgs>
 }
 export type FeedIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  post?: boolean | Prisma.PostDefaultArgs<ExtArgs>
 }
 export type FeedIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  post?: boolean | Prisma.PostDefaultArgs<ExtArgs>
 }
 
 export type $FeedPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Feed"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
-    post: Prisma.$PostPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     user_id: string
-    post_id: string
+    target_type: $Enums.ContentType
+    target_id: string
     score: number
     created_at: Date
   }, ExtArgs["result"]["feed"]>
@@ -1069,7 +985,6 @@ readonly fields: FeedFieldRefs;
 export interface Prisma__FeedClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  post<T extends Prisma.PostDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PostDefaultArgs<ExtArgs>>): Prisma.Prisma__PostClient<runtime.Types.Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1101,7 +1016,8 @@ export interface Prisma__FeedClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface FeedFieldRefs {
   readonly id: Prisma.FieldRef<"Feed", 'String'>
   readonly user_id: Prisma.FieldRef<"Feed", 'String'>
-  readonly post_id: Prisma.FieldRef<"Feed", 'String'>
+  readonly target_type: Prisma.FieldRef<"Feed", 'ContentType'>
+  readonly target_id: Prisma.FieldRef<"Feed", 'String'>
   readonly score: Prisma.FieldRef<"Feed", 'Float'>
   readonly created_at: Prisma.FieldRef<"Feed", 'DateTime'>
 }

@@ -57,20 +57,15 @@ export const ModelName = {
   Media: 'Media',
   Post: 'Post',
   PostMedia: 'PostMedia',
-  PostView: 'PostView',
-  PostSave: 'PostSave',
-  PostLike: 'PostLike',
+  Reel: 'Reel',
+  Story: 'Story',
+  Like: 'Like',
+  View: 'View',
+  Save: 'Save',
+  Comment: 'Comment',
   Hashtag: 'Hashtag',
   PostHashtag: 'PostHashtag',
-  PostMention: 'PostMention',
-  Comment: 'Comment',
-  CommentLike: 'CommentLike',
   Follow: 'Follow',
-  Story: 'Story',
-  StoryView: 'StoryView',
-  Reel: 'Reel',
-  ReelLike: 'ReelLike',
-  ReelView: 'ReelView',
   Conversation: 'Conversation',
   ConversationUser: 'ConversationUser',
   Message: 'Message',
@@ -109,7 +104,8 @@ export const UserScalarFieldEnum = {
   is_active: 'is_active',
   is_private: 'is_private',
   created_at: 'created_at',
-  updated_at: 'updated_at'
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -167,6 +163,7 @@ export type DeviceTokenScalarFieldEnum = (typeof DeviceTokenScalarFieldEnum)[key
 
 export const MediaScalarFieldEnum = {
   id: 'id',
+  public_id: 'public_id',
   url: 'url',
   media_type: 'media_type',
   width: 'width',
@@ -183,10 +180,11 @@ export const PostScalarFieldEnum = {
   user_id: 'user_id',
   caption: 'caption',
   location: 'location',
-  comments_disabled: 'comments_disabled',
   like_count: 'like_count',
   comment_count: 'comment_count',
-  created_at: 'created_at'
+  comments_disabled: 'comments_disabled',
+  created_at: 'created_at',
+  deleted_at: 'deleted_at'
 } as const
 
 export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
@@ -202,33 +200,79 @@ export const PostMediaScalarFieldEnum = {
 export type PostMediaScalarFieldEnum = (typeof PostMediaScalarFieldEnum)[keyof typeof PostMediaScalarFieldEnum]
 
 
-export const PostViewScalarFieldEnum = {
+export const ReelScalarFieldEnum = {
   id: 'id',
-  post_id: 'post_id',
   user_id: 'user_id',
-  viewed_at: 'viewed_at'
+  media_id: 'media_id',
+  caption: 'caption',
+  location: 'location',
+  like_count: 'like_count',
+  comment_count: 'comment_count',
+  comments_disabled: 'comments_disabled',
+  created_at: 'created_at',
+  deleted_at: 'deleted_at'
 } as const
 
-export type PostViewScalarFieldEnum = (typeof PostViewScalarFieldEnum)[keyof typeof PostViewScalarFieldEnum]
+export type ReelScalarFieldEnum = (typeof ReelScalarFieldEnum)[keyof typeof ReelScalarFieldEnum]
 
 
-export const PostSaveScalarFieldEnum = {
+export const StoryScalarFieldEnum = {
   id: 'id',
-  post_id: 'post_id',
   user_id: 'user_id',
+  media_id: 'media_id',
+  expires_at: 'expires_at',
   created_at: 'created_at'
 } as const
 
-export type PostSaveScalarFieldEnum = (typeof PostSaveScalarFieldEnum)[keyof typeof PostSaveScalarFieldEnum]
+export type StoryScalarFieldEnum = (typeof StoryScalarFieldEnum)[keyof typeof StoryScalarFieldEnum]
 
 
-export const PostLikeScalarFieldEnum = {
+export const LikeScalarFieldEnum = {
   id: 'id',
-  post_id: 'post_id',
-  user_id: 'user_id'
+  user_id: 'user_id',
+  target_type: 'target_type',
+  target_id: 'target_id',
+  created_at: 'created_at'
 } as const
 
-export type PostLikeScalarFieldEnum = (typeof PostLikeScalarFieldEnum)[keyof typeof PostLikeScalarFieldEnum]
+export type LikeScalarFieldEnum = (typeof LikeScalarFieldEnum)[keyof typeof LikeScalarFieldEnum]
+
+
+export const ViewScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  target_type: 'target_type',
+  target_id: 'target_id',
+  created_at: 'created_at'
+} as const
+
+export type ViewScalarFieldEnum = (typeof ViewScalarFieldEnum)[keyof typeof ViewScalarFieldEnum]
+
+
+export const SaveScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  target_type: 'target_type',
+  target_id: 'target_id',
+  created_at: 'created_at'
+} as const
+
+export type SaveScalarFieldEnum = (typeof SaveScalarFieldEnum)[keyof typeof SaveScalarFieldEnum]
+
+
+export const CommentScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  target_type: 'target_type',
+  target_id: 'target_id',
+  parent_id: 'parent_id',
+  content: 'content',
+  like_count: 'like_count',
+  created_at: 'created_at',
+  deleted_at: 'deleted_at'
+} as const
+
+export type CommentScalarFieldEnum = (typeof CommentScalarFieldEnum)[keyof typeof CommentScalarFieldEnum]
 
 
 export const HashtagScalarFieldEnum = {
@@ -248,37 +292,6 @@ export const PostHashtagScalarFieldEnum = {
 export type PostHashtagScalarFieldEnum = (typeof PostHashtagScalarFieldEnum)[keyof typeof PostHashtagScalarFieldEnum]
 
 
-export const PostMentionScalarFieldEnum = {
-  id: 'id',
-  post_id: 'post_id',
-  user_id: 'user_id'
-} as const
-
-export type PostMentionScalarFieldEnum = (typeof PostMentionScalarFieldEnum)[keyof typeof PostMentionScalarFieldEnum]
-
-
-export const CommentScalarFieldEnum = {
-  id: 'id',
-  post_id: 'post_id',
-  user_id: 'user_id',
-  parent_id: 'parent_id',
-  content: 'content',
-  like_count: 'like_count',
-  created_at: 'created_at'
-} as const
-
-export type CommentScalarFieldEnum = (typeof CommentScalarFieldEnum)[keyof typeof CommentScalarFieldEnum]
-
-
-export const CommentLikeScalarFieldEnum = {
-  id: 'id',
-  comment_id: 'comment_id',
-  user_id: 'user_id'
-} as const
-
-export type CommentLikeScalarFieldEnum = (typeof CommentLikeScalarFieldEnum)[keyof typeof CommentLikeScalarFieldEnum]
-
-
 export const FollowScalarFieldEnum = {
   id: 'id',
   follower_id: 'follower_id',
@@ -288,57 +301,6 @@ export const FollowScalarFieldEnum = {
 } as const
 
 export type FollowScalarFieldEnum = (typeof FollowScalarFieldEnum)[keyof typeof FollowScalarFieldEnum]
-
-
-export const StoryScalarFieldEnum = {
-  id: 'id',
-  user_id: 'user_id',
-  media_id: 'media_id',
-  expires_at: 'expires_at'
-} as const
-
-export type StoryScalarFieldEnum = (typeof StoryScalarFieldEnum)[keyof typeof StoryScalarFieldEnum]
-
-
-export const StoryViewScalarFieldEnum = {
-  id: 'id',
-  story_id: 'story_id',
-  user_id: 'user_id',
-  viewed_at: 'viewed_at'
-} as const
-
-export type StoryViewScalarFieldEnum = (typeof StoryViewScalarFieldEnum)[keyof typeof StoryViewScalarFieldEnum]
-
-
-export const ReelScalarFieldEnum = {
-  id: 'id',
-  user_id: 'user_id',
-  media_id: 'media_id',
-  caption: 'caption',
-  like_count: 'like_count',
-  comment_count: 'comment_count',
-  created_at: 'created_at'
-} as const
-
-export type ReelScalarFieldEnum = (typeof ReelScalarFieldEnum)[keyof typeof ReelScalarFieldEnum]
-
-
-export const ReelLikeScalarFieldEnum = {
-  id: 'id',
-  reel_id: 'reel_id',
-  user_id: 'user_id'
-} as const
-
-export type ReelLikeScalarFieldEnum = (typeof ReelLikeScalarFieldEnum)[keyof typeof ReelLikeScalarFieldEnum]
-
-
-export const ReelViewScalarFieldEnum = {
-  id: 'id',
-  reel_id: 'reel_id',
-  user_id: 'user_id'
-} as const
-
-export type ReelViewScalarFieldEnum = (typeof ReelViewScalarFieldEnum)[keyof typeof ReelViewScalarFieldEnum]
 
 
 export const ConversationScalarFieldEnum = {
@@ -388,7 +350,8 @@ export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[k
 export const FeedScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
-  post_id: 'post_id',
+  target_type: 'target_type',
+  target_id: 'target_id',
   score: 'score',
   created_at: 'created_at'
 } as const
@@ -420,7 +383,8 @@ export const ReportScalarFieldEnum = {
   reporter_id: 'reporter_id',
   target_type: 'target_type',
   target_id: 'target_id',
-  reason: 'reason'
+  reason: 'reason',
+  created_at: 'created_at'
 } as const
 
 export type ReportScalarFieldEnum = (typeof ReportScalarFieldEnum)[keyof typeof ReportScalarFieldEnum]

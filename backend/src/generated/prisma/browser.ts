@@ -58,20 +58,35 @@ export type Post = Prisma.PostModel
  */
 export type PostMedia = Prisma.PostMediaModel
 /**
- * Model PostView
+ * Model Reel
  * 
  */
-export type PostView = Prisma.PostViewModel
+export type Reel = Prisma.ReelModel
 /**
- * Model PostSave
+ * Model Story
  * 
  */
-export type PostSave = Prisma.PostSaveModel
+export type Story = Prisma.StoryModel
 /**
- * Model PostLike
+ * Model Like
  * 
  */
-export type PostLike = Prisma.PostLikeModel
+export type Like = Prisma.LikeModel
+/**
+ * Model View
+ * 
+ */
+export type View = Prisma.ViewModel
+/**
+ * Model Save
+ * 
+ */
+export type Save = Prisma.SaveModel
+/**
+ * Model Comment
+ * 
+ */
+export type Comment = Prisma.CommentModel
 /**
  * Model Hashtag
  * 
@@ -83,50 +98,10 @@ export type Hashtag = Prisma.HashtagModel
  */
 export type PostHashtag = Prisma.PostHashtagModel
 /**
- * Model PostMention
- * 
- */
-export type PostMention = Prisma.PostMentionModel
-/**
- * Model Comment
- * 
- */
-export type Comment = Prisma.CommentModel
-/**
- * Model CommentLike
- * 
- */
-export type CommentLike = Prisma.CommentLikeModel
-/**
  * Model Follow
  * 
  */
 export type Follow = Prisma.FollowModel
-/**
- * Model Story
- * 
- */
-export type Story = Prisma.StoryModel
-/**
- * Model StoryView
- * 
- */
-export type StoryView = Prisma.StoryViewModel
-/**
- * Model Reel
- * 
- */
-export type Reel = Prisma.ReelModel
-/**
- * Model ReelLike
- * 
- */
-export type ReelLike = Prisma.ReelLikeModel
-/**
- * Model ReelView
- * 
- */
-export type ReelView = Prisma.ReelViewModel
 /**
  * Model Conversation
  * 

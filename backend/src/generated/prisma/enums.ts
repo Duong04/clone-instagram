@@ -47,6 +47,15 @@ export const EntityType = {
 export type EntityType = (typeof EntityType)[keyof typeof EntityType]
 
 
+export const ContentType = {
+  post: 'post',
+  reel: 'reel',
+  story: 'story'
+} as const
+
+export type ContentType = (typeof ContentType)[keyof typeof ContentType]
+
+
 export const ReportTargetType = {
   post: 'post',
   comment: 'comment',
