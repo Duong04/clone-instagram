@@ -15,7 +15,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ===== ENUMS =====
+//////////////////////////////////////////////////
+// ENUMS
+//////////////////////////////////////////////////
 
 enum FollowStatus {
   accepted
@@ -43,6 +45,12 @@ enum EntityType {
   story
 }
 
+enum ContentType {
+  post
+  reel
+  story
+}
+
 enum ReportTargetType {
   post
   comment
@@ -50,50 +58,53 @@ enum ReportTargetType {
   reel
 }
 
-// ===== MODELS =====
+//////////////////////////////////////////////////
+// USER
+//////////////////////////////////////////////////
 
 model User {
-  id         String   @id @default(uuid())
-  username   String   @unique
-  email      String   @unique
+  id         String    @id @default(uuid())
+  username   String    @unique
+  email      String    @unique
   password   String
   name       String
   bio        String?
   avatar_id  String?
   website    String?
-  is_active  Boolean  @default(false)
-  is_private Boolean  @default(false)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  is_active  Boolean   @default(false)
+  is_private Boolean   @default(false)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
 
-  avatar              Media?             @relation("UserAvatar", fields: [avatar_id], references: [id])
+  avatar Media? @relation("UserAvatar", fields: [avatar_id], references: [id])
   accounts            Account[]
   settings            UserSetting?
   sessions            UserSession[]
   device_tokens       DeviceToken[]
-  posts               Post[]
-  post_views          PostView[]
-  post_saves          PostSave[]
-  post_likes          PostLike[]
-  post_mentions       PostMention[]
-  comments            Comment[]
-  comment_likes       CommentLike[]
-  stories             Story[]
-  story_views         StoryView[]
-  reels               Reel[]
-  reel_likes          ReelLike[]
-  reel_views          ReelView[]
-  followers           Follow[]           @relation("Following")
-  following           Follow[]           @relation("Follower")
-  conversations       ConversationUser[]
-  messages            Message[]
-  notifications       Notification[]     @relation("NotificationUser")
-  actor_notifications Notification[]     @relation("NotificationActor")
-  feeds               Feed[]
-  search_history      SearchHistory[]
-  blocked_by          UserBlock[]        @relation("BlockedUser")
-  blocking            UserBlock[]        @relation("BlockingUser")
-  reports             Report[]
+  posts    Post[]
+  reels    Reel[]
+  stories  Story[]
+  comments Comment[]
+  likes    Like[]
+  views    View[]
+  saves    Save[]
+
+  followers Follow[] @relation("Following")
+  following Follow[] @relation("Follower")
+
+  feeds          Feed[]
+  search_history SearchHistory[]
+
+  messages      Message[]
+  conversations ConversationUser[]
+
+  notifications       Notification[] @relation("NotificationUser")
+  actor_notifications Notification[] @relation("NotificationActor")
+
+  blocked_by UserBlock[] @relation("BlockedUser")
+  blocking   UserBlock[] @relation("BlockingUser")
+  reports    Report[]
 
   @@map("users")
 }
@@ -154,6 +165,10 @@ model DeviceToken {
   @@map("device_tokens")
 }
 
+//////////////////////////////////////////////////
+// MEDIA
+//////////////////////////////////////////////////
+
 model Media {
   id         String   @id @default(uuid())
   url        String
@@ -172,26 +187,26 @@ model Media {
   @@map("media")
 }
 
+//////////////////////////////////////////////////
+// POST
+//////////////////////////////////////////////////
+
 model Post {
-  id                String   @id @default(uuid())
+  id                String    @id @default(uuid())
   user_id           String
   caption           String?
   location          String?
-  comments_disabled Boolean  @default(false)
-  like_count        Int      @default(0)
-  comment_count     Int      @default(0)
-  created_at        DateTime @default(now())
+  like_count        Int       @default(0)
+  comment_count     Int       @default(0)
+  comments_disabled Boolean   @default(false)
+  created_at        DateTime  @default(now())
+  deleted_at        DateTime?
 
   user     User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
   media    PostMedia[]
-  views    PostView[]
-  saves    PostSave[]
-  likes    PostLike[]
-  comments Comment[]
   hashtags PostHashtag[]
-  mentions PostMention[]
-  feeds    Feed[]
 
+  @@index([user_id])
   @@map("posts")
 }
 
@@ -207,43 +222,129 @@ model PostMedia {
   @@map("post_media")
 }
 
-model PostView {
-  id        String   @id @default(uuid())
-  post_id   String
-  user_id   String
-  viewed_at DateTime @default(now())
+//////////////////////////////////////////////////
+// REEL
+//////////////////////////////////////////////////
 
-  post Post @relation(fields: [post_id], references: [id], onDelete: Cascade)
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+model Reel {
+  id                String    @id @default(uuid())
+  user_id           String
+  media_id          String
+  caption           String?
+  location          String?
+  like_count        Int       @default(0)
+  comment_count     Int       @default(0)
+  comments_disabled Boolean   @default(false)
+  created_at        DateTime  @default(now())
+  deleted_at        DateTime?
 
-  @@unique([post_id, user_id])
-  @@map("post_views")
+  user  User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  media Media @relation(fields: [media_id], references: [id])
+
+  @@index([user_id])
+  @@map("reels")
 }
 
-model PostSave {
+//////////////////////////////////////////////////
+// STORY
+//////////////////////////////////////////////////
+
+model Story {
   id         String   @id @default(uuid())
-  post_id    String
   user_id    String
+  media_id   String
+  expires_at DateTime
   created_at DateTime @default(now())
 
-  post Post @relation(fields: [post_id], references: [id], onDelete: Cascade)
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  media Media @relation(fields: [media_id], references: [id])
 
-  @@unique([post_id, user_id])
-  @@map("post_saves")
+  @@index([user_id])
+  @@map("stories")
 }
 
-model PostLike {
-  id      String @id @default(uuid())
-  post_id String
-  user_id String
+//////////////////////////////////////////////////
+// LIKE (UNIFIED)
+//////////////////////////////////////////////////
 
-  post Post @relation(fields: [post_id], references: [id], onDelete: Cascade)
+model Like {
+  id          String      @id @default(uuid())
+  user_id     String
+  target_type ContentType
+  target_id   String
+  created_at  DateTime    @default(now())
+
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  @@unique([post_id, user_id])
-  @@map("post_likes")
+  @@unique([user_id, target_type, target_id])
+  @@index([target_type, target_id])
+  @@index([user_id])
+  @@map("likes")
 }
+
+//////////////////////////////////////////////////
+// VIEW (UNIFIED)
+//////////////////////////////////////////////////
+
+model View {
+  id          String      @id @default(uuid())
+  user_id     String
+  target_type ContentType
+  target_id   String
+  created_at  DateTime    @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, target_type, target_id])
+  @@index([target_type, target_id])
+  @@map("views")
+}
+
+//////////////////////////////////////////////////
+// SAVE (UNIFIED)
+//////////////////////////////////////////////////
+
+model Save {
+  id          String      @id @default(uuid())
+  user_id     String
+  target_type ContentType
+  target_id   String
+  created_at  DateTime    @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, target_type, target_id])
+  @@index([target_type, target_id])
+  @@map("saves")
+}
+
+//////////////////////////////////////////////////
+// COMMENT (UNIFIED)
+//////////////////////////////////////////////////
+
+model Comment {
+  id          String      @id @default(uuid())
+  user_id     String
+  target_type ContentType
+  target_id   String
+  parent_id   String?
+  content     String
+  like_count  Int         @default(0)
+  created_at  DateTime    @default(now())
+  deleted_at  DateTime?
+
+  user    User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  parent  Comment?  @relation("Replies", fields: [parent_id], references: [id])
+  replies Comment[] @relation("Replies")
+
+  @@index([target_type, target_id])
+  @@index([user_id])
+  @@map("comments")
+}
+
+//////////////////////////////////////////////////
+// HASHTAG
+//////////////////////////////////////////////////
 
 model Hashtag {
   id   String @id @default(uuid())
@@ -266,47 +367,9 @@ model PostHashtag {
   @@map("post_hashtags")
 }
 
-model PostMention {
-  id      String @id @default(uuid())
-  post_id String
-  user_id String
-
-  post Post @relation(fields: [post_id], references: [id], onDelete: Cascade)
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
-
-  @@unique([post_id, user_id])
-  @@map("post_mentions")
-}
-
-model Comment {
-  id         String   @id @default(uuid())
-  post_id    String
-  user_id    String
-  parent_id  String?
-  content    String
-  like_count Int      @default(0)
-  created_at DateTime @default(now())
-
-  post    Post          @relation(fields: [post_id], references: [id], onDelete: Cascade)
-  user    User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  parent  Comment?      @relation("CommentReplies", fields: [parent_id], references: [id])
-  replies Comment[]     @relation("CommentReplies")
-  likes   CommentLike[]
-
-  @@map("comments")
-}
-
-model CommentLike {
-  id         String @id @default(uuid())
-  comment_id String
-  user_id    String
-
-  comment Comment @relation(fields: [comment_id], references: [id], onDelete: Cascade)
-  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
-
-  @@unique([comment_id, user_id])
-  @@map("comment_likes")
-}
+//////////////////////////////////////////////////
+// FOLLOW
+//////////////////////////////////////////////////
 
 model Follow {
   id           String       @id @default(uuid())
@@ -319,75 +382,14 @@ model Follow {
   following User @relation("Following", fields: [following_id], references: [id], onDelete: Cascade)
 
   @@unique([follower_id, following_id])
+  @@index([follower_id])
+  @@index([following_id])
   @@map("follows")
 }
 
-model Story {
-  id         String   @id @default(uuid())
-  user_id    String
-  media_id   String
-  expires_at DateTime
-
-  user  User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  media Media       @relation(fields: [media_id], references: [id])
-  views StoryView[]
-
-  @@map("stories")
-}
-
-model StoryView {
-  id        String   @id @default(uuid())
-  story_id  String
-  user_id   String
-  viewed_at DateTime @default(now())
-
-  story Story @relation(fields: [story_id], references: [id], onDelete: Cascade)
-  user  User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
-
-  @@unique([story_id, user_id])
-  @@map("story_views")
-}
-
-model Reel {
-  id            String   @id @default(uuid())
-  user_id       String
-  media_id      String
-  caption       String?
-  like_count    Int      @default(0)
-  comment_count Int      @default(0)
-  created_at    DateTime @default(now())
-
-  user  User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  media Media      @relation(fields: [media_id], references: [id])
-  likes ReelLike[]
-  views ReelView[]
-
-  @@map("reels")
-}
-
-model ReelLike {
-  id      String @id @default(uuid())
-  reel_id String
-  user_id String
-
-  reel Reel @relation(fields: [reel_id], references: [id], onDelete: Cascade)
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
-
-  @@unique([reel_id, user_id])
-  @@map("reel_likes")
-}
-
-model ReelView {
-  id      String @id @default(uuid())
-  reel_id String
-  user_id String
-
-  reel Reel @relation(fields: [reel_id], references: [id], onDelete: Cascade)
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
-
-  @@unique([reel_id, user_id])
-  @@map("reel_views")
-}
+//////////////////////////////////////////////////
+// CHAT
+//////////////////////////////////////////////////
 
 model Conversation {
   id         String   @id @default(uuid())
@@ -424,8 +426,13 @@ model Message {
   sender       User         @relation(fields: [sender_id], references: [id], onDelete: Cascade)
   media        Media?       @relation(fields: [media_id], references: [id])
 
+  @@index([conversation_id, created_at])
   @@map("messages")
 }
+
+//////////////////////////////////////////////////
+// NOTIFICATION
+//////////////////////////////////////////////////
 
 model Notification {
   id          String           @id @default(uuid())
@@ -440,22 +447,33 @@ model Notification {
   user  User @relation("NotificationUser", fields: [user_id], references: [id], onDelete: Cascade)
   actor User @relation("NotificationActor", fields: [actor_id], references: [id], onDelete: Cascade)
 
+  @@index([user_id, is_read])
+  @@index([user_id, created_at])
   @@map("notifications")
 }
 
+//////////////////////////////////////////////////
+// FEED
+//////////////////////////////////////////////////
+
 model Feed {
-  id         String   @id @default(uuid())
-  user_id    String
-  post_id    String
-  score      Float    @default(0)
-  created_at DateTime @default(now())
+  id          String      @id @default(uuid())
+  user_id     String
+  target_type ContentType
+  target_id   String
+  score       Float       @default(0)
+  created_at  DateTime    @default(now())
 
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  post Post @relation(fields: [post_id], references: [id], onDelete: Cascade)
 
-  @@unique([user_id, post_id])
+  @@unique([user_id, target_type, target_id])
+  @@index([user_id, score, created_at])
   @@map("feeds")
 }
+
+//////////////////////////////////////////////////
+// SEARCH
+//////////////////////////////////////////////////
 
 model SearchHistory {
   id         String   @id @default(uuid())
@@ -465,8 +483,13 @@ model SearchHistory {
 
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
+  @@index([user_id])
   @@map("search_history")
 }
+
+//////////////////////////////////////////////////
+// BLOCK
+//////////////////////////////////////////////////
 
 model UserBlock {
   id              String @id @default(uuid())
@@ -477,8 +500,13 @@ model UserBlock {
   blocked_user User @relation("BlockedUser", fields: [blocked_user_id], references: [id], onDelete: Cascade)
 
   @@unique([user_id, blocked_user_id])
+  @@index([user_id])
   @@map("user_blocks")
 }
+
+//////////////////////////////////////////////////
+// REPORT
+//////////////////////////////////////////////////
 
 model Report {
   id          String           @id @default(uuid())
@@ -486,8 +514,10 @@ model Report {
   target_type ReportTargetType
   target_id   String
   reason      String?
+  created_at  DateTime         @default(now())
 
   reporter User @relation(fields: [reporter_id], references: [id], onDelete: Cascade)
 
+  @@index([reporter_id])
   @@map("reports")
 }
