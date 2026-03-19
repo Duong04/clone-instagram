@@ -1,14 +1,14 @@
 import api from '~/shared/lib/axios'
-import type { LoginRequest, Response, RegisterRequest } from '~/shared/types/auth'
+import type { LoginRequest, AuthResponse, RegisterRequest } from '~/shared/types/auth'
 
 export const authApi = {
-  register: async (data: RegisterRequest): Promise<Response> => {
-    const res = await api.post<Response>('/auth/register', data);
+  register: async (data: RegisterRequest): Promise<AuthResponse> => {
+    const res = await api.post<AuthResponse>('/auth/register', data);
     return res.data
   },
 
-  login: async (data: LoginRequest): Promise<Response> => {
-    const res = await api.post<Response>('/auth/login', data)
+  login: async (data: LoginRequest): Promise<AuthResponse> => {
+    const res = await api.post<AuthResponse>('/auth/login', data)
     return res.data
   },
  

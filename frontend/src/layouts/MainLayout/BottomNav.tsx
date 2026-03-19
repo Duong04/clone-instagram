@@ -5,7 +5,7 @@ import {
   PlaySquare, 
   PlusSquare
 } from "lucide-react"
-import { cn } from "~/shared/utils/cn.ts"
+import { cn } from "~/lib/utils"
 import { motion } from "motion/react"
 
 const bottomNavItems = [

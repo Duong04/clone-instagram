@@ -18,7 +18,7 @@ export interface RegisterRequest {
   password: string
 }
  
-export interface Response {
+export interface AuthResponse {
   data: User
 }
  

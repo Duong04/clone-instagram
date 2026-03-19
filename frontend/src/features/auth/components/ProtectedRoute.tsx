@@ -7,7 +7,7 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     getMe();
-  }, [getMe]);
+  }, []);
 
   if (isLoading) return <div>Loading...</div>
 

@@ -13,7 +13,8 @@ import {
 import { useRegister } from "../hooks/useRegister";
 
 export const RegisterPage = () => {
-  const { form, error, isLoading, handleChange, handleSubmit } = useRegister();
+  const { form, serverError, isLoading, handleSubmit } = useRegister();
+  const { register, formState: { errors } } = form
 
   return (
     <div className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden bg-[#0a0a0a]">
@@ -72,67 +73,71 @@ export const RegisterPage = () => {
               <div className="relative">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
                 <input
-                  name="email"
+                  {...register('email')}
                   type="text"
                   placeholder="Email address"
                   className="w-full bg-white/[0.05] border border-white/10 rounded-2xl px-11 py-3.5 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all"
-                  value={form.email}
-                  onChange={handleChange}
                 />
               </div>
+               {errors.email && (
+                <p className="text-red-400 text-xs ml-1">{errors.email.message}</p>
+              )}
             </div>
 
             <div className="space-y-1.5">
               <div className="relative">
                 <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
                 <input
-                  name="name"
+                  {...register('name')}
                   type="text"
                   placeholder="Full name"
                   className="w-full bg-white/[0.05] border border-white/10 rounded-2xl px-11 py-3.5 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all"
-                  value={form.name}
-                  onChange={handleChange}
                 />
               </div>
+              {errors.name && (
+                <p className="text-red-400 text-xs ml-1">{errors.name.message}</p>
+              )}
             </div>
 
             <div className="space-y-1.5">
               <div className="relative">
                 <UserCircle className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
                 <input
-                  name="username"
+                  {...register('username')}
                   type="text"
                   placeholder="Username"
                   className="w-full bg-white/[0.05] border border-white/10 rounded-2xl px-11 py-3.5 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all"
-                  value={form.username}
-                  onChange={handleChange}
                 />
               </div>
+              {errors.username && (
+                <p className="text-red-400 text-xs ml-1">{errors.username.message}</p>
+              )}
             </div>
 
             <div className="space-y-1.5 md:col-span-2">
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
                 <input
-                  name="password"
+                  {...register('password')}
                   type="password"
                   placeholder="Create password"
                   className="w-full bg-white/[0.05] border border-white/10 rounded-2xl px-11 py-3.5 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all"
-                  value={form.password}
-                  onChange={handleChange}
                 />
               </div>
+              {errors.password && (
+                <p className="text-red-400 text-xs ml-1">{errors.password.message}</p>
+              )}
             </div>
 
             {/* Error */}
-            {error && (
+            {serverError && (
               <motion.div
                 initial={{ opacity: 0, y: -6 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="w-full md:col-span-2 flex items-center gap-2 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3"
               >
                 <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
-                <p className="text-red-400 text-xs">{error}</p>
+                <p className="text-red-400 text-xs">{serverError}</p>
               </motion.div>
             )}
             <div className="md:col-span-2 py-2">

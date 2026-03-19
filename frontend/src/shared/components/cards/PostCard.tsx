@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal } from "lucide-react";
 import type { Post } from '~/shared/types';
-import { cn } from "~/shared/utils/cn";
+import { cn } from "~/lib/utils";
 import { motion, AnimatePresence } from "motion/react";
 
 interface PostCardProps {

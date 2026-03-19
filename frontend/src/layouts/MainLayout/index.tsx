@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "motion/react"
 import { Sidebar } from "./Sidebar"
 import { BottomNav } from './BottomNav'
 import { MobileHeader } from "./MobileHeader"
-import { cn } from "~/shared/utils/cn.ts"
+import { cn } from "~/lib/utils"
 
 export default function MainLayout() {
     const location = useLocation();

@@ -1,17 +1,11 @@
-import { NavLink } from "react-router-dom";
-import { motion } from "motion/react";
-import {
-  Instagram,
-  Facebook,
-  Mail,
-  Lock,
-  ArrowRight,
-  AlertCircle,
-} from "lucide-react";
-import { useLogin } from "../hooks/useLogin";
+import { NavLink } from 'react-router-dom'
+import { motion } from 'motion/react'
+import { Instagram, Facebook, Mail, Lock, ArrowRight, AlertCircle } from 'lucide-react'
+import { useLogin } from '../hooks/useLogin'
 
 export const LoginPage = () => {
-  const { form, error, isLoading, handleChange, handleSubmit } = useLogin();
+  const { form, serverError, isLoading, handleSubmit } = useLogin()
+  const { register, formState: { errors } } = form
 
   return (
     <div className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden bg-[#0a0a0a]">
@@ -39,16 +33,13 @@ export const LoginPage = () => {
             >
               <Instagram className="w-10 h-10 text-white" />
             </motion.div>
-            <h1 className="text-3xl font-bold text-white tracking-tight mb-2">
-              Welcome back
-            </h1>
-            <p className="text-zinc-400 text-sm">
-              Enter your details to access your account
-            </p>
+            <h1 className="text-3xl font-bold text-white tracking-tight mb-2">Welcome back</h1>
+            <p className="text-zinc-400 text-sm">Enter your details to access your account</p>
           </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Email */}
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-zinc-400 ml-1">
                 Email or Username
@@ -56,52 +47,50 @@ export const LoginPage = () => {
               <div className="relative">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
                 <input
-                  name="email"
+                  {...register('email')}
                   type="text"
                   placeholder="name@example.com"
-                  value={form.email}
-                  onChange={handleChange}
                   autoComplete="email"
                   className="w-full bg-white/[0.05] border border-white/10 rounded-2xl px-11 py-3.5 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all"
                 />
               </div>
+              {errors.email && (
+                <p className="text-red-400 text-xs ml-1">{errors.email.message}</p>
+              )}
             </div>
 
+            {/* Password */}
             <div className="space-y-1.5">
               <div className="flex justify-between items-center px-1">
-                <label className="text-xs font-medium text-zinc-400">
-                  Password
-                </label>
-                <a
-                  href="#"
-                  className="text-xs text-purple-400 hover:text-purple-300 transition-colors"
-                >
+                <label className="text-xs font-medium text-zinc-400">Password</label>
+                <a href="#" className="text-xs text-purple-400 hover:text-purple-300 transition-colors">
                   Forgot?
                 </a>
               </div>
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
                 <input
-                  name="password"
+                  {...register('password')}
                   type="password"
                   placeholder="••••••••"
-                  value={form.password}
-                  onChange={handleChange}
                   autoComplete="current-password"
                   className="w-full bg-white/[0.05] border border-white/10 rounded-2xl px-11 py-3.5 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all"
                 />
               </div>
+              {errors.password && (
+                <p className="text-red-400 text-xs ml-1">{errors.password.message}</p>
+              )}
             </div>
 
-            {/* Error */}
-            {error && (
+            {/* Server error */}
+            {serverError && (
               <motion.div
                 initial={{ opacity: 0, y: -6 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3"
               >
                 <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
-                <p className="text-red-400 text-xs">{error}</p>
+                <p className="text-red-400 text-xs">{serverError}</p>
               </motion.div>
             )}
 
@@ -150,7 +139,7 @@ export const LoginPage = () => {
           className="mt-8 text-center"
         >
           <p className="text-zinc-400 text-sm">
-            Don't have an account?{" "}
+            Don't have an account?{' '}
             <NavLink
               to="/register"
               className="text-white font-bold hover:underline underline-offset-4"
@@ -161,5 +150,5 @@ export const LoginPage = () => {
         </motion.div>
       </motion.div>
     </div>
-  );
-};
+  )
+}

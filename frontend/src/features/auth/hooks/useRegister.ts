@@ -1,36 +1,36 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
 import { useAuthStore } from '../store/authStore'
-import type { RegisterRequest } from '~/shared/types/auth'
 import axios from 'axios'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { registerSchema, type RegisterSchema  } from '../schemas/registerSchema'
 
 export function useRegister() {
-  const [form, setForm] = useState<RegisterRequest>({ email: '', name: '', username: '', password: '' })
-  const [error, setError] = useState('')
+  const [serverError, setServerError] = useState('')
 
-  const { register, isLoading } = useAuthStore()
+  const { register: registerUser, isLoading } = useAuthStore()
   const navigate = useNavigate()
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-    setError('')
-  }
+  const form = useForm<RegisterSchema>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: { email: '', name: '', username: '', password: '' },
+  })
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
+  const handleSubmit = form.handleSubmit(async (data) => {
+    setServerError('')
 
     try {
-      await register(form)
-      navigate('/')
+      await registerUser(data)
+      navigate('/login')
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        setError(err.response?.data?.message ?? 'Register failed')
+        setServerError(err.response?.data?.message ?? 'Register failed')
       } else {
-        setError('Register failed')
+        setServerError('Register failed')
       }
     }
-  }
+  })
 
-  return { form, error, isLoading, handleChange, handleSubmit }
+  return { form, serverError, isLoading, handleSubmit }
 }
