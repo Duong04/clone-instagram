@@ -1,8 +1,16 @@
 import { Response } from 'express'
 
+interface Meta {
+  total: number
+  page: number
+  limit: number
+  total_pages: number
+}
+
 interface SuccessOptions<T> {
   res: Response
   data?: T
+  meta?: Meta
   message?: string
   statusCode?: number
 }
@@ -14,11 +22,12 @@ interface ErrorOptions {
   errors?: { field: string; message: string }[]
 }
 
-export const sendSuccess = <T>({ res, data, message = 'Success', statusCode = 200 }: SuccessOptions<T>) => {
+export const sendSuccess = <T>({ res, data, meta, message = 'Success', statusCode = 200 }: SuccessOptions<T>) => {
   return res.status(statusCode).json({
     success: true,
     message,
-    data: data ?? null
+    data: data ?? null,
+    ...(meta && { meta })
   })
 }
 
