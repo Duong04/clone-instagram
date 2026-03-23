@@ -23,6 +23,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Settings, ShieldUser, LogOut } from "lucide-react";
+import { useModal } from "~/shared/context/modal/modal-context";
 
 const navItems = [
   { icon: Home, label: "Home", path: "/" },
@@ -31,11 +32,13 @@ const navItems = [
   { icon: PlaySquare, label: "Reels", path: "/reels" },
   { icon: MessageCircle, label: "Messages", path: "/messages" },
   { icon: Heart, label: "Notifications", path: "#" },
-  { icon: PlusSquare, label: "Create", path: "#" },
+  { icon: PlusSquare, label: "Create", path: "#", isCreate: true },
 ];
 
 export const Sidebar = () => {
   const { user, logout } = useAuthStore();
+  const { openCreatePost } = useModal();
+
   return (
     <div className="fixed left-0 top-0 h-full w-[72px] xl:w-60 border-r border-zinc-200 bg-white px-3 py-8 hidden md:flex flex-col z-50 transition-all duration-500 ease-in-out">
       <div className="mb-10 px-3">
@@ -52,7 +55,20 @@ export const Sidebar = () => {
       </div>
 
       <nav className="flex-1 space-y-2">
-        {navItems.map((item) => (
+        {navItems.map((item) => {
+          if (item.isCreate) {
+            return (
+              <button
+                key={item.label}
+                onClick={openCreatePost}
+                className="flex items-center gap-4 p-3 rounded-lg transition-all duration-300 hover:bg-zinc-100 group relative w-full text-left"
+              >
+                <item.icon className="w-7 h-7 transition-transform duration-300 group-hover:scale-110" />
+                <span className="hidden xl:block text-base">{item.label}</span>
+              </button>
+            );
+          }
+          return (
           <NavLink
             key={item.label}
             to={item.path}
@@ -86,7 +102,8 @@ export const Sidebar = () => {
               );
             }}
           </NavLink>
-        ))}
+        )
+        })}
 
         <NavLink
           to="/profile"

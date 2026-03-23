@@ -5,8 +5,11 @@ import { Sidebar } from "./Sidebar"
 import { BottomNav } from './BottomNav'
 import { MobileHeader } from "./MobileHeader"
 import { cn } from "~/lib/utils"
+import { useModal } from "~/shared/context/modal/modal-context"
+import { CreatePostModal } from "~/shared/components/dialogs/CreatePostModal"
 
 export default function MainLayout() {
+    const { isCreatePostOpen, closeCreatePost } = useModal();
     const location = useLocation();
     const isReelsPage = location.pathname === "/reels";
     const isFeedPage = location.pathname === "/";
@@ -33,6 +36,7 @@ export default function MainLayout() {
             </AnimatePresence>
         </main>
         <BottomNav />
+        <CreatePostModal isOpen={isCreatePostOpen} onClose={closeCreatePost} />
         </div>
     )
 }
