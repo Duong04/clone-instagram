@@ -1,8 +1,8 @@
 import { NavLink } from "react-router-dom";
 import { Home, Search, PlaySquare, PlusSquare } from "lucide-react";
-import { cn } from "~/lib/utils";
+import { cn } from "~/shared/libs/utils";
 import { motion } from "motion/react";
-import { useModal } from "~/shared/context/modal/modal-context";
+import { useModal } from "~/shared/context/modal/modalContext";
 
 const bottomNavItems = [
   { icon: Home, label: "Home", path: "/" },

@@ -10,7 +10,7 @@ import {
   Smile
 } from "lucide-react";
 import { MOCK_CHATS, MOCK_USER } from "../mockData";
-import { cn } from "~/lib/utils";
+import { cn } from "~/shared/libs/utils";
 
 export const MessagesPage = () => {
   const [selectedChat, setSelectedChat] = useState(MOCK_CHATS[0]);

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { useAuthStore } from '../store/authStore'
+import { useAuthStore } from '../../../store/authStore'
 import { loginSchema, type LoginSchema } from '../schemas/loginSchema'
 
 export function useLogin() {

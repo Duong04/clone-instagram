@@ -10,10 +10,10 @@ import {
   Menu,
   Instagram,
 } from "lucide-react";
-import { cn } from "~/lib/utils";
+import { cn } from "~/shared/libs/utils";
 import { motion } from "motion/react";
-import { useAuthStore } from "~/features/auth/store/authStore";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { useAuthStore } from "~/store/authStore";
+import { Avatar, AvatarImage } from "~/shared/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,9 +21,9 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "~/shared/components/ui/dropdown-menu";
 import { Settings, ShieldUser, LogOut } from "lucide-react";
-import { useModal } from "~/shared/context/modal/modal-context";
+import { useModal } from "~/shared/context/modal/modalContext";
 
 const navItems = [
   { icon: Home, label: "Home", path: "/" },

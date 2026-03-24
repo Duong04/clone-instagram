@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { useAuthStore } from '../store/authStore'
+import { useAuthStore } from '../../../store/authStore'
 import axios from 'axios'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { registerSchema, type RegisterSchema  } from '../schemas/registerSchema'

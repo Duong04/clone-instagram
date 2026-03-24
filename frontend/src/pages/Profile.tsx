@@ -9,7 +9,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { MOCK_USER } from "../mockData";
-import { cn } from "~/lib/utils";
+import { cn } from "~/shared/libs/utils";
 
 type TabType = "posts" | "saved" | "tagged";
 

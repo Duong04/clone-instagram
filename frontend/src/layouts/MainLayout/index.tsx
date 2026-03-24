@@ -4,9 +4,9 @@ import { AnimatePresence, motion } from "motion/react"
 import { Sidebar } from "./Sidebar"
 import { BottomNav } from './BottomNav'
 import { MobileHeader } from "./MobileHeader"
-import { cn } from "~/lib/utils"
-import { useModal } from "~/shared/context/modal/modal-context"
-import { CreatePostModal } from "~/shared/components/dialogs/CreatePostModal"
+import { cn } from "~/shared/libs/utils"
+import { useModal } from "~/shared/context/modal/modalContext"
+import { CreatePostModal } from "~/shared/components/dialogs/create-post"
 
 export default function MainLayout() {
     const { isCreatePostOpen, closeCreatePost } = useModal();

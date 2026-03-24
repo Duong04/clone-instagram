@@ -1,4 +1,4 @@
-import api from '~/shared/lib/axios'
+import api from '~/shared/libs/axios'
 import type { LoginRequest, AuthResponse, RegisterRequest } from '~/shared/types/auth'
 
 export const authApi = {
