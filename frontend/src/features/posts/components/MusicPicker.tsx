@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import { ArrowLeft, Search as SearchIcon, Play, Pause } from "lucide-react";
-import type { Song } from "~/shared/types/music";
+import type { Song } from "../types";
 
 interface MusicPickerProps {
   onClose: () => void;
@@ -75,7 +75,6 @@ export const MusicPicker: React.FC<MusicPickerProps> = ({
       exit={{ y: "100%" }}
       className="absolute inset-0 bg-white dark:bg-zinc-900 z-20 flex flex-col"
     >
-      {/* Header */}
       <div className="p-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-3">
         <button onClick={onClose}>
           <ArrowLeft className="w-6 h-6" />
@@ -92,7 +91,6 @@ export const MusicPicker: React.FC<MusicPickerProps> = ({
         </div>
       </div>
 
-      {/* Song List */}
       <div className="flex-1 overflow-y-auto">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center h-40 gap-3">

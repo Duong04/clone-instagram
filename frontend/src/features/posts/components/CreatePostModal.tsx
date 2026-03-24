@@ -9,9 +9,9 @@ import {
   Pause,
 } from "lucide-react";
 import { cn } from "~/shared/libs/utils";
-import { FILTERS } from "~/shared/constants";
-import type { Song, CreatePostModalProps  } from "~/shared/types/music";
-import { useAudioPlayer } from "~/shared/hooks/useAudioplayer";
+import { FILTERS } from "../constants";
+import type { Song, CreatePostModalProps } from "../types";
+import { useAudioPlayer } from "../hooks/useAudioPlayer";
 import { StepSelectPhotos } from "./steps/StepSelectPhotos";
 import { StepEditFilter } from "./steps/StepEditFilter";
 import { StepPostDetails } from "./steps/StepPostDetails";
@@ -85,7 +85,6 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClos
         className="relative z-[110] bg-white dark:bg-zinc-900 rounded-xl overflow-hidden w-full max-w-[900px] shadow-2xl flex flex-col"
         style={{ maxHeight: "calc(100vh - 80px)" }}
       >
-        {/* Header */}
         <div className="h-12 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-4 shrink-0">
           <div className="w-10">
             {step > 1 && (
@@ -127,9 +126,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClos
           </div>
         </div>
 
-        {/* Content */}
         <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
-          {/* Main Preview Area */}
           <div
             className={cn(
               "flex-1 bg-zinc-50 dark:bg-black flex items-center justify-center relative overflow-hidden",
@@ -187,7 +184,6 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClos
                       <ChevronRight className="w-5 h-5" />
                     </button>
 
-                    {/* Dots indicator */}
                     <div className="absolute bottom-6 flex gap-1.5">
                       {selectedImages.map((_, i) => (
                         <div
@@ -202,7 +198,6 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClos
                   </>
                 )}
 
-                {/* Music Badge */}
                 {selectedMusic && (
                   <div className="absolute top-6 left-6 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-2 text-white text-xs font-medium">
                     <button
@@ -227,7 +222,6 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClos
             )}
           </div>
 
-          {/* Sidebar */}
           <AnimatePresence mode="wait">
             {step === 2 && (
               <StepEditFilter

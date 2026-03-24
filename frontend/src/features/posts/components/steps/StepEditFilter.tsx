@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "motion/react";
 import { cn } from "~/shared/libs/utils";
-import { FILTERS } from "~/shared/constants";
+import { FILTERS } from "../../constants";
 
 interface Filter {
   name: string;

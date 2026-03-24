@@ -10,8 +10,8 @@ import {
   Pause,
   X,
 } from "lucide-react";
-import type { Song } from "~/shared/types/music";
-import { MusicPicker } from "../components/MusicPicker";
+import type { Song } from "../../types";
+import { MusicPicker } from "../MusicPicker";
 
 interface StepPostDetailsProps {
   caption: string;
@@ -54,7 +54,6 @@ export const StepPostDetails: React.FC<StepPostDetailsProps> = ({
       className="w-full md:w-80 border-l border-zinc-200 dark:border-zinc-800 flex flex-col bg-white dark:bg-zinc-900 overflow-hidden"
     >
       <div className="flex-1 overflow-y-auto relative">
-        {/* Music Picker Overlay */}
         <AnimatePresence>
           {isMusicPickerOpen && (
             <MusicPicker
@@ -66,7 +65,6 @@ export const StepPostDetails: React.FC<StepPostDetailsProps> = ({
           )}
         </AnimatePresence>
 
-        {/* User Info */}
         <div className="p-4 flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-yellow-400 to-purple-600 p-[1.5px]">
             <div className="w-full h-full rounded-full border-2 border-white dark:border-zinc-900 overflow-hidden">
@@ -80,7 +78,6 @@ export const StepPostDetails: React.FC<StepPostDetailsProps> = ({
           <span className="font-semibold text-sm">johndoe_official</span>
         </div>
 
-        {/* Caption */}
         <div className="px-4">
           <textarea
             placeholder="Write a caption..."
@@ -96,7 +93,6 @@ export const StepPostDetails: React.FC<StepPostDetailsProps> = ({
           </div>
         </div>
 
-        {/* Music */}
         <div className="p-4 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
           <div
             onClick={onMusicPickerOpen}
@@ -139,7 +135,6 @@ export const StepPostDetails: React.FC<StepPostDetailsProps> = ({
           )}
         </div>
 
-        {/* Hashtags */}
         <div className="p-4 border-b border-zinc-100 dark:border-zinc-800">
           <input
             type="text"
@@ -150,7 +145,6 @@ export const StepPostDetails: React.FC<StepPostDetailsProps> = ({
           />
         </div>
 
-        {/* Location */}
         <div className="p-4 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
           <div className="flex items-center gap-2 flex-1">
             <MapPin className="w-5 h-5 text-zinc-500" />
@@ -164,7 +158,6 @@ export const StepPostDetails: React.FC<StepPostDetailsProps> = ({
           </div>
         </div>
 
-        {/* Accessibility & Advanced */}
         <div className="p-4 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
           <span className="text-sm">Accessibility</span>
           <ChevronDown className="w-5 h-5 text-zinc-500" />
