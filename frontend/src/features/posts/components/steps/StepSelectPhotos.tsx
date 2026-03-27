@@ -8,10 +8,10 @@ interface StepSelectPhotosProps {
   onImagesChange: (images: string[]) => void;
 }
 
-export const StepSelectPhotos: React.FC<StepSelectPhotosProps> = ({
+export const StepSelectPhotos = ({
   selectedImages,
   onImagesChange,
-}) => {
+}: StepSelectPhotosProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

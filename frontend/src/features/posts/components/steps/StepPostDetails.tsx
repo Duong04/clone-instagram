@@ -31,23 +31,23 @@ interface StepPostDetailsProps {
   onTogglePlay: (song: Song, e: React.MouseEvent) => void;
 }
 
-export const StepPostDetails: React.FC<StepPostDetailsProps> = ({
-  caption,
-  onCaptionChange,
-  location,
-  onLocationChange,
-  hashtags,
-  onHashtagsChange,
-  selectedMusic,
-  onMusicSelect,
-  onMusicRemove,
-  isMusicPickerOpen,
-  onMusicPickerOpen,
-  onMusicPickerClose,
-  playingSongId,
-  onTogglePlay,
-}) => {
-
+export const StepPostDetails = (props: StepPostDetailsProps) => {
+  const {
+    caption,
+    onCaptionChange,
+    location,
+    onLocationChange,
+    hashtags,
+    onHashtagsChange,
+    selectedMusic,
+    onMusicSelect,
+    onMusicRemove,
+    isMusicPickerOpen,
+    onMusicPickerOpen,
+    onMusicPickerClose,
+    playingSongId,
+    onTogglePlay,
+  } = props;
   const { user } = useAuthStore();
   console.log(user);
 

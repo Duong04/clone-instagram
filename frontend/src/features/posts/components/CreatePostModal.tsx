@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   X,
@@ -18,10 +18,10 @@ import { StepPostDetails } from "./steps/StepPostDetails";
 import { usePost } from "../hooks/usePost";
 import { toast } from "sonner";
 
-export const CreatePostModal: React.FC<CreatePostModalProps> = ({
+export const CreatePostModal = ({
   isOpen,
   onClose,
-}) => {
+}: CreatePostModalProps) => {
   const [step, setStep] = useState(1);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);

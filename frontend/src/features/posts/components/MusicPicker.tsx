@@ -24,7 +24,7 @@ interface ItunesResponse {
 
 const fetchMusic = async (query: string): Promise<Song[]> => {
   const response = await fetch(
-    `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&limit=20`
+    `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&limit=20`,
   );
   const data: ItunesResponse = await response.json();
   return data.results.map((item) => ({
@@ -36,12 +36,8 @@ const fetchMusic = async (query: string): Promise<Song[]> => {
   }));
 };
 
-export const MusicPicker: React.FC<MusicPickerProps> = ({
-  onClose,
-  onSelect,
-  playingSongId,
-  onTogglePlay,
-}) => {
+export const MusicPicker = (props: MusicPickerProps) => {
+  const { onClose, onSelect, playingSongId, onTogglePlay } = props;
   const [musicSearch, setMusicSearch] = useState("");
   const [songs, setSongs] = useState<Song[]>([]);
   const [isLoading, setIsLoading] = useState(false);
