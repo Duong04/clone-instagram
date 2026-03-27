@@ -2,7 +2,7 @@ export interface User {
   id: string
   email: string
   username: string
-  full_name: string
+  name: string
   avatar_url?: string
 }
  

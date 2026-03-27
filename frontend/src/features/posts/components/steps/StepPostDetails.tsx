@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import type { Song } from "../../types";
 import { MusicPicker } from "../MusicPicker";
+import { useAuthStore } from "~/store/authStore";
 
 interface StepPostDetailsProps {
   caption: string;
@@ -46,6 +47,10 @@ export const StepPostDetails: React.FC<StepPostDetailsProps> = ({
   playingSongId,
   onTogglePlay,
 }) => {
+
+  const { user } = useAuthStore();
+  console.log(user);
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -69,13 +74,13 @@ export const StepPostDetails: React.FC<StepPostDetailsProps> = ({
           <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-yellow-400 to-purple-600 p-[1.5px]">
             <div className="w-full h-full rounded-full border-2 border-white dark:border-zinc-900 overflow-hidden">
               <img
-                src="https://picsum.photos/seed/user/100/100"
+                src={user?.avatar_url}
                 alt="User"
                 className="w-full h-full object-cover"
               />
             </div>
           </div>
-          <span className="font-semibold text-sm">johndoe_official</span>
+          <span className="font-semibold text-sm">{user?.name}</span>
         </div>
 
         <div className="px-4">
