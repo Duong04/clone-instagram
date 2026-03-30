@@ -6,7 +6,7 @@ import { BottomNav } from './BottomNav'
 import { MobileHeader } from "./MobileHeader"
 import { cn } from "~/shared/libs/utils"
 import { useModal } from "~/shared/context/modal/modalContext"
-import { CreatePostModal } from "~/shared/components/dialogs/create-post"
+import { CreatePostModal } from "~/features/posts"
 
 export default function MainLayout() {
     const { isCreatePostOpen, closeCreatePost } = useModal();

@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { ModalContext } from "./modalContext";
 
-export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+type Props = {
+  children: ReactNode;
+};
+
+export const ModalProvider = ({ children }: Props) => {
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
 
   const openCreatePost = () => setIsCreatePostOpen(true);

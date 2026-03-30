@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal } from "lucide-react";
 import type { Post } from '~/shared/types';
 import { cn } from "~/shared/libs/utils";
@@ -8,7 +8,7 @@ interface PostCardProps {
   post: Post;
 }
 
-export const PostCard: React.FC<PostCardProps> = ({ post }) => {
+export const PostCard = ({ post }: PostCardProps) => {
   const [isLiked, setIsLiked] = useState(post.isLiked);
   const [showHeart, setShowHeart] = useState(false);
 

@@ -189,6 +189,25 @@ model Media {
 }
 
 //////////////////////////////////////////////////
+// MUSIC
+//////////////////////////////////////////////////
+model Music {
+  id         String   @id @default(uuid())
+  title      String
+  artist     String?
+  url        String
+  duration   Int?
+  cover_url  String?
+  created_at DateTime @default(now())
+
+  posts   Post[]
+  reels   Reel[]
+  stories Story[]
+
+  @@map("music")
+}
+
+//////////////////////////////////////////////////
 // POST
 //////////////////////////////////////////////////
 
@@ -197,6 +216,7 @@ model Post {
   user_id           String
   caption           String?
   location          String?
+  music_id          String?
   like_count        Int       @default(0)
   comment_count     Int       @default(0)
   comments_disabled Boolean   @default(false)
@@ -204,6 +224,7 @@ model Post {
   deleted_at        DateTime?
 
   user     User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  music    Music?  @relation(fields: [music_id], references: [id])
   media    PostMedia[]
   hashtags PostHashtag[]
 
@@ -233,6 +254,7 @@ model Reel {
   media_id          String
   caption           String?
   location          String?
+  music_id          String?
   like_count        Int       @default(0)
   comment_count     Int       @default(0)
   comments_disabled Boolean   @default(false)
@@ -241,6 +263,7 @@ model Reel {
 
   user  User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
   media Media @relation(fields: [media_id], references: [id])
+  music    Music?  @relation(fields: [music_id], references: [id])
 
   @@index([user_id])
   @@map("reels")
@@ -254,12 +277,13 @@ model Story {
   id         String   @id @default(uuid())
   user_id    String
   media_id   String
+  music_id String?
   expires_at DateTime
   created_at DateTime @default(now())
 
   user  User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
   media Media @relation(fields: [media_id], references: [id])
-
+  music    Music?  @relation(fields: [music_id], references: [id])
   @@index([user_id])
   @@map("stories")
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import { ArrowLeft, Search as SearchIcon, Play, Pause } from "lucide-react";
-import type { Song } from "~/shared/types/music";
+import type { Song } from "../types";
 
 interface MusicPickerProps {
   onClose: () => void;
@@ -24,7 +24,7 @@ interface ItunesResponse {
 
 const fetchMusic = async (query: string): Promise<Song[]> => {
   const response = await fetch(
-    `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&limit=20`
+    `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&limit=20`,
   );
   const data: ItunesResponse = await response.json();
   return data.results.map((item) => ({
@@ -36,12 +36,8 @@ const fetchMusic = async (query: string): Promise<Song[]> => {
   }));
 };
 
-export const MusicPicker: React.FC<MusicPickerProps> = ({
-  onClose,
-  onSelect,
-  playingSongId,
-  onTogglePlay,
-}) => {
+export const MusicPicker = (props: MusicPickerProps) => {
+  const { onClose, onSelect, playingSongId, onTogglePlay } = props;
   const [musicSearch, setMusicSearch] = useState("");
   const [songs, setSongs] = useState<Song[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -75,7 +71,6 @@ export const MusicPicker: React.FC<MusicPickerProps> = ({
       exit={{ y: "100%" }}
       className="absolute inset-0 bg-white dark:bg-zinc-900 z-20 flex flex-col"
     >
-      {/* Header */}
       <div className="p-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-3">
         <button onClick={onClose}>
           <ArrowLeft className="w-6 h-6" />
@@ -92,7 +87,6 @@ export const MusicPicker: React.FC<MusicPickerProps> = ({
         </div>
       </div>
 
-      {/* Song List */}
       <div className="flex-1 overflow-y-auto">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center h-40 gap-3">

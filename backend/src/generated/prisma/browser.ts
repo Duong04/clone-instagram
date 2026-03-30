@@ -48,6 +48,12 @@ export type DeviceToken = Prisma.DeviceTokenModel
  */
 export type Media = Prisma.MediaModel
 /**
+ * Model Music
+ * ///////////////////////////////////////////////
+ * ///////////////////////////////////////////////
+ */
+export type Music = Prisma.MusicModel
+/**
  * Model Post
  * 
  */

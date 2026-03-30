@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import type { Song } from "../types/music";
+import type { Song } from "../types";
 
 export const useAudioPlayer = (selectedMusic: Song | null, step: number) => {
   const [playingSongId, setPlayingSongId] = useState<string | null>(null);
@@ -56,7 +56,6 @@ export const useAudioPlayer = (selectedMusic: Song | null, step: number) => {
     setPlayingSongId(null);
   };
 
-  // Auto-play selected music when reaching Step 3
   useEffect(() => {
     if (step !== 3 || !selectedMusic) return;
     if (playingSongId === selectedMusic.id) return;
@@ -81,7 +80,6 @@ export const useAudioPlayer = (selectedMusic: Song | null, step: number) => {
     Promise.resolve().then(() => setPlayingSongId(selectedMusic.id));
   }, [step, selectedMusic]);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       audioRef.current?.pause();

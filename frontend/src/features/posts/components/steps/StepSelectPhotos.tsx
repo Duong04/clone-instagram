@@ -1,20 +1,32 @@
 import React, { useRef } from "react";
 import { Reorder } from "motion/react";
 import { Image as ImageIcon, Plus, GripVertical, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface StepSelectPhotosProps {
   selectedImages: string[];
   onImagesChange: (images: string[]) => void;
 }
 
-export const StepSelectPhotos: React.FC<StepSelectPhotosProps> = ({
+export const StepSelectPhotos = ({
   selectedImages,
   onImagesChange,
-}) => {
+}: StepSelectPhotosProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []) as File[];
+
+    const oversized = files.filter((f) => f.size > 10 * 1024 * 1024);
+    if (oversized.length > 0) {
+      toast.error("Each image must be under 10MB");
+      return;
+    }
+
+    if (selectedImages.length + files.length > 10) {
+      toast.error("Maximum 10 images allowed");
+      return;
+    }
     if (files.length === 0) return;
 
     const newImages: string[] = [];
@@ -65,7 +77,9 @@ export const StepSelectPhotos: React.FC<StepSelectPhotosProps> = ({
   return (
     <div className="w-full h-full p-6 overflow-y-auto">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold">Selected ({selectedImages.length})</h3>
+        <h3 className="text-sm font-semibold">
+          Selected ({selectedImages.length})
+        </h3>
         <button
           onClick={() => fileInputRef.current?.click()}
           className="flex items-center gap-1 text-sky-500 text-xs font-semibold hover:text-sky-600"
@@ -97,10 +111,16 @@ export const StepSelectPhotos: React.FC<StepSelectPhotosProps> = ({
           >
             <GripVertical className="w-5 h-5 text-zinc-400 shrink-0" />
             <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0">
-              <img src={img} alt={`Selected ${index}`} className="w-full h-full object-cover" />
+              <img
+                src={img}
+                alt={`Selected ${index}`}
+                className="w-full h-full object-cover"
+              />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium text-zinc-500 truncate">Image {index + 1}</p>
+              <p className="text-xs font-medium text-zinc-500 truncate">
+                Image {index + 1}
+              </p>
             </div>
             <button
               onClick={() => removeImage(index)}

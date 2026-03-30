@@ -55,6 +55,7 @@ export const ModelName = {
   UserSession: 'UserSession',
   DeviceToken: 'DeviceToken',
   Media: 'Media',
+  Music: 'Music',
   Post: 'Post',
   PostMedia: 'PostMedia',
   Reel: 'Reel',
@@ -175,11 +176,25 @@ export const MediaScalarFieldEnum = {
 export type MediaScalarFieldEnum = (typeof MediaScalarFieldEnum)[keyof typeof MediaScalarFieldEnum]
 
 
+export const MusicScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  artist: 'artist',
+  url: 'url',
+  duration: 'duration',
+  cover_url: 'cover_url',
+  created_at: 'created_at'
+} as const
+
+export type MusicScalarFieldEnum = (typeof MusicScalarFieldEnum)[keyof typeof MusicScalarFieldEnum]
+
+
 export const PostScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
   caption: 'caption',
   location: 'location',
+  music_id: 'music_id',
   like_count: 'like_count',
   comment_count: 'comment_count',
   comments_disabled: 'comments_disabled',
@@ -206,6 +221,7 @@ export const ReelScalarFieldEnum = {
   media_id: 'media_id',
   caption: 'caption',
   location: 'location',
+  music_id: 'music_id',
   like_count: 'like_count',
   comment_count: 'comment_count',
   comments_disabled: 'comments_disabled',
@@ -220,6 +236,7 @@ export const StoryScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
   media_id: 'media_id',
+  music_id: 'music_id',
   expires_at: 'expires_at',
   created_at: 'created_at'
 } as const

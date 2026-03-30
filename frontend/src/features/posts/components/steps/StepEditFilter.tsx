@@ -1,7 +1,6 @@
-import React from "react";
 import { motion } from "motion/react";
 import { cn } from "~/shared/libs/utils";
-import { FILTERS } from "~/shared/constants";
+import { FILTERS } from "../../constants";
 
 interface Filter {
   name: string;
@@ -15,12 +14,9 @@ interface StepEditFilterProps {
   onFilterChange: (filter: Filter) => void;
 }
 
-export const StepEditFilter: React.FC<StepEditFilterProps> = ({
-  selectedImages,
-  currentImageIndex,
-  selectedFilter,
-  onFilterChange,
-}) => {
+export const StepEditFilter = (props: StepEditFilterProps) => {
+  const { selectedImages, currentImageIndex, selectedFilter, onFilterChange } =
+    props;
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -41,7 +37,7 @@ export const StepEditFilter: React.FC<StepEditFilterProps> = ({
                   "w-full aspect-square rounded-md overflow-hidden border-2 transition-all",
                   selectedFilter.name === filter.name
                     ? "border-sky-500"
-                    : "border-transparent group-hover:border-zinc-300"
+                    : "border-transparent group-hover:border-zinc-300",
                 )}
               >
                 <img
@@ -53,7 +49,9 @@ export const StepEditFilter: React.FC<StepEditFilterProps> = ({
               <span
                 className={cn(
                   "text-xs font-medium",
-                  selectedFilter.name === filter.name ? "text-sky-500" : "text-zinc-500"
+                  selectedFilter.name === filter.name
+                    ? "text-sky-500"
+                    : "text-zinc-500",
                 )}
               >
                 {filter.name}

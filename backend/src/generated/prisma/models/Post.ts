@@ -41,6 +41,7 @@ export type PostMinAggregateOutputType = {
   user_id: string | null
   caption: string | null
   location: string | null
+  music_id: string | null
   like_count: number | null
   comment_count: number | null
   comments_disabled: boolean | null
@@ -53,6 +54,7 @@ export type PostMaxAggregateOutputType = {
   user_id: string | null
   caption: string | null
   location: string | null
+  music_id: string | null
   like_count: number | null
   comment_count: number | null
   comments_disabled: boolean | null
@@ -65,6 +67,7 @@ export type PostCountAggregateOutputType = {
   user_id: number
   caption: number
   location: number
+  music_id: number
   like_count: number
   comment_count: number
   comments_disabled: number
@@ -89,6 +92,7 @@ export type PostMinAggregateInputType = {
   user_id?: true
   caption?: true
   location?: true
+  music_id?: true
   like_count?: true
   comment_count?: true
   comments_disabled?: true
@@ -101,6 +105,7 @@ export type PostMaxAggregateInputType = {
   user_id?: true
   caption?: true
   location?: true
+  music_id?: true
   like_count?: true
   comment_count?: true
   comments_disabled?: true
@@ -113,6 +118,7 @@ export type PostCountAggregateInputType = {
   user_id?: true
   caption?: true
   location?: true
+  music_id?: true
   like_count?: true
   comment_count?: true
   comments_disabled?: true
@@ -212,6 +218,7 @@ export type PostGroupByOutputType = {
   user_id: string
   caption: string | null
   location: string | null
+  music_id: string | null
   like_count: number
   comment_count: number
   comments_disabled: boolean
@@ -247,12 +254,14 @@ export type PostWhereInput = {
   user_id?: Prisma.StringFilter<"Post"> | string
   caption?: Prisma.StringNullableFilter<"Post"> | string | null
   location?: Prisma.StringNullableFilter<"Post"> | string | null
+  music_id?: Prisma.StringNullableFilter<"Post"> | string | null
   like_count?: Prisma.IntFilter<"Post"> | number
   comment_count?: Prisma.IntFilter<"Post"> | number
   comments_disabled?: Prisma.BoolFilter<"Post"> | boolean
   created_at?: Prisma.DateTimeFilter<"Post"> | Date | string
   deleted_at?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  music?: Prisma.XOR<Prisma.MusicNullableScalarRelationFilter, Prisma.MusicWhereInput> | null
   media?: Prisma.PostMediaListRelationFilter
   hashtags?: Prisma.PostHashtagListRelationFilter
 }
@@ -262,12 +271,14 @@ export type PostOrderByWithRelationInput = {
   user_id?: Prisma.SortOrder
   caption?: Prisma.SortOrderInput | Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
+  music_id?: Prisma.SortOrderInput | Prisma.SortOrder
   like_count?: Prisma.SortOrder
   comment_count?: Prisma.SortOrder
   comments_disabled?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  music?: Prisma.MusicOrderByWithRelationInput
   media?: Prisma.PostMediaOrderByRelationAggregateInput
   hashtags?: Prisma.PostHashtagOrderByRelationAggregateInput
 }
@@ -280,12 +291,14 @@ export type PostWhereUniqueInput = Prisma.AtLeast<{
   user_id?: Prisma.StringFilter<"Post"> | string
   caption?: Prisma.StringNullableFilter<"Post"> | string | null
   location?: Prisma.StringNullableFilter<"Post"> | string | null
+  music_id?: Prisma.StringNullableFilter<"Post"> | string | null
   like_count?: Prisma.IntFilter<"Post"> | number
   comment_count?: Prisma.IntFilter<"Post"> | number
   comments_disabled?: Prisma.BoolFilter<"Post"> | boolean
   created_at?: Prisma.DateTimeFilter<"Post"> | Date | string
   deleted_at?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  music?: Prisma.XOR<Prisma.MusicNullableScalarRelationFilter, Prisma.MusicWhereInput> | null
   media?: Prisma.PostMediaListRelationFilter
   hashtags?: Prisma.PostHashtagListRelationFilter
 }, "id">
@@ -295,6 +308,7 @@ export type PostOrderByWithAggregationInput = {
   user_id?: Prisma.SortOrder
   caption?: Prisma.SortOrderInput | Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
+  music_id?: Prisma.SortOrderInput | Prisma.SortOrder
   like_count?: Prisma.SortOrder
   comment_count?: Prisma.SortOrder
   comments_disabled?: Prisma.SortOrder
@@ -315,6 +329,7 @@ export type PostScalarWhereWithAggregatesInput = {
   user_id?: Prisma.StringWithAggregatesFilter<"Post"> | string
   caption?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
   location?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
+  music_id?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
   like_count?: Prisma.IntWithAggregatesFilter<"Post"> | number
   comment_count?: Prisma.IntWithAggregatesFilter<"Post"> | number
   comments_disabled?: Prisma.BoolWithAggregatesFilter<"Post"> | boolean
@@ -332,6 +347,7 @@ export type PostCreateInput = {
   created_at?: Date | string
   deleted_at?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutPostsInput
+  music?: Prisma.MusicCreateNestedOneWithoutPostsInput
   media?: Prisma.PostMediaCreateNestedManyWithoutPostInput
   hashtags?: Prisma.PostHashtagCreateNestedManyWithoutPostInput
 }
@@ -341,6 +357,7 @@ export type PostUncheckedCreateInput = {
   user_id: string
   caption?: string | null
   location?: string | null
+  music_id?: string | null
   like_count?: number
   comment_count?: number
   comments_disabled?: boolean
@@ -360,6 +377,7 @@ export type PostUpdateInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutPostsNestedInput
+  music?: Prisma.MusicUpdateOneWithoutPostsNestedInput
   media?: Prisma.PostMediaUpdateManyWithoutPostNestedInput
   hashtags?: Prisma.PostHashtagUpdateManyWithoutPostNestedInput
 }
@@ -369,6 +387,7 @@ export type PostUncheckedUpdateInput = {
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  music_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   like_count?: Prisma.IntFieldUpdateOperationsInput | number
   comment_count?: Prisma.IntFieldUpdateOperationsInput | number
   comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -383,6 +402,7 @@ export type PostCreateManyInput = {
   user_id: string
   caption?: string | null
   location?: string | null
+  music_id?: string | null
   like_count?: number
   comment_count?: number
   comments_disabled?: boolean
@@ -406,6 +426,7 @@ export type PostUncheckedUpdateManyInput = {
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  music_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   like_count?: Prisma.IntFieldUpdateOperationsInput | number
   comment_count?: Prisma.IntFieldUpdateOperationsInput | number
   comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -428,6 +449,7 @@ export type PostCountOrderByAggregateInput = {
   user_id?: Prisma.SortOrder
   caption?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  music_id?: Prisma.SortOrder
   like_count?: Prisma.SortOrder
   comment_count?: Prisma.SortOrder
   comments_disabled?: Prisma.SortOrder
@@ -445,6 +467,7 @@ export type PostMaxOrderByAggregateInput = {
   user_id?: Prisma.SortOrder
   caption?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  music_id?: Prisma.SortOrder
   like_count?: Prisma.SortOrder
   comment_count?: Prisma.SortOrder
   comments_disabled?: Prisma.SortOrder
@@ -457,6 +480,7 @@ export type PostMinOrderByAggregateInput = {
   user_id?: Prisma.SortOrder
   caption?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  music_id?: Prisma.SortOrder
   like_count?: Prisma.SortOrder
   comment_count?: Prisma.SortOrder
   comments_disabled?: Prisma.SortOrder
@@ -516,6 +540,48 @@ export type PostUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.PostScalarWhereInput | Prisma.PostScalarWhereInput[]
 }
 
+export type PostCreateNestedManyWithoutMusicInput = {
+  create?: Prisma.XOR<Prisma.PostCreateWithoutMusicInput, Prisma.PostUncheckedCreateWithoutMusicInput> | Prisma.PostCreateWithoutMusicInput[] | Prisma.PostUncheckedCreateWithoutMusicInput[]
+  connectOrCreate?: Prisma.PostCreateOrConnectWithoutMusicInput | Prisma.PostCreateOrConnectWithoutMusicInput[]
+  createMany?: Prisma.PostCreateManyMusicInputEnvelope
+  connect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+}
+
+export type PostUncheckedCreateNestedManyWithoutMusicInput = {
+  create?: Prisma.XOR<Prisma.PostCreateWithoutMusicInput, Prisma.PostUncheckedCreateWithoutMusicInput> | Prisma.PostCreateWithoutMusicInput[] | Prisma.PostUncheckedCreateWithoutMusicInput[]
+  connectOrCreate?: Prisma.PostCreateOrConnectWithoutMusicInput | Prisma.PostCreateOrConnectWithoutMusicInput[]
+  createMany?: Prisma.PostCreateManyMusicInputEnvelope
+  connect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+}
+
+export type PostUpdateManyWithoutMusicNestedInput = {
+  create?: Prisma.XOR<Prisma.PostCreateWithoutMusicInput, Prisma.PostUncheckedCreateWithoutMusicInput> | Prisma.PostCreateWithoutMusicInput[] | Prisma.PostUncheckedCreateWithoutMusicInput[]
+  connectOrCreate?: Prisma.PostCreateOrConnectWithoutMusicInput | Prisma.PostCreateOrConnectWithoutMusicInput[]
+  upsert?: Prisma.PostUpsertWithWhereUniqueWithoutMusicInput | Prisma.PostUpsertWithWhereUniqueWithoutMusicInput[]
+  createMany?: Prisma.PostCreateManyMusicInputEnvelope
+  set?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  disconnect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  delete?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  connect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  update?: Prisma.PostUpdateWithWhereUniqueWithoutMusicInput | Prisma.PostUpdateWithWhereUniqueWithoutMusicInput[]
+  updateMany?: Prisma.PostUpdateManyWithWhereWithoutMusicInput | Prisma.PostUpdateManyWithWhereWithoutMusicInput[]
+  deleteMany?: Prisma.PostScalarWhereInput | Prisma.PostScalarWhereInput[]
+}
+
+export type PostUncheckedUpdateManyWithoutMusicNestedInput = {
+  create?: Prisma.XOR<Prisma.PostCreateWithoutMusicInput, Prisma.PostUncheckedCreateWithoutMusicInput> | Prisma.PostCreateWithoutMusicInput[] | Prisma.PostUncheckedCreateWithoutMusicInput[]
+  connectOrCreate?: Prisma.PostCreateOrConnectWithoutMusicInput | Prisma.PostCreateOrConnectWithoutMusicInput[]
+  upsert?: Prisma.PostUpsertWithWhereUniqueWithoutMusicInput | Prisma.PostUpsertWithWhereUniqueWithoutMusicInput[]
+  createMany?: Prisma.PostCreateManyMusicInputEnvelope
+  set?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  disconnect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  delete?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  connect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  update?: Prisma.PostUpdateWithWhereUniqueWithoutMusicInput | Prisma.PostUpdateWithWhereUniqueWithoutMusicInput[]
+  updateMany?: Prisma.PostUpdateManyWithWhereWithoutMusicInput | Prisma.PostUpdateManyWithWhereWithoutMusicInput[]
+  deleteMany?: Prisma.PostScalarWhereInput | Prisma.PostScalarWhereInput[]
+}
+
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number
@@ -561,6 +627,7 @@ export type PostCreateWithoutUserInput = {
   comments_disabled?: boolean
   created_at?: Date | string
   deleted_at?: Date | string | null
+  music?: Prisma.MusicCreateNestedOneWithoutPostsInput
   media?: Prisma.PostMediaCreateNestedManyWithoutPostInput
   hashtags?: Prisma.PostHashtagCreateNestedManyWithoutPostInput
 }
@@ -569,6 +636,7 @@ export type PostUncheckedCreateWithoutUserInput = {
   id?: string
   caption?: string | null
   location?: string | null
+  music_id?: string | null
   like_count?: number
   comment_count?: number
   comments_disabled?: boolean
@@ -612,11 +680,66 @@ export type PostScalarWhereInput = {
   user_id?: Prisma.StringFilter<"Post"> | string
   caption?: Prisma.StringNullableFilter<"Post"> | string | null
   location?: Prisma.StringNullableFilter<"Post"> | string | null
+  music_id?: Prisma.StringNullableFilter<"Post"> | string | null
   like_count?: Prisma.IntFilter<"Post"> | number
   comment_count?: Prisma.IntFilter<"Post"> | number
   comments_disabled?: Prisma.BoolFilter<"Post"> | boolean
   created_at?: Prisma.DateTimeFilter<"Post"> | Date | string
   deleted_at?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
+}
+
+export type PostCreateWithoutMusicInput = {
+  id?: string
+  caption?: string | null
+  location?: string | null
+  like_count?: number
+  comment_count?: number
+  comments_disabled?: boolean
+  created_at?: Date | string
+  deleted_at?: Date | string | null
+  user: Prisma.UserCreateNestedOneWithoutPostsInput
+  media?: Prisma.PostMediaCreateNestedManyWithoutPostInput
+  hashtags?: Prisma.PostHashtagCreateNestedManyWithoutPostInput
+}
+
+export type PostUncheckedCreateWithoutMusicInput = {
+  id?: string
+  user_id: string
+  caption?: string | null
+  location?: string | null
+  like_count?: number
+  comment_count?: number
+  comments_disabled?: boolean
+  created_at?: Date | string
+  deleted_at?: Date | string | null
+  media?: Prisma.PostMediaUncheckedCreateNestedManyWithoutPostInput
+  hashtags?: Prisma.PostHashtagUncheckedCreateNestedManyWithoutPostInput
+}
+
+export type PostCreateOrConnectWithoutMusicInput = {
+  where: Prisma.PostWhereUniqueInput
+  create: Prisma.XOR<Prisma.PostCreateWithoutMusicInput, Prisma.PostUncheckedCreateWithoutMusicInput>
+}
+
+export type PostCreateManyMusicInputEnvelope = {
+  data: Prisma.PostCreateManyMusicInput | Prisma.PostCreateManyMusicInput[]
+  skipDuplicates?: boolean
+}
+
+export type PostUpsertWithWhereUniqueWithoutMusicInput = {
+  where: Prisma.PostWhereUniqueInput
+  update: Prisma.XOR<Prisma.PostUpdateWithoutMusicInput, Prisma.PostUncheckedUpdateWithoutMusicInput>
+  create: Prisma.XOR<Prisma.PostCreateWithoutMusicInput, Prisma.PostUncheckedCreateWithoutMusicInput>
+}
+
+export type PostUpdateWithWhereUniqueWithoutMusicInput = {
+  where: Prisma.PostWhereUniqueInput
+  data: Prisma.XOR<Prisma.PostUpdateWithoutMusicInput, Prisma.PostUncheckedUpdateWithoutMusicInput>
+}
+
+export type PostUpdateManyWithWhereWithoutMusicInput = {
+  where: Prisma.PostScalarWhereInput
+  data: Prisma.XOR<Prisma.PostUpdateManyMutationInput, Prisma.PostUncheckedUpdateManyWithoutMusicInput>
 }
 
 export type PostCreateWithoutMediaInput = {
@@ -629,6 +752,7 @@ export type PostCreateWithoutMediaInput = {
   created_at?: Date | string
   deleted_at?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutPostsInput
+  music?: Prisma.MusicCreateNestedOneWithoutPostsInput
   hashtags?: Prisma.PostHashtagCreateNestedManyWithoutPostInput
 }
 
@@ -637,6 +761,7 @@ export type PostUncheckedCreateWithoutMediaInput = {
   user_id: string
   caption?: string | null
   location?: string | null
+  music_id?: string | null
   like_count?: number
   comment_count?: number
   comments_disabled?: boolean
@@ -671,6 +796,7 @@ export type PostUpdateWithoutMediaInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutPostsNestedInput
+  music?: Prisma.MusicUpdateOneWithoutPostsNestedInput
   hashtags?: Prisma.PostHashtagUpdateManyWithoutPostNestedInput
 }
 
@@ -679,6 +805,7 @@ export type PostUncheckedUpdateWithoutMediaInput = {
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  music_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   like_count?: Prisma.IntFieldUpdateOperationsInput | number
   comment_count?: Prisma.IntFieldUpdateOperationsInput | number
   comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -697,6 +824,7 @@ export type PostCreateWithoutHashtagsInput = {
   created_at?: Date | string
   deleted_at?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutPostsInput
+  music?: Prisma.MusicCreateNestedOneWithoutPostsInput
   media?: Prisma.PostMediaCreateNestedManyWithoutPostInput
 }
 
@@ -705,6 +833,7 @@ export type PostUncheckedCreateWithoutHashtagsInput = {
   user_id: string
   caption?: string | null
   location?: string | null
+  music_id?: string | null
   like_count?: number
   comment_count?: number
   comments_disabled?: boolean
@@ -739,6 +868,7 @@ export type PostUpdateWithoutHashtagsInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutPostsNestedInput
+  music?: Prisma.MusicUpdateOneWithoutPostsNestedInput
   media?: Prisma.PostMediaUpdateManyWithoutPostNestedInput
 }
 
@@ -747,6 +877,7 @@ export type PostUncheckedUpdateWithoutHashtagsInput = {
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  music_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   like_count?: Prisma.IntFieldUpdateOperationsInput | number
   comment_count?: Prisma.IntFieldUpdateOperationsInput | number
   comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -759,6 +890,7 @@ export type PostCreateManyUserInput = {
   id?: string
   caption?: string | null
   location?: string | null
+  music_id?: string | null
   like_count?: number
   comment_count?: number
   comments_disabled?: boolean
@@ -775,6 +907,7 @@ export type PostUpdateWithoutUserInput = {
   comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  music?: Prisma.MusicUpdateOneWithoutPostsNestedInput
   media?: Prisma.PostMediaUpdateManyWithoutPostNestedInput
   hashtags?: Prisma.PostHashtagUpdateManyWithoutPostNestedInput
 }
@@ -783,6 +916,7 @@ export type PostUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  music_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   like_count?: Prisma.IntFieldUpdateOperationsInput | number
   comment_count?: Prisma.IntFieldUpdateOperationsInput | number
   comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -794,6 +928,59 @@ export type PostUncheckedUpdateWithoutUserInput = {
 
 export type PostUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  music_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  like_count?: Prisma.IntFieldUpdateOperationsInput | number
+  comment_count?: Prisma.IntFieldUpdateOperationsInput | number
+  comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type PostCreateManyMusicInput = {
+  id?: string
+  user_id: string
+  caption?: string | null
+  location?: string | null
+  like_count?: number
+  comment_count?: number
+  comments_disabled?: boolean
+  created_at?: Date | string
+  deleted_at?: Date | string | null
+}
+
+export type PostUpdateWithoutMusicInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  like_count?: Prisma.IntFieldUpdateOperationsInput | number
+  comment_count?: Prisma.IntFieldUpdateOperationsInput | number
+  comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  user?: Prisma.UserUpdateOneRequiredWithoutPostsNestedInput
+  media?: Prisma.PostMediaUpdateManyWithoutPostNestedInput
+  hashtags?: Prisma.PostHashtagUpdateManyWithoutPostNestedInput
+}
+
+export type PostUncheckedUpdateWithoutMusicInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  user_id?: Prisma.StringFieldUpdateOperationsInput | string
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  like_count?: Prisma.IntFieldUpdateOperationsInput | number
+  comment_count?: Prisma.IntFieldUpdateOperationsInput | number
+  comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  media?: Prisma.PostMediaUncheckedUpdateManyWithoutPostNestedInput
+  hashtags?: Prisma.PostHashtagUncheckedUpdateManyWithoutPostNestedInput
+}
+
+export type PostUncheckedUpdateManyWithoutMusicInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  user_id?: Prisma.StringFieldUpdateOperationsInput | string
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   like_count?: Prisma.IntFieldUpdateOperationsInput | number
@@ -848,12 +1035,14 @@ export type PostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   user_id?: boolean
   caption?: boolean
   location?: boolean
+  music_id?: boolean
   like_count?: boolean
   comment_count?: boolean
   comments_disabled?: boolean
   created_at?: boolean
   deleted_at?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  music?: boolean | Prisma.Post$musicArgs<ExtArgs>
   media?: boolean | Prisma.Post$mediaArgs<ExtArgs>
   hashtags?: boolean | Prisma.Post$hashtagsArgs<ExtArgs>
   _count?: boolean | Prisma.PostCountOutputTypeDefaultArgs<ExtArgs>
@@ -864,12 +1053,14 @@ export type PostSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   user_id?: boolean
   caption?: boolean
   location?: boolean
+  music_id?: boolean
   like_count?: boolean
   comment_count?: boolean
   comments_disabled?: boolean
   created_at?: boolean
   deleted_at?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  music?: boolean | Prisma.Post$musicArgs<ExtArgs>
 }, ExtArgs["result"]["post"]>
 
 export type PostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -877,12 +1068,14 @@ export type PostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   user_id?: boolean
   caption?: boolean
   location?: boolean
+  music_id?: boolean
   like_count?: boolean
   comment_count?: boolean
   comments_disabled?: boolean
   created_at?: boolean
   deleted_at?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  music?: boolean | Prisma.Post$musicArgs<ExtArgs>
 }, ExtArgs["result"]["post"]>
 
 export type PostSelectScalar = {
@@ -890,6 +1083,7 @@ export type PostSelectScalar = {
   user_id?: boolean
   caption?: boolean
   location?: boolean
+  music_id?: boolean
   like_count?: boolean
   comment_count?: boolean
   comments_disabled?: boolean
@@ -897,24 +1091,28 @@ export type PostSelectScalar = {
   deleted_at?: boolean
 }
 
-export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "caption" | "location" | "like_count" | "comment_count" | "comments_disabled" | "created_at" | "deleted_at", ExtArgs["result"]["post"]>
+export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "caption" | "location" | "music_id" | "like_count" | "comment_count" | "comments_disabled" | "created_at" | "deleted_at", ExtArgs["result"]["post"]>
 export type PostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  music?: boolean | Prisma.Post$musicArgs<ExtArgs>
   media?: boolean | Prisma.Post$mediaArgs<ExtArgs>
   hashtags?: boolean | Prisma.Post$hashtagsArgs<ExtArgs>
   _count?: boolean | Prisma.PostCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PostIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  music?: boolean | Prisma.Post$musicArgs<ExtArgs>
 }
 export type PostIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  music?: boolean | Prisma.Post$musicArgs<ExtArgs>
 }
 
 export type $PostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Post"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    music: Prisma.$MusicPayload<ExtArgs> | null
     media: Prisma.$PostMediaPayload<ExtArgs>[]
     hashtags: Prisma.$PostHashtagPayload<ExtArgs>[]
   }
@@ -923,6 +1121,7 @@ export type $PostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     user_id: string
     caption: string | null
     location: string | null
+    music_id: string | null
     like_count: number
     comment_count: number
     comments_disabled: boolean
@@ -1323,6 +1522,7 @@ readonly fields: PostFieldRefs;
 export interface Prisma__PostClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  music<T extends Prisma.Post$musicArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Post$musicArgs<ExtArgs>>): Prisma.Prisma__MusicClient<runtime.Types.Result.GetResult<Prisma.$MusicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   media<T extends Prisma.Post$mediaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Post$mediaArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostMediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   hashtags<T extends Prisma.Post$hashtagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Post$hashtagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostHashtagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1358,6 +1558,7 @@ export interface PostFieldRefs {
   readonly user_id: Prisma.FieldRef<"Post", 'String'>
   readonly caption: Prisma.FieldRef<"Post", 'String'>
   readonly location: Prisma.FieldRef<"Post", 'String'>
+  readonly music_id: Prisma.FieldRef<"Post", 'String'>
   readonly like_count: Prisma.FieldRef<"Post", 'Int'>
   readonly comment_count: Prisma.FieldRef<"Post", 'Int'>
   readonly comments_disabled: Prisma.FieldRef<"Post", 'Boolean'>
@@ -1756,6 +1957,25 @@ export type PostDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Posts to delete.
    */
   limit?: number
+}
+
+/**
+ * Post.music
+ */
+export type Post$musicArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Music
+   */
+  select?: Prisma.MusicSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Music
+   */
+  omit?: Prisma.MusicOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MusicInclude<ExtArgs> | null
+  where?: Prisma.MusicWhereInput
 }
 
 /**
