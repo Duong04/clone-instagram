@@ -31,7 +31,7 @@ class PostRepository {
   }
 
   async create(data: Prisma.PostCreateInput) {
-    return prisma.post.create({ data })
+    return prisma.post.create({ data, include: POST_INCLUDE })
   }
 
   async find(id: string) {
