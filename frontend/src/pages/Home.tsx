@@ -4,8 +4,11 @@ import { MOCK_POSTS, MOCK_STORIES, MOCK_USER } from "~/mockData";
 import { motion } from "motion/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
+import { Plus } from "lucide-react";
+import { useAuthStore } from "~/store/authStore";
 
 export const HomePage = () => {
+  const { user } = useAuthStore();
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -20,7 +23,7 @@ export const HomePage = () => {
             <Swiper
               modules={[Navigation]}
               navigation
-              spaceBetween={12}
+              spaceBetween={3}
               slidesPerView={3}
               observer={true}
               observeParents={true}
@@ -30,8 +33,34 @@ export const HomePage = () => {
                 580: { slidesPerView: 6 },
                 1024: { slidesPerView: 7 },
               }}
-              className="w-full"
+              className="w-full" style={{ padding: "6px 0" }}
             >
+              <SwiperSlide key={user?.id}>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex flex-col items-center gap-1 flex-shrink-0 cursor-pointer group"
+                >
+                  <div className="relative flex flex-col items-center gap-1">
+                    <div className="p-[3px] rounded-full instagram-gradient">
+                      <div className="p-[2px] bg-white rounded-full">
+                        <img
+                          src={user?.avatar_url}
+                          alt={user?.username}
+                          className="w-14 h-14 rounded-full object-cover"
+                          referrerPolicy="no-referrer"
+                        />
+                      </div>
+                    </div>
+                    <div className="absolute bottom-5 right-3 bg-[#0095f6] border-2 border-white rounded-full p-0.5 text-white">
+                      <Plus className="w-3 h-3" />
+                    </div>
+                    <span className="text-xs text-zinc-500 truncate w-16 text-center">
+                      Your Story
+                    </span>
+                  </div>
+                </motion.div>
+              </SwiperSlide>
               {MOCK_STORIES.map((story) => (
                 <SwiperSlide key={story.id}>
                   <StoryCircle story={story} />
