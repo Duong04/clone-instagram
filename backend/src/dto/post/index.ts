@@ -1,11 +1,7 @@
 import { z } from 'zod'
 
 export const getAllPostSchema = z.object({
-  page: z
-    .string()
-    .optional()
-    .transform((val) => (val ? parseInt(val, 10) : 1))
-    .pipe(z.number().int().positive('Page must be greater than 0.')),
+  cursor: z.string().optional(), 
   limit: z
     .string()
     .optional()

@@ -6,9 +6,9 @@ import { sendSuccess, sendError } from '~/utils/response'
 class PostController {
   async getAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const { page, limit } = getAllPostSchema.parse(req.query)
+      const { cursor, limit } = getAllPostSchema.parse(req.query)
 
-      const result = await postService.getAll(page, limit)
+      const result = await postService.getAll(limit, cursor)
 
       return sendSuccess({
         res,

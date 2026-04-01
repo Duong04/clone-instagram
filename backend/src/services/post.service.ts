@@ -2,8 +2,8 @@ import postRepository from '~/repositories/post.repository'
 import type { CreatePostDto, UpdatePostDto } from '~/dto/post'
 
 class PostService {
-  async getAll(page: number = 1, limit: number = 10) {
-    return postRepository.all(page, limit)
+  async getAll(limit: number, cursor?: string) {
+    return postRepository.all(limit, cursor)
   }
 
   async getById(id: string) {

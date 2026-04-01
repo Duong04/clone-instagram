@@ -1,10 +1,9 @@
 import { Response } from 'express'
 
 interface Meta {
-  total: number
-  page: number
+  nextCursor: string | null
+  hasNextPage: boolean
   limit: number
-  total_pages: number
 }
 
 interface SuccessOptions<T> {
