@@ -4,10 +4,12 @@ import { authMiddleware } from '~/middlewares/auth.middleware'
 
 const router = Router()
 
-router.get('/', authMiddleware, postController.getAll)
-router.get('/:id', authMiddleware, postController.getById)
-router.post('/', authMiddleware, postController.create)
-router.put('/:id', authMiddleware, postController.update)
-router.delete('/:id', authMiddleware, postController.remove)
+router.use(authMiddleware)
+
+router.get('/', postController.getAll)
+router.get('/:id', postController.getById)
+router.post('/', postController.create)
+router.put('/:id', postController.update)
+router.delete('/:id', postController.remove)
 
 export default router
