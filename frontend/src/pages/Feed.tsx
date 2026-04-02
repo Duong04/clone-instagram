@@ -1,0 +1,1 @@
+export { FeedPage } from '~/features/feed/pages'

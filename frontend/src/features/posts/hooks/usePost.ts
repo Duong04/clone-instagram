@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { mediaApi } from "../api/mediaApi";
 import { postApi } from "../api/postApi";
-import { createPostSchema } from "../schemas/post.schema";
+import { createPostSchema } from "../schemas/postSchema";
 
 export function usePost() {
   const [isLoading, setIsLoading] = useState(false);

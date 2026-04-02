@@ -1,15 +1,26 @@
 import { useState } from "react";
-import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal } from "lucide-react";
-import type { Post } from '~/shared/types';
+import {
+  Heart,
+  MessageCircle,
+  Send,
+  Bookmark,
+  MoreHorizontal,
+} from "lucide-react";
 import { cn } from "~/shared/libs/utils";
 import { motion, AnimatePresence } from "motion/react";
+import type { FeedItem } from "~/shared/types/feed";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
 
-interface PostCardProps {
-  post: Post;
+interface FeedItemCardProps {
+  item: FeedItem;
 }
 
-export const PostCard = ({ post }: PostCardProps) => {
-  const [isLiked, setIsLiked] = useState(post.isLiked);
+export const PostCard = ({ item }: FeedItemCardProps) => {
+  const sortedMedia = [...item.media].sort((a, b) => a.position - b.position);
+  const hasMultiple = sortedMedia.length > 1;
+
+  const [isLiked, setIsLiked] = useState(item.is_liked);
   const [showHeart, setShowHeart] = useState(false);
 
   const handleLike = () => {
@@ -21,7 +32,7 @@ export const PostCard = ({ post }: PostCardProps) => {
   };
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, scale: 0.98 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
@@ -30,25 +41,27 @@ export const PostCard = ({ post }: PostCardProps) => {
       {/* Header */}
       <div className="flex items-center justify-between p-3">
         <div className="flex items-center gap-3">
-          <motion.div 
+          <motion.div
             whileHover={{ scale: 1.05 }}
             className="p-[2px] rounded-full instagram-gradient cursor-pointer"
           >
-            <img 
-              src={post.user.avatar} 
-              alt={post.user.username} 
+            <img
+              src={item.user.avatar?.url}
+              alt={item.user.name}
               className="w-8 h-8 rounded-full border-2 border-white object-cover"
               referrerPolicy="no-referrer"
             />
           </motion.div>
           <div className="flex items-center gap-1">
-            <span className="font-semibold text-sm hover:text-zinc-500 cursor-pointer transition-colors">{post.user.username}</span>
-            {post.user.isVerified && (
+            <span className="font-semibold text-sm hover:text-zinc-500 cursor-pointer transition-colors">
+              {item.user.username}
+            </span>
+            {/* {item.user?.isVerified && (
               <svg aria-label="Verified" className="w-3 h-3 text-[#0095f6]" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12.001.5a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12.001.5Zm5.688 8.858-6.17 6.17a1.144 1.144 0 0 1-1.618 0l-3.592-3.592a1.144 1.144 0 0 1 1.618-1.618l2.783 2.783 5.362-5.362a1.144 1.144 0 0 1 1.617 1.619Z"></path>
               </svg>
-            )}
-            <span className="text-zinc-500 text-sm">• {post.timestamp}</span>
+            )} */}
+            <span className="text-zinc-500 text-sm">• {item.created_at}</span>
           </div>
         </div>
         <button className="hover:text-zinc-500 transition-colors">
@@ -57,16 +70,25 @@ export const PostCard = ({ post }: PostCardProps) => {
       </div>
 
       {/* Image with Double Tap Like */}
-      <div 
+      <div
         className="relative aspect-square bg-zinc-100 overflow-hidden cursor-pointer"
         onDoubleClick={handleLike}
       >
-        <img 
-          src={post.image} 
-          alt="Post content" 
-          className="w-full h-full object-cover"
-          referrerPolicy="no-referrer"
-        />
+        {hasMultiple ? (
+        <Swiper
+          modules={[Pagination]}
+          pagination={{ clickable: true }}
+          className="w-full"
+        >
+          {sortedMedia.map((m) => (
+            <SwiperSlide key={m.id}>
+              <MediaSlide media={m.media} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      ) : (
+        sortedMedia[0] && <MediaSlide media={sortedMedia[0].media} />
+      )}
         <AnimatePresence>
           {showHeart && (
             <motion.div
@@ -85,44 +107,58 @@ export const PostCard = ({ post }: PostCardProps) => {
       <div className="p-3">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-4">
-            <motion.button 
+            <motion.button
               whileTap={{ scale: 0.8 }}
               onClick={handleLike}
-              className={cn("hover:opacity-60 transition-opacity", isLiked && "text-red-500")}
+              className={cn(
+                "hover:opacity-60 transition-opacity",
+                isLiked && "text-red-500",
+              )}
             >
               <Heart className={cn("w-7 h-7", isLiked && "fill-current")} />
             </motion.button>
-            <motion.button whileTap={{ scale: 0.8 }} className="hover:opacity-60 transition-opacity">
+            <motion.button
+              whileTap={{ scale: 0.8 }}
+              className="hover:opacity-60 transition-opacity"
+            >
               <MessageCircle className="w-7 h-7" />
             </motion.button>
-            <motion.button whileTap={{ scale: 0.8 }} className="hover:opacity-60 transition-opacity">
+            <motion.button
+              whileTap={{ scale: 0.8 }}
+              className="hover:opacity-60 transition-opacity"
+            >
               <Send className="w-7 h-7" />
             </motion.button>
           </div>
-          <motion.button whileTap={{ scale: 0.8 }} className="hover:opacity-60 transition-opacity">
+          <motion.button
+            whileTap={{ scale: 0.8 }}
+            className="hover:opacity-60 transition-opacity"
+          >
             <Bookmark className="w-7 h-7" />
           </motion.button>
         </div>
 
         {/* Likes */}
-        <p className="font-semibold text-sm mb-2">{post.likes.toLocaleString()} likes</p>
+        <p className="font-semibold text-sm mb-2">
+          {item.like_count.toLocaleString()} likes
+        </p>
 
         {/* Caption */}
         <div className="text-sm mb-2">
-          <span className="font-semibold mr-2">{post.user.username}</span>
-          <span>{post.caption}</span>
+          <span className="font-semibold mr-2">{item.user.username}</span>
+          <span>{item.caption}</span>
         </div>
 
         {/* Comments */}
         <button className="text-zinc-500 text-sm mb-2 hover:text-zinc-400 transition-colors">
-          View all {post.comments} comments
+          View all {item.comment_count} comments
         </button>
 
         {/* Add Comment */}
         <div className="flex items-center justify-between mt-2">
-          <input 
-            type="text" 
-            placeholder="Add a comment..." 
+          <input
+            type="text"
+            placeholder="Add a comment..."
             className="text-sm w-full outline-none bg-transparent"
           />
           <button className="text-[#0095f6] font-semibold text-sm hover:text-[#00376b] transition-colors">
@@ -131,5 +167,24 @@ export const PostCard = ({ post }: PostCardProps) => {
         </div>
       </div>
     </motion.div>
+  );
+};
+
+const MediaSlide = ({ media }: { media: FeedItem["media"][0]["media"] }) => {
+  const isVideo = media.media_type.startsWith("video");
+
+  return isVideo ? (
+    <video
+      src={media.url}
+      className="w-full h-full object-cover"
+      controls
+    />
+  ) : (
+    <img
+      src={media.url}
+      alt="post-content"
+      className="w-full h-full object-cover"
+      referrerPolicy="no-referrer"
+    />
   );
 };

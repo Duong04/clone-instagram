@@ -1,14 +1,23 @@
-import { PostCard } from "~/shared/components/cards/PostCard";
 import { StoryCircle } from "~/shared/components/cards/StoryCircle";
-import { MOCK_POSTS, MOCK_STORIES, MOCK_USER } from "~/mockData";
+import { MOCK_STORIES, MOCK_USER } from "~/mockData";
 import { motion } from "motion/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import { Plus } from "lucide-react";
 import { useAuthStore } from "~/store/authStore";
+import { useFeedStore } from "~/features/feed";
+import { useEffect } from "react";
+import { FeedList } from "../components/FeedList";
 
-export const HomePage = () => {
+export const FeedPage = () => {
   const { user } = useAuthStore();
+  const { loadMore } = useFeedStore();
+
+  useEffect(() => {
+    const load = async () => await loadMore();
+    load();
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -33,7 +42,8 @@ export const HomePage = () => {
                 580: { slidesPerView: 6 },
                 1024: { slidesPerView: 7 },
               }}
-              className="w-full" style={{ padding: "6px 0" }}
+              className="w-full"
+              style={{ padding: "6px 0" }}
             >
               <SwiperSlide key={user?.id}>
                 <motion.div
@@ -71,9 +81,7 @@ export const HomePage = () => {
 
           {/* POSTS */}
           <div className="space-y-6">
-            {MOCK_POSTS.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
+            <FeedList />
           </div>
         </div>
 

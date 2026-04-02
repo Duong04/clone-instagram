@@ -5,7 +5,7 @@ import AuthLayout from '~/layouts/AuthLayout'
 import MainLayout from '~/layouts/MainLayout'
 import { ExplorePage } from '~/pages/Explore'
 import { Forbidden } from '~/pages/Forbidden'
-import { HomePage } from '~/pages/Home'
+import { FeedPage } from '~/pages/Feed'
 import { LoginPage } from '~/pages/Login'
 import { MessagesPage } from '~/pages/Messages'
 import { NotFound } from '~/pages/NotFound'
@@ -23,7 +23,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <HomePage />,
+        element: <FeedPage />,
       },
       {
         path: '/explore',
