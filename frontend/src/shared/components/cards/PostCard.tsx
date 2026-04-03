@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from "motion/react";
 import type { FeedItem } from "~/shared/types/feed";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
+import { MediaSlide } from "./MediaSlide";
 
 interface FeedItemCardProps {
   item: FeedItem;
@@ -82,12 +83,12 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
         >
           {sortedMedia.map((m) => (
             <SwiperSlide key={m.id}>
-              <MediaSlide media={m.media} />
+              <MediaSlide media_type={m.media.media_type} url={m.media.url} />
             </SwiperSlide>
           ))}
         </Swiper>
       ) : (
-        sortedMedia[0] && <MediaSlide media={sortedMedia[0].media} />
+        sortedMedia[0] && <MediaSlide media_type={sortedMedia[0].media.media_type} url={sortedMedia[0].media.url} />
       )}
         <AnimatePresence>
           {showHeart && (
@@ -167,24 +168,5 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
         </div>
       </div>
     </motion.div>
-  );
-};
-
-const MediaSlide = ({ media }: { media: FeedItem["media"][0]["media"] }) => {
-  const isVideo = media.media_type.startsWith("video");
-
-  return isVideo ? (
-    <video
-      src={media.url}
-      className="w-full h-full object-cover"
-      controls
-    />
-  ) : (
-    <img
-      src={media.url}
-      alt="post-content"
-      className="w-full h-full object-cover"
-      referrerPolicy="no-referrer"
-    />
   );
 };

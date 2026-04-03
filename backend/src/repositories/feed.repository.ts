@@ -41,7 +41,7 @@ class FeedRepository {
     })
 
     if (feedItems.length === 0) {
-      return this.getDiscoveryFeed(viewedIds, limit)
+      return this.getDiscoveryFeed(viewedIds, limit, cursor)
     }
 
     const hasNextPage = feedItems.length > limit
@@ -62,7 +62,11 @@ class FeedRepository {
     return views.map((v) => v.target_id)
   }
 
-  private async getDiscoveryFeed(viewedIds: string[], limit: number): Promise<FeedResult<ResolvedFeedItem>> {
+  private async getDiscoveryFeed(
+    viewedIds: string[],
+    limit: number,
+    cursor?: string // thêm cursor
+  ): Promise<FeedResult<ResolvedFeedItem>> {
     const posts = await prisma.post.findMany({
       where: { id: { notIn: viewedIds }, deleted_at: null },
       include: {
@@ -70,19 +74,27 @@ class FeedRepository {
         media: { include: { media: true } }
       },
       orderBy: { created_at: 'desc' },
-      take: limit
+      take: limit + 1,
+      cursor: cursor ? { id: cursor } : undefined,
+      skip: cursor ? 1 : 0
     })
 
+    const hasNextPage = posts.length > limit
+    const pageItems = posts.slice(0, limit)
+
     return {
-      data: posts.map((p) => ({
+      data: pageItems.map((p) => ({
         ...p,
         feed_id: p.id,
         feed_type: ContentType.post
       })),
-      meta: { nextCursor: null, hasNextPage: false, limit }
+      meta: {
+        nextCursor: hasNextPage ? pageItems[pageItems.length - 1].id : null,
+        hasNextPage,
+        limit
+      }
     }
   }
-
   private async resolveFeedContent(feedItems: FeedRow[]): Promise<ResolvedFeedItem[]> {
     const postIds = feedItems.filter((i) => i.target_type === ContentType.post).map((i) => i.target_id)
     const reelIds = feedItems.filter((i) => i.target_type === ContentType.reel).map((i) => i.target_id)

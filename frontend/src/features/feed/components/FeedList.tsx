@@ -1,29 +1,31 @@
-import { useEffect, useRef } from "react";
 import { useFeed } from "../hooks/useFeed";
 import { PostCard } from "~/shared/components/cards/PostCard";
+import { useIntersection } from "~/shared/hooks/useIntersection";
 
 export const FeedList = () => {
-  const { feed, isLoading, hasMore, loadMore } = useFeed();
-  const bottomRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMore) loadMore();
-      },
-      { threshold: 0.1 },
-    );
-    if (bottomRef.current) observer.observe(bottomRef.current);
-    return () => observer.disconnect();
-  }, [hasMore, loadMore]);
+  const { feed, isLoading, hasMore, error, loadMore } = useFeed();
+  const bottomRef = useIntersection(() => {
+    if (hasMore && !isLoading) loadMore();
+  });
 
   return (
     <div>
       {feed.map((item) => (
         <PostCard key={item.feed_id} item={item} />
       ))}
-      {isLoading && <p>Loading...</p>}
-      <div ref={bottomRef} />
+
+      {error && (
+        <div>
+          <p>Lỗi: {error}</p>
+          <button onClick={loadMore}>Thử lại</button>
+        </div>
+      )}
+
+      {isLoading && <p>Đang tải...</p>}
+
+      {!hasMore && !isLoading && <p>Đã tải hết bài viết</p>}
+
+      <div ref={bottomRef} style={{ height: 1 }} />
     </div>
   );
 };
