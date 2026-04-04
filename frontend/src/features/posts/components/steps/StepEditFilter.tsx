@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { cn } from "~/shared/libs/utils";
+import { cn } from "~/shared/utils/cn";
 import { FILTERS } from "../../constants";
 
 interface Filter {

@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { Home, Search, PlaySquare, PlusSquare } from "lucide-react";
-import { cn } from "~/shared/libs/utils";
+import { cn } from "~/shared/utils/cn";
 import { motion } from "motion/react";
 import { useModal } from "~/shared/context/modal/modalContext";
 

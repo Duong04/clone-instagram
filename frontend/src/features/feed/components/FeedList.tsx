@@ -23,8 +23,6 @@ export const FeedList = () => {
 
       {isLoading && <p>Đang tải...</p>}
 
-      {!hasMore && !isLoading && <p>Đã tải hết bài viết</p>}
-
       <div ref={bottomRef} style={{ height: 1 }} />
     </div>
   );

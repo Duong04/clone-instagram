@@ -10,7 +10,7 @@ import {
   Menu,
   Instagram,
 } from "lucide-react";
-import { cn } from "~/shared/libs/utils";
+import { cn } from "~/shared/utils/cn";
 import { motion } from "motion/react";
 import { useAuthStore } from "~/store/authStore";
 import { Avatar, AvatarImage } from "~/shared/components/ui/avatar";

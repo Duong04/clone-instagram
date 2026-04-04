@@ -6,12 +6,13 @@ import {
   Bookmark,
   MoreHorizontal,
 } from "lucide-react";
-import { cn } from "~/shared/libs/utils";
+import { cn } from "~/shared/utils/cn";
 import { motion, AnimatePresence } from "motion/react";
 import type { FeedItem } from "~/shared/types/feed";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination } from "swiper/modules";
+import { Pagination, Navigation } from "swiper/modules";
 import { MediaSlide } from "./MediaSlide";
+import { formatRelativeTime } from "~/shared/utils/formatDate";
 
 interface FeedItemCardProps {
   item: FeedItem;
@@ -62,7 +63,7 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
                 <path d="M12.001.5a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12.001.5Zm5.688 8.858-6.17 6.17a1.144 1.144 0 0 1-1.618 0l-3.592-3.592a1.144 1.144 0 0 1 1.618-1.618l2.783 2.783 5.362-5.362a1.144 1.144 0 0 1 1.617 1.619Z"></path>
               </svg>
             )} */}
-            <span className="text-zinc-500 text-sm">• {item.created_at}</span>
+            <span className="text-zinc-500 text-sm">• {formatRelativeTime(item.created_at)}</span>
           </div>
         </div>
         <button className="hover:text-zinc-500 transition-colors">
@@ -72,13 +73,14 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
 
       {/* Image with Double Tap Like */}
       <div
-        className="relative aspect-square bg-zinc-100 overflow-hidden cursor-pointer"
+        className="flex flex-col relative aspect-square bg-zinc-100 overflow-hidden cursor-pointer"
         onDoubleClick={handleLike}
       >
         {hasMultiple ? (
         <Swiper
-          modules={[Pagination]}
-          pagination={{ clickable: true }}
+          modules={[Pagination, Navigation]}
+          pagination={true}
+          navigation={true}
           className="w-full"
         >
           {sortedMedia.map((m) => (

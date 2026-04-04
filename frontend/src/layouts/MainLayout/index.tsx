@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "motion/react"
 import { Sidebar } from "./Sidebar"
 import { BottomNav } from './BottomNav'
 import { MobileHeader } from "./MobileHeader"
-import { cn } from "~/shared/libs/utils"
+import { cn } from "~/shared/utils/cn"
 import { useModal } from "~/shared/context/modal/modalContext"
 import { CreatePostModal } from "~/features/posts"
 

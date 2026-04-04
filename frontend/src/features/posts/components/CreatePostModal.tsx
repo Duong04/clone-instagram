@@ -8,7 +8,7 @@ import {
   Play,
   Pause,
 } from "lucide-react";
-import { cn } from "~/shared/libs/utils";
+import { cn } from "~/shared/utils/cn";
 import { FILTERS } from "../constants";
 import type { Song, CreatePostModalProps } from "../types";
 import { useAudioPlayer } from "../hooks/useAudioPlayer";
