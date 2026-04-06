@@ -23,6 +23,16 @@ export * from './enums';
  */
 export type User = Prisma.UserModel
 /**
+ * Model VerificationToken
+ * 
+ */
+export type VerificationToken = Prisma.VerificationTokenModel
+/**
+ * Model UserTag
+ * 
+ */
+export type UserTag = Prisma.UserTagModel
+/**
  * Model Account
  * 
  */
@@ -94,6 +104,11 @@ export type Save = Prisma.SaveModel
  */
 export type Comment = Prisma.CommentModel
 /**
+ * Model CommentLike
+ * 
+ */
+export type CommentLike = Prisma.CommentLikeModel
+/**
  * Model Hashtag
  * 
  */
@@ -103,6 +118,16 @@ export type Hashtag = Prisma.HashtagModel
  * 
  */
 export type PostHashtag = Prisma.PostHashtagModel
+/**
+ * Model ReelHashtag
+ * 
+ */
+export type ReelHashtag = Prisma.ReelHashtagModel
+/**
+ * Model Mention
+ * 
+ */
+export type Mention = Prisma.MentionModel
 /**
  * Model Follow
  * 
@@ -123,6 +148,11 @@ export type ConversationUser = Prisma.ConversationUserModel
  * 
  */
 export type Message = Prisma.MessageModel
+/**
+ * Model MessageRead
+ * 
+ */
+export type MessageRead = Prisma.MessageReadModel
 /**
  * Model Notification
  * 

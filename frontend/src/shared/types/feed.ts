@@ -9,6 +9,8 @@ export interface MediaItem {
   created_at: string
 }
 
+export type TargetType = 'post' | 'reel' | 'story'
+
 export interface PostMedia {
   id: string
   post_id: string
@@ -38,7 +40,7 @@ export interface FeedItem {
   user: FeedUser
   media: PostMedia[]
   feed_id: string
-  feed_type: 'post' | 'reel'
+  feed_type: TargetType
   score?: number
   is_liked: boolean
   is_saved: boolean
@@ -46,7 +48,7 @@ export interface FeedItem {
 }
 
 export interface FeedMeta {
-  nextCursor: string | null
+  nextCursor: string | undefined
   hasNextPage: boolean
   limit: number
 }

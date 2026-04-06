@@ -64,3 +64,11 @@ export const ReportTargetType = {
 } as const
 
 export type ReportTargetType = (typeof ReportTargetType)[keyof typeof ReportTargetType]
+
+
+export const ConversationRole = {
+  admin: 'admin',
+  member: 'member'
+} as const
+
+export type ConversationRole = (typeof ConversationRole)[keyof typeof ConversationRole]

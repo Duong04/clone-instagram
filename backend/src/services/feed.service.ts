@@ -18,7 +18,6 @@ class FeedService {
   private async enrichFeedMetadata(userId: string, items: ResolvedFeedItem[]) {
     const targetIds = items.map((i) => i.id)
 
-    // ✅ Parallel fetch
     const [userLikes, userSaves] = await Promise.all([
       prisma.like.findMany({
         where: { user_id: userId, target_id: { in: targetIds } },

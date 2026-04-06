@@ -28,18 +28,24 @@ export type ConversationUserMinAggregateOutputType = {
   id: string | null
   conversation_id: string | null
   user_id: string | null
+  role: $Enums.ConversationRole | null
+  joined_at: Date | null
 }
 
 export type ConversationUserMaxAggregateOutputType = {
   id: string | null
   conversation_id: string | null
   user_id: string | null
+  role: $Enums.ConversationRole | null
+  joined_at: Date | null
 }
 
 export type ConversationUserCountAggregateOutputType = {
   id: number
   conversation_id: number
   user_id: number
+  role: number
+  joined_at: number
   _all: number
 }
 
@@ -48,18 +54,24 @@ export type ConversationUserMinAggregateInputType = {
   id?: true
   conversation_id?: true
   user_id?: true
+  role?: true
+  joined_at?: true
 }
 
 export type ConversationUserMaxAggregateInputType = {
   id?: true
   conversation_id?: true
   user_id?: true
+  role?: true
+  joined_at?: true
 }
 
 export type ConversationUserCountAggregateInputType = {
   id?: true
   conversation_id?: true
   user_id?: true
+  role?: true
+  joined_at?: true
   _all?: true
 }
 
@@ -139,6 +151,8 @@ export type ConversationUserGroupByOutputType = {
   id: string
   conversation_id: string
   user_id: string
+  role: $Enums.ConversationRole
+  joined_at: Date
   _count: ConversationUserCountAggregateOutputType | null
   _min: ConversationUserMinAggregateOutputType | null
   _max: ConversationUserMaxAggregateOutputType | null
@@ -166,6 +180,8 @@ export type ConversationUserWhereInput = {
   id?: Prisma.StringFilter<"ConversationUser"> | string
   conversation_id?: Prisma.StringFilter<"ConversationUser"> | string
   user_id?: Prisma.StringFilter<"ConversationUser"> | string
+  role?: Prisma.EnumConversationRoleFilter<"ConversationUser"> | $Enums.ConversationRole
+  joined_at?: Prisma.DateTimeFilter<"ConversationUser"> | Date | string
   conversation?: Prisma.XOR<Prisma.ConversationScalarRelationFilter, Prisma.ConversationWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
@@ -174,6 +190,8 @@ export type ConversationUserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   conversation_id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  joined_at?: Prisma.SortOrder
   conversation?: Prisma.ConversationOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
 }
@@ -186,6 +204,8 @@ export type ConversationUserWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ConversationUserWhereInput | Prisma.ConversationUserWhereInput[]
   conversation_id?: Prisma.StringFilter<"ConversationUser"> | string
   user_id?: Prisma.StringFilter<"ConversationUser"> | string
+  role?: Prisma.EnumConversationRoleFilter<"ConversationUser"> | $Enums.ConversationRole
+  joined_at?: Prisma.DateTimeFilter<"ConversationUser"> | Date | string
   conversation?: Prisma.XOR<Prisma.ConversationScalarRelationFilter, Prisma.ConversationWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id" | "conversation_id_user_id">
@@ -194,6 +214,8 @@ export type ConversationUserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   conversation_id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  joined_at?: Prisma.SortOrder
   _count?: Prisma.ConversationUserCountOrderByAggregateInput
   _max?: Prisma.ConversationUserMaxOrderByAggregateInput
   _min?: Prisma.ConversationUserMinOrderByAggregateInput
@@ -206,10 +228,14 @@ export type ConversationUserScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"ConversationUser"> | string
   conversation_id?: Prisma.StringWithAggregatesFilter<"ConversationUser"> | string
   user_id?: Prisma.StringWithAggregatesFilter<"ConversationUser"> | string
+  role?: Prisma.EnumConversationRoleWithAggregatesFilter<"ConversationUser"> | $Enums.ConversationRole
+  joined_at?: Prisma.DateTimeWithAggregatesFilter<"ConversationUser"> | Date | string
 }
 
 export type ConversationUserCreateInput = {
   id?: string
+  role?: $Enums.ConversationRole
+  joined_at?: Date | string
   conversation: Prisma.ConversationCreateNestedOneWithoutUsersInput
   user: Prisma.UserCreateNestedOneWithoutConversationsInput
 }
@@ -218,10 +244,14 @@ export type ConversationUserUncheckedCreateInput = {
   id?: string
   conversation_id: string
   user_id: string
+  role?: $Enums.ConversationRole
+  joined_at?: Date | string
 }
 
 export type ConversationUserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumConversationRoleFieldUpdateOperationsInput | $Enums.ConversationRole
+  joined_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   conversation?: Prisma.ConversationUpdateOneRequiredWithoutUsersNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutConversationsNestedInput
 }
@@ -230,22 +260,30 @@ export type ConversationUserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   conversation_id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumConversationRoleFieldUpdateOperationsInput | $Enums.ConversationRole
+  joined_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ConversationUserCreateManyInput = {
   id?: string
   conversation_id: string
   user_id: string
+  role?: $Enums.ConversationRole
+  joined_at?: Date | string
 }
 
 export type ConversationUserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumConversationRoleFieldUpdateOperationsInput | $Enums.ConversationRole
+  joined_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ConversationUserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   conversation_id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumConversationRoleFieldUpdateOperationsInput | $Enums.ConversationRole
+  joined_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ConversationUserListRelationFilter = {
@@ -267,18 +305,24 @@ export type ConversationUserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   conversation_id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  joined_at?: Prisma.SortOrder
 }
 
 export type ConversationUserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   conversation_id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  joined_at?: Prisma.SortOrder
 }
 
 export type ConversationUserMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   conversation_id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  joined_at?: Prisma.SortOrder
 }
 
 export type ConversationUserCreateNestedManyWithoutUserInput = {
@@ -365,14 +409,22 @@ export type ConversationUserUncheckedUpdateManyWithoutConversationNestedInput = 
   deleteMany?: Prisma.ConversationUserScalarWhereInput | Prisma.ConversationUserScalarWhereInput[]
 }
 
+export type EnumConversationRoleFieldUpdateOperationsInput = {
+  set?: $Enums.ConversationRole
+}
+
 export type ConversationUserCreateWithoutUserInput = {
   id?: string
+  role?: $Enums.ConversationRole
+  joined_at?: Date | string
   conversation: Prisma.ConversationCreateNestedOneWithoutUsersInput
 }
 
 export type ConversationUserUncheckedCreateWithoutUserInput = {
   id?: string
   conversation_id: string
+  role?: $Enums.ConversationRole
+  joined_at?: Date | string
 }
 
 export type ConversationUserCreateOrConnectWithoutUserInput = {
@@ -408,16 +460,22 @@ export type ConversationUserScalarWhereInput = {
   id?: Prisma.StringFilter<"ConversationUser"> | string
   conversation_id?: Prisma.StringFilter<"ConversationUser"> | string
   user_id?: Prisma.StringFilter<"ConversationUser"> | string
+  role?: Prisma.EnumConversationRoleFilter<"ConversationUser"> | $Enums.ConversationRole
+  joined_at?: Prisma.DateTimeFilter<"ConversationUser"> | Date | string
 }
 
 export type ConversationUserCreateWithoutConversationInput = {
   id?: string
+  role?: $Enums.ConversationRole
+  joined_at?: Date | string
   user: Prisma.UserCreateNestedOneWithoutConversationsInput
 }
 
 export type ConversationUserUncheckedCreateWithoutConversationInput = {
   id?: string
   user_id: string
+  role?: $Enums.ConversationRole
+  joined_at?: Date | string
 }
 
 export type ConversationUserCreateOrConnectWithoutConversationInput = {
@@ -449,41 +507,57 @@ export type ConversationUserUpdateManyWithWhereWithoutConversationInput = {
 export type ConversationUserCreateManyUserInput = {
   id?: string
   conversation_id: string
+  role?: $Enums.ConversationRole
+  joined_at?: Date | string
 }
 
 export type ConversationUserUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumConversationRoleFieldUpdateOperationsInput | $Enums.ConversationRole
+  joined_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   conversation?: Prisma.ConversationUpdateOneRequiredWithoutUsersNestedInput
 }
 
 export type ConversationUserUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   conversation_id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumConversationRoleFieldUpdateOperationsInput | $Enums.ConversationRole
+  joined_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ConversationUserUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   conversation_id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumConversationRoleFieldUpdateOperationsInput | $Enums.ConversationRole
+  joined_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ConversationUserCreateManyConversationInput = {
   id?: string
   user_id: string
+  role?: $Enums.ConversationRole
+  joined_at?: Date | string
 }
 
 export type ConversationUserUpdateWithoutConversationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumConversationRoleFieldUpdateOperationsInput | $Enums.ConversationRole
+  joined_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutConversationsNestedInput
 }
 
 export type ConversationUserUncheckedUpdateWithoutConversationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumConversationRoleFieldUpdateOperationsInput | $Enums.ConversationRole
+  joined_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ConversationUserUncheckedUpdateManyWithoutConversationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumConversationRoleFieldUpdateOperationsInput | $Enums.ConversationRole
+  joined_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -492,6 +566,8 @@ export type ConversationUserSelect<ExtArgs extends runtime.Types.Extensions.Inte
   id?: boolean
   conversation_id?: boolean
   user_id?: boolean
+  role?: boolean
+  joined_at?: boolean
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversationUser"]>
@@ -500,6 +576,8 @@ export type ConversationUserSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   id?: boolean
   conversation_id?: boolean
   user_id?: boolean
+  role?: boolean
+  joined_at?: boolean
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversationUser"]>
@@ -508,6 +586,8 @@ export type ConversationUserSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   id?: boolean
   conversation_id?: boolean
   user_id?: boolean
+  role?: boolean
+  joined_at?: boolean
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversationUser"]>
@@ -516,9 +596,11 @@ export type ConversationUserSelectScalar = {
   id?: boolean
   conversation_id?: boolean
   user_id?: boolean
+  role?: boolean
+  joined_at?: boolean
 }
 
-export type ConversationUserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "conversation_id" | "user_id", ExtArgs["result"]["conversationUser"]>
+export type ConversationUserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "conversation_id" | "user_id" | "role" | "joined_at", ExtArgs["result"]["conversationUser"]>
 export type ConversationUserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -542,6 +624,8 @@ export type $ConversationUserPayload<ExtArgs extends runtime.Types.Extensions.In
     id: string
     conversation_id: string
     user_id: string
+    role: $Enums.ConversationRole
+    joined_at: Date
   }, ExtArgs["result"]["conversationUser"]>
   composites: {}
 }
@@ -970,6 +1054,8 @@ export interface ConversationUserFieldRefs {
   readonly id: Prisma.FieldRef<"ConversationUser", 'String'>
   readonly conversation_id: Prisma.FieldRef<"ConversationUser", 'String'>
   readonly user_id: Prisma.FieldRef<"ConversationUser", 'String'>
+  readonly role: Prisma.FieldRef<"ConversationUser", 'ConversationRole'>
+  readonly joined_at: Prisma.FieldRef<"ConversationUser", 'DateTime'>
 }
     
 

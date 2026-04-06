@@ -1,7 +1,7 @@
 import { Response } from 'express'
 
 interface Meta {
-  nextCursor: string | null
+  nextCursor: string | undefined
   hasNextPage: boolean
   limit: number
 }

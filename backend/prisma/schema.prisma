@@ -58,6 +58,12 @@ enum ReportTargetType {
   reel
 }
 
+enum ConversationRole {
+  admin
+  member
+}
+
+
 //////////////////////////////////////////////////
 // USER
 //////////////////////////////////////////////////
@@ -89,6 +95,10 @@ model User {
   likes    Like[]
   views    View[]
   saves    Save[]
+  comment_likes CommentLike[]
+  
+  mentioned_in  Mention[] @relation("MentionedUser")
+  actor_mentions Mention[] @relation("MentionActor")
 
   followers Follow[] @relation("Following")
   following Follow[] @relation("Follower")
@@ -98,15 +108,49 @@ model User {
 
   messages      Message[]
   conversations ConversationUser[]
+  admin_conversations Conversation[] @relation("ConversationAdmin")
 
+  message_reads MessageRead[]
   notifications       Notification[] @relation("NotificationUser")
   actor_notifications Notification[] @relation("NotificationActor")
 
   blocked_by UserBlock[] @relation("BlockedUser")
   blocking   UserBlock[] @relation("BlockingUser")
   reports    Report[]
+  verification_tokens VerificationToken[]
 
+  tagged_by UserTag[] @relation("Tagged")
+  tagging   UserTag[] @relation("Tagger")
   @@map("users")
+}
+
+model VerificationToken {
+  id         String   @id @default(uuid())
+  user_id    String
+  token      String   @unique
+  type       String   
+  expires_at DateTime
+  created_at DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("verification_tokens")
+}
+
+model UserTag {
+  id          String      @id @default(uuid())  
+  tagger_id   String
+  tagged_id   String
+  target_type ContentType
+  target_id   String
+  created_at  DateTime    @default(now())
+
+  tagger User @relation("Tagger", fields: [tagger_id], references: [id], onDelete: Cascade)
+  tagged User @relation("Tagged", fields: [tagged_id], references: [id], onDelete: Cascade)
+
+  @@unique([tagger_id, tagged_id, target_type, target_id])
+  @@map("user_tags")
 }
 
 model Account {
@@ -184,6 +228,7 @@ model Media {
   story        Story[]
   reel         Reel[]
   messages     Message[]
+  conversations Conversation[] @relation("ConversationAvatar")
 
   @@map("media")
 }
@@ -261,6 +306,7 @@ model Reel {
   created_at        DateTime  @default(now())
   deleted_at        DateTime?
 
+  hashtags ReelHashtag[]
   user  User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
   media Media @relation(fields: [media_id], references: [id])
   music    Music?  @relation(fields: [music_id], references: [id])
@@ -361,10 +407,25 @@ model Comment {
   user    User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
   parent  Comment?  @relation("Replies", fields: [parent_id], references: [id])
   replies Comment[] @relation("Replies")
+  likes CommentLike[]
 
   @@index([target_type, target_id])
   @@index([user_id])
   @@map("comments")
+}
+
+model CommentLike {
+  id         String   @id @default(uuid())
+  user_id    String
+  comment_id String
+  created_at DateTime @default(now())
+
+  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  comment Comment @relation(fields: [comment_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, comment_id])
+  @@index([comment_id])
+  @@map("comment_likes")
 }
 
 //////////////////////////////////////////////////
@@ -376,6 +437,7 @@ model Hashtag {
   name String @unique
 
   posts PostHashtag[]
+  reels ReelHashtag[]
 
   @@map("hashtags")
 }
@@ -392,6 +454,32 @@ model PostHashtag {
   @@map("post_hashtags")
 }
 
+model ReelHashtag {
+  id         String @id @default(uuid())
+  reel_id    String
+  hashtag_id String
+
+  reel    Reel    @relation(fields: [reel_id], references: [id], onDelete: Cascade)
+  hashtag Hashtag @relation(fields: [hashtag_id], references: [id])
+
+  @@unique([reel_id, hashtag_id])
+  @@map("reel_hashtags")
+}
+
+model Mention {
+  id          String     @id @default(uuid())
+  user_id     String    
+  actor_id    String  
+  target_type EntityType
+  target_id   String
+  created_at  DateTime   @default(now())
+
+  user  User @relation("MentionedUser", fields: [user_id], references: [id], onDelete: Cascade)
+  actor User @relation("MentionActor", fields: [actor_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("mentions")
+}
 //////////////////////////////////////////////////
 // FOLLOW
 //////////////////////////////////////////////////
@@ -420,8 +508,15 @@ model Conversation {
   id         String   @id @default(uuid())
   created_at DateTime @default(now())
 
+  is_group     Boolean @default(false)
+  name         String?
+  avatar_id    String?
+  admin_id    String?
+  admin       User?   @relation("ConversationAdmin", fields: [admin_id], references: [id])
+  last_message_at DateTime?
   users    ConversationUser[]
   messages Message[]
+  avatar Media? @relation("ConversationAvatar", fields: [avatar_id], references: [id])
 
   @@map("conversations")
 }
@@ -431,6 +526,8 @@ model ConversationUser {
   conversation_id String
   user_id         String
 
+  role      ConversationRole @default(member)
+  joined_at DateTime @default(now())
   conversation Conversation @relation(fields: [conversation_id], references: [id], onDelete: Cascade)
   user         User         @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
@@ -444,6 +541,8 @@ model Message {
   sender_id       String
   content         String?
   media_id        String?
+  reply_to_id     String?
+  deleted_at      DateTime?
   message_type    MessageType @default(text)
   created_at      DateTime    @default(now())
 
@@ -451,8 +550,24 @@ model Message {
   sender       User         @relation(fields: [sender_id], references: [id], onDelete: Cascade)
   media        Media?       @relation(fields: [media_id], references: [id])
 
+  reads MessageRead[]
+  reply_to    Message?  @relation("MessageReply", fields: [reply_to_id], references: [id])
+  replies     Message[] @relation("MessageReply")
   @@index([conversation_id, created_at])
   @@map("messages")
+}
+
+model MessageRead {
+  id         String   @id @default(uuid())
+  message_id String
+  user_id    String
+  read_at    DateTime @default(now())
+
+  message Message @relation(fields: [message_id], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([message_id, user_id])
+  @@map("message_reads")
 }
 
 //////////////////////////////////////////////////

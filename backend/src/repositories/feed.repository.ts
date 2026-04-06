@@ -95,6 +95,7 @@ class FeedRepository {
       }
     }
   }
+
   private async resolveFeedContent(feedItems: FeedRow[]): Promise<ResolvedFeedItem[]> {
     const postIds = feedItems.filter((i) => i.target_type === ContentType.post).map((i) => i.target_id)
     const reelIds = feedItems.filter((i) => i.target_type === ContentType.reel).map((i) => i.target_id)

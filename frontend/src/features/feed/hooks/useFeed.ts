@@ -1,4 +1,3 @@
-// hooks/useFeed.ts
 import { useEffect, useRef } from 'react'
 import { useFeedStore } from '../store/feedStore'
 

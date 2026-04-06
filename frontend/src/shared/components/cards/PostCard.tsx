@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Heart,
   MessageCircle,
   Send,
   Bookmark,
   MoreHorizontal,
+  Smile,
 } from "lucide-react";
 import { cn } from "~/shared/utils/cn";
 import { motion, AnimatePresence } from "motion/react";
@@ -13,6 +14,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
 import { MediaSlide } from "./MediaSlide";
 import { formatRelativeTime } from "~/shared/utils/formatDate";
+import { useLike } from "~/features/feed/hooks/useLike";
+import EmojiPicker, { Theme } from "emoji-picker-react";
+import type { EmojiClickData } from "emoji-picker-react";
 
 interface FeedItemCardProps {
   item: FeedItem;
@@ -21,17 +25,44 @@ interface FeedItemCardProps {
 export const PostCard = ({ item }: FeedItemCardProps) => {
   const sortedMedia = [...item.media].sort((a, b) => a.position - b.position);
   const hasMultiple = sortedMedia.length > 1;
+  const { handleLike } = useLike();
+  const [comment, setComment] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const emojiPickerRef = useRef<HTMLDivElement>(null);
+  const [showHeart, setShowHeart] = useState(false)
 
-  const [isLiked, setIsLiked] = useState(item.is_liked);
-  const [showHeart, setShowHeart] = useState(false);
+  const showHeartAnimation = () => {
+    setShowHeart(true)
+    setTimeout(() => setShowHeart(false), 1000)
+  }
 
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-    if (!isLiked) {
-      setShowHeart(true);
-      setTimeout(() => setShowHeart(false), 1000);
-    }
+  const onDoubleTap = () => {
+    if (!item.is_liked) handleLike(item.feed_id, item.feed_type, item.is_liked)
+    showHeartAnimation()
+  }
+
+  const oneClickTap = () => {
+    console.log(item.is_liked);
+    if (!item.is_liked) showHeartAnimation()
+    handleLike(item.feed_id, item.feed_type, item.is_liked)
+  }
+
+  const onEmojiClick = (emojiData: EmojiClickData) => {
+    setComment((prev) => prev + emojiData.emoji);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(event.target as Node)
+      ) {
+        setShowEmojiPicker(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <motion.div
@@ -63,7 +94,9 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
                 <path d="M12.001.5a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12.001.5Zm5.688 8.858-6.17 6.17a1.144 1.144 0 0 1-1.618 0l-3.592-3.592a1.144 1.144 0 0 1 1.618-1.618l2.783 2.783 5.362-5.362a1.144 1.144 0 0 1 1.617 1.619Z"></path>
               </svg>
             )} */}
-            <span className="text-zinc-500 text-sm">• {formatRelativeTime(item.created_at)}</span>
+            <span className="text-zinc-500 text-sm">
+              • {formatRelativeTime(item.created_at)}
+            </span>
           </div>
         </div>
         <button className="hover:text-zinc-500 transition-colors">
@@ -74,24 +107,29 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
       {/* Image with Double Tap Like */}
       <div
         className="flex flex-col relative aspect-square bg-zinc-100 overflow-hidden cursor-pointer"
-        onDoubleClick={handleLike}
+        onDoubleClick={onDoubleTap}
       >
         {hasMultiple ? (
-        <Swiper
-          modules={[Pagination, Navigation]}
-          pagination={true}
-          navigation={true}
-          className="w-full"
-        >
-          {sortedMedia.map((m) => (
-            <SwiperSlide key={m.id}>
-              <MediaSlide media_type={m.media.media_type} url={m.media.url} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      ) : (
-        sortedMedia[0] && <MediaSlide media_type={sortedMedia[0].media.media_type} url={sortedMedia[0].media.url} />
-      )}
+          <Swiper
+            modules={[Pagination, Navigation]}
+            pagination={true}
+            navigation={true}
+            className="w-full"
+          >
+            {sortedMedia.map((m) => (
+              <SwiperSlide key={m.id}>
+                <MediaSlide media_type={m.media.media_type} url={m.media.url} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
+          sortedMedia[0] && (
+            <MediaSlide
+              media_type={sortedMedia[0].media.media_type}
+              url={sortedMedia[0].media.url}
+            />
+          )
+        )}
         <AnimatePresence>
           {showHeart && (
             <motion.div
@@ -112,13 +150,15 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
           <div className="flex items-center gap-4">
             <motion.button
               whileTap={{ scale: 0.8 }}
-              onClick={handleLike}
+              onClick={oneClickTap}
               className={cn(
                 "hover:opacity-60 transition-opacity",
-                isLiked && "text-red-500",
+                item.is_liked && "text-red-500",
               )}
             >
-              <Heart className={cn("w-7 h-7", isLiked && "fill-current")} />
+              <Heart
+                className={cn("w-7 h-7", item.is_liked && "fill-current")}
+              />
             </motion.button>
             <motion.button
               whileTap={{ scale: 0.8 }}
@@ -158,13 +198,53 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
         </button>
 
         {/* Add Comment */}
-        <div className="flex items-center justify-between mt-2">
-          <input
-            type="text"
-            placeholder="Add a comment..."
+        <div className="flex items-center gap-2 mt-2 relative">
+          <div ref={emojiPickerRef}>
+            <button 
+              onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+              className="hover:opacity-60 transition-opacity"
+            >
+              <Smile className="w-6 h-6 text-zinc-500" />
+            </button>
+            <AnimatePresence>
+              {showEmojiPicker && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="absolute bottom-full left-0 mb-2 z-50"
+                >
+                  <EmojiPicker 
+                    onEmojiClick={onEmojiClick}
+                    theme={Theme.LIGHT}
+                    autoFocusSearch={false}
+                    width={300}
+                    height={400}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+          <input 
+            type="text" 
+            placeholder="Add a comment..." 
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
             className="text-sm w-full outline-none bg-transparent"
           />
-          <button className="text-[#0095f6] font-semibold text-sm hover:text-[#00376b] transition-colors">
+          <button 
+            disabled={!comment.trim()}
+            className={cn(
+              "font-semibold text-sm transition-colors",
+              comment.trim() ? "text-[#0095f6] hover:text-[#00376b]" : "text-[#0095f6]/50 cursor-default"
+            )}
+            onClick={() => {
+              if (comment.trim()) {
+                setComment("");
+                setShowEmojiPicker(false);
+              }
+            }}
+          >
             Post
           </button>
         </div>

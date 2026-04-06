@@ -268,6 +268,7 @@ export type ReelWhereInput = {
   comments_disabled?: Prisma.BoolFilter<"Reel"> | boolean
   created_at?: Prisma.DateTimeFilter<"Reel"> | Date | string
   deleted_at?: Prisma.DateTimeNullableFilter<"Reel"> | Date | string | null
+  hashtags?: Prisma.ReelHashtagListRelationFilter
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   media?: Prisma.XOR<Prisma.MediaScalarRelationFilter, Prisma.MediaWhereInput>
   music?: Prisma.XOR<Prisma.MusicNullableScalarRelationFilter, Prisma.MusicWhereInput> | null
@@ -285,6 +286,7 @@ export type ReelOrderByWithRelationInput = {
   comments_disabled?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
+  hashtags?: Prisma.ReelHashtagOrderByRelationAggregateInput
   user?: Prisma.UserOrderByWithRelationInput
   media?: Prisma.MediaOrderByWithRelationInput
   music?: Prisma.MusicOrderByWithRelationInput
@@ -305,6 +307,7 @@ export type ReelWhereUniqueInput = Prisma.AtLeast<{
   comments_disabled?: Prisma.BoolFilter<"Reel"> | boolean
   created_at?: Prisma.DateTimeFilter<"Reel"> | Date | string
   deleted_at?: Prisma.DateTimeNullableFilter<"Reel"> | Date | string | null
+  hashtags?: Prisma.ReelHashtagListRelationFilter
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   media?: Prisma.XOR<Prisma.MediaScalarRelationFilter, Prisma.MediaWhereInput>
   music?: Prisma.XOR<Prisma.MusicNullableScalarRelationFilter, Prisma.MusicWhereInput> | null
@@ -355,6 +358,7 @@ export type ReelCreateInput = {
   comments_disabled?: boolean
   created_at?: Date | string
   deleted_at?: Date | string | null
+  hashtags?: Prisma.ReelHashtagCreateNestedManyWithoutReelInput
   user: Prisma.UserCreateNestedOneWithoutReelsInput
   media: Prisma.MediaCreateNestedOneWithoutReelInput
   music?: Prisma.MusicCreateNestedOneWithoutReelsInput
@@ -372,6 +376,7 @@ export type ReelUncheckedCreateInput = {
   comments_disabled?: boolean
   created_at?: Date | string
   deleted_at?: Date | string | null
+  hashtags?: Prisma.ReelHashtagUncheckedCreateNestedManyWithoutReelInput
 }
 
 export type ReelUpdateInput = {
@@ -383,6 +388,7 @@ export type ReelUpdateInput = {
   comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hashtags?: Prisma.ReelHashtagUpdateManyWithoutReelNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutReelsNestedInput
   media?: Prisma.MediaUpdateOneRequiredWithoutReelNestedInput
   music?: Prisma.MusicUpdateOneWithoutReelsNestedInput
@@ -400,6 +406,7 @@ export type ReelUncheckedUpdateInput = {
   comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hashtags?: Prisma.ReelHashtagUncheckedUpdateManyWithoutReelNestedInput
 }
 
 export type ReelCreateManyInput = {
@@ -501,6 +508,11 @@ export type ReelMinOrderByAggregateInput = {
 export type ReelSumOrderByAggregateInput = {
   like_count?: Prisma.SortOrder
   comment_count?: Prisma.SortOrder
+}
+
+export type ReelScalarRelationFilter = {
+  is?: Prisma.ReelWhereInput
+  isNot?: Prisma.ReelWhereInput
 }
 
 export type ReelCreateNestedManyWithoutUserInput = {
@@ -629,6 +641,20 @@ export type ReelUncheckedUpdateManyWithoutMusicNestedInput = {
   deleteMany?: Prisma.ReelScalarWhereInput | Prisma.ReelScalarWhereInput[]
 }
 
+export type ReelCreateNestedOneWithoutHashtagsInput = {
+  create?: Prisma.XOR<Prisma.ReelCreateWithoutHashtagsInput, Prisma.ReelUncheckedCreateWithoutHashtagsInput>
+  connectOrCreate?: Prisma.ReelCreateOrConnectWithoutHashtagsInput
+  connect?: Prisma.ReelWhereUniqueInput
+}
+
+export type ReelUpdateOneRequiredWithoutHashtagsNestedInput = {
+  create?: Prisma.XOR<Prisma.ReelCreateWithoutHashtagsInput, Prisma.ReelUncheckedCreateWithoutHashtagsInput>
+  connectOrCreate?: Prisma.ReelCreateOrConnectWithoutHashtagsInput
+  upsert?: Prisma.ReelUpsertWithoutHashtagsInput
+  connect?: Prisma.ReelWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ReelUpdateToOneWithWhereWithoutHashtagsInput, Prisma.ReelUpdateWithoutHashtagsInput>, Prisma.ReelUncheckedUpdateWithoutHashtagsInput>
+}
+
 export type ReelCreateWithoutUserInput = {
   id?: string
   caption?: string | null
@@ -638,6 +664,7 @@ export type ReelCreateWithoutUserInput = {
   comments_disabled?: boolean
   created_at?: Date | string
   deleted_at?: Date | string | null
+  hashtags?: Prisma.ReelHashtagCreateNestedManyWithoutReelInput
   media: Prisma.MediaCreateNestedOneWithoutReelInput
   music?: Prisma.MusicCreateNestedOneWithoutReelsInput
 }
@@ -653,6 +680,7 @@ export type ReelUncheckedCreateWithoutUserInput = {
   comments_disabled?: boolean
   created_at?: Date | string
   deleted_at?: Date | string | null
+  hashtags?: Prisma.ReelHashtagUncheckedCreateNestedManyWithoutReelInput
 }
 
 export type ReelCreateOrConnectWithoutUserInput = {
@@ -707,6 +735,7 @@ export type ReelCreateWithoutMediaInput = {
   comments_disabled?: boolean
   created_at?: Date | string
   deleted_at?: Date | string | null
+  hashtags?: Prisma.ReelHashtagCreateNestedManyWithoutReelInput
   user: Prisma.UserCreateNestedOneWithoutReelsInput
   music?: Prisma.MusicCreateNestedOneWithoutReelsInput
 }
@@ -722,6 +751,7 @@ export type ReelUncheckedCreateWithoutMediaInput = {
   comments_disabled?: boolean
   created_at?: Date | string
   deleted_at?: Date | string | null
+  hashtags?: Prisma.ReelHashtagUncheckedCreateNestedManyWithoutReelInput
 }
 
 export type ReelCreateOrConnectWithoutMediaInput = {
@@ -759,6 +789,7 @@ export type ReelCreateWithoutMusicInput = {
   comments_disabled?: boolean
   created_at?: Date | string
   deleted_at?: Date | string | null
+  hashtags?: Prisma.ReelHashtagCreateNestedManyWithoutReelInput
   user: Prisma.UserCreateNestedOneWithoutReelsInput
   media: Prisma.MediaCreateNestedOneWithoutReelInput
 }
@@ -774,6 +805,7 @@ export type ReelUncheckedCreateWithoutMusicInput = {
   comments_disabled?: boolean
   created_at?: Date | string
   deleted_at?: Date | string | null
+  hashtags?: Prisma.ReelHashtagUncheckedCreateNestedManyWithoutReelInput
 }
 
 export type ReelCreateOrConnectWithoutMusicInput = {
@@ -802,6 +834,78 @@ export type ReelUpdateManyWithWhereWithoutMusicInput = {
   data: Prisma.XOR<Prisma.ReelUpdateManyMutationInput, Prisma.ReelUncheckedUpdateManyWithoutMusicInput>
 }
 
+export type ReelCreateWithoutHashtagsInput = {
+  id?: string
+  caption?: string | null
+  location?: string | null
+  like_count?: number
+  comment_count?: number
+  comments_disabled?: boolean
+  created_at?: Date | string
+  deleted_at?: Date | string | null
+  user: Prisma.UserCreateNestedOneWithoutReelsInput
+  media: Prisma.MediaCreateNestedOneWithoutReelInput
+  music?: Prisma.MusicCreateNestedOneWithoutReelsInput
+}
+
+export type ReelUncheckedCreateWithoutHashtagsInput = {
+  id?: string
+  user_id: string
+  media_id: string
+  caption?: string | null
+  location?: string | null
+  music_id?: string | null
+  like_count?: number
+  comment_count?: number
+  comments_disabled?: boolean
+  created_at?: Date | string
+  deleted_at?: Date | string | null
+}
+
+export type ReelCreateOrConnectWithoutHashtagsInput = {
+  where: Prisma.ReelWhereUniqueInput
+  create: Prisma.XOR<Prisma.ReelCreateWithoutHashtagsInput, Prisma.ReelUncheckedCreateWithoutHashtagsInput>
+}
+
+export type ReelUpsertWithoutHashtagsInput = {
+  update: Prisma.XOR<Prisma.ReelUpdateWithoutHashtagsInput, Prisma.ReelUncheckedUpdateWithoutHashtagsInput>
+  create: Prisma.XOR<Prisma.ReelCreateWithoutHashtagsInput, Prisma.ReelUncheckedCreateWithoutHashtagsInput>
+  where?: Prisma.ReelWhereInput
+}
+
+export type ReelUpdateToOneWithWhereWithoutHashtagsInput = {
+  where?: Prisma.ReelWhereInput
+  data: Prisma.XOR<Prisma.ReelUpdateWithoutHashtagsInput, Prisma.ReelUncheckedUpdateWithoutHashtagsInput>
+}
+
+export type ReelUpdateWithoutHashtagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  like_count?: Prisma.IntFieldUpdateOperationsInput | number
+  comment_count?: Prisma.IntFieldUpdateOperationsInput | number
+  comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  user?: Prisma.UserUpdateOneRequiredWithoutReelsNestedInput
+  media?: Prisma.MediaUpdateOneRequiredWithoutReelNestedInput
+  music?: Prisma.MusicUpdateOneWithoutReelsNestedInput
+}
+
+export type ReelUncheckedUpdateWithoutHashtagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  user_id?: Prisma.StringFieldUpdateOperationsInput | string
+  media_id?: Prisma.StringFieldUpdateOperationsInput | string
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  music_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  like_count?: Prisma.IntFieldUpdateOperationsInput | number
+  comment_count?: Prisma.IntFieldUpdateOperationsInput | number
+  comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
 export type ReelCreateManyUserInput = {
   id?: string
   media_id: string
@@ -824,6 +928,7 @@ export type ReelUpdateWithoutUserInput = {
   comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hashtags?: Prisma.ReelHashtagUpdateManyWithoutReelNestedInput
   media?: Prisma.MediaUpdateOneRequiredWithoutReelNestedInput
   music?: Prisma.MusicUpdateOneWithoutReelsNestedInput
 }
@@ -839,6 +944,7 @@ export type ReelUncheckedUpdateWithoutUserInput = {
   comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hashtags?: Prisma.ReelHashtagUncheckedUpdateManyWithoutReelNestedInput
 }
 
 export type ReelUncheckedUpdateManyWithoutUserInput = {
@@ -876,6 +982,7 @@ export type ReelUpdateWithoutMediaInput = {
   comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hashtags?: Prisma.ReelHashtagUpdateManyWithoutReelNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutReelsNestedInput
   music?: Prisma.MusicUpdateOneWithoutReelsNestedInput
 }
@@ -891,6 +998,7 @@ export type ReelUncheckedUpdateWithoutMediaInput = {
   comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hashtags?: Prisma.ReelHashtagUncheckedUpdateManyWithoutReelNestedInput
 }
 
 export type ReelUncheckedUpdateManyWithoutMediaInput = {
@@ -928,6 +1036,7 @@ export type ReelUpdateWithoutMusicInput = {
   comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hashtags?: Prisma.ReelHashtagUpdateManyWithoutReelNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutReelsNestedInput
   media?: Prisma.MediaUpdateOneRequiredWithoutReelNestedInput
 }
@@ -943,6 +1052,7 @@ export type ReelUncheckedUpdateWithoutMusicInput = {
   comments_disabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hashtags?: Prisma.ReelHashtagUncheckedUpdateManyWithoutReelNestedInput
 }
 
 export type ReelUncheckedUpdateManyWithoutMusicInput = {
@@ -959,6 +1069,35 @@ export type ReelUncheckedUpdateManyWithoutMusicInput = {
 }
 
 
+/**
+ * Count Type ReelCountOutputType
+ */
+
+export type ReelCountOutputType = {
+  hashtags: number
+}
+
+export type ReelCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  hashtags?: boolean | ReelCountOutputTypeCountHashtagsArgs
+}
+
+/**
+ * ReelCountOutputType without action
+ */
+export type ReelCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ReelCountOutputType
+   */
+  select?: Prisma.ReelCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ReelCountOutputType without action
+ */
+export type ReelCountOutputTypeCountHashtagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReelHashtagWhereInput
+}
+
 
 export type ReelSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -972,9 +1111,11 @@ export type ReelSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   comments_disabled?: boolean
   created_at?: boolean
   deleted_at?: boolean
+  hashtags?: boolean | Prisma.Reel$hashtagsArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   media?: boolean | Prisma.MediaDefaultArgs<ExtArgs>
   music?: boolean | Prisma.Reel$musicArgs<ExtArgs>
+  _count?: boolean | Prisma.ReelCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["reel"]>
 
 export type ReelSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1027,9 +1168,11 @@ export type ReelSelectScalar = {
 
 export type ReelOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "media_id" | "caption" | "location" | "music_id" | "like_count" | "comment_count" | "comments_disabled" | "created_at" | "deleted_at", ExtArgs["result"]["reel"]>
 export type ReelInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  hashtags?: boolean | Prisma.Reel$hashtagsArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   media?: boolean | Prisma.MediaDefaultArgs<ExtArgs>
   music?: boolean | Prisma.Reel$musicArgs<ExtArgs>
+  _count?: boolean | Prisma.ReelCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ReelIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1045,6 +1188,7 @@ export type ReelIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $ReelPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Reel"
   objects: {
+    hashtags: Prisma.$ReelHashtagPayload<ExtArgs>[]
     user: Prisma.$UserPayload<ExtArgs>
     media: Prisma.$MediaPayload<ExtArgs>
     music: Prisma.$MusicPayload<ExtArgs> | null
@@ -1455,6 +1599,7 @@ readonly fields: ReelFieldRefs;
  */
 export interface Prisma__ReelClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  hashtags<T extends Prisma.Reel$hashtagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Reel$hashtagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReelHashtagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   media<T extends Prisma.MediaDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MediaDefaultArgs<ExtArgs>>): Prisma.Prisma__MediaClient<runtime.Types.Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   music<T extends Prisma.Reel$musicArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Reel$musicArgs<ExtArgs>>): Prisma.Prisma__MusicClient<runtime.Types.Result.GetResult<Prisma.$MusicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -1891,6 +2036,30 @@ export type ReelDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Reels to delete.
    */
   limit?: number
+}
+
+/**
+ * Reel.hashtags
+ */
+export type Reel$hashtagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ReelHashtag
+   */
+  select?: Prisma.ReelHashtagSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ReelHashtag
+   */
+  omit?: Prisma.ReelHashtagOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReelHashtagInclude<ExtArgs> | null
+  where?: Prisma.ReelHashtagWhereInput
+  orderBy?: Prisma.ReelHashtagOrderByWithRelationInput | Prisma.ReelHashtagOrderByWithRelationInput[]
+  cursor?: Prisma.ReelHashtagWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReelHashtagScalarFieldEnum | Prisma.ReelHashtagScalarFieldEnum[]
 }
 
 /**
