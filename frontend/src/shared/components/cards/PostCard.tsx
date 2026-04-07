@@ -17,35 +17,38 @@ import { formatRelativeTime } from "~/shared/utils/formatDate";
 import { useLike } from "~/features/feed/hooks/useLike";
 import EmojiPicker, { Theme } from "emoji-picker-react";
 import type { EmojiClickData } from "emoji-picker-react";
+import { useModal } from "~/shared/context/modal/modalContext";
 
 interface FeedItemCardProps {
   item: FeedItem;
 }
 
 export const PostCard = ({ item }: FeedItemCardProps) => {
+  const { openPostDetail } = useModal();
   const sortedMedia = [...item.media].sort((a, b) => a.position - b.position);
   const hasMultiple = sortedMedia.length > 1;
   const { handleLike } = useLike();
   const [comment, setComment] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
-  const [showHeart, setShowHeart] = useState(false)
+  const [showHeart, setShowHeart] = useState(false);
+  const [heartColor, setHeartColor] = useState<"orange" | "pink">("orange");
 
   const showHeartAnimation = () => {
-    setShowHeart(true)
-    setTimeout(() => setShowHeart(false), 1000)
-  }
+    setHeartColor(Math.random() > 0.5 ? "orange" : "pink");
+    setShowHeart(true);
+    setTimeout(() => setShowHeart(false), 1000);
+  };
 
   const onDoubleTap = () => {
-    if (!item.is_liked) handleLike(item.feed_id, item.feed_type, item.is_liked)
-    showHeartAnimation()
-  }
+    if (!item.is_liked) handleLike(item.feed_id, item.feed_type, item.is_liked);
+    showHeartAnimation();
+  };
 
   const oneClickTap = () => {
-    console.log(item.is_liked);
-    if (!item.is_liked) showHeartAnimation()
-    handleLike(item.feed_id, item.feed_type, item.is_liked)
-  }
+    if (!item.is_liked) showHeartAnimation();
+    handleLike(item.feed_id, item.feed_type, item.is_liked);
+  };
 
   const onEmojiClick = (emojiData: EmojiClickData) => {
     setComment((prev) => prev + emojiData.emoji);
@@ -133,12 +136,57 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
         <AnimatePresence>
           {showHeart && (
             <motion.div
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1.2, opacity: 1 }}
-              exit={{ scale: 0, opacity: 0 }}
-              className="absolute inset-0 flex items-center justify-center pointer-events-none"
+              initial={{ scale: 0, opacity: 0, rotate: 0, y: 0 }}
+              animate={{
+                scale: [0, 1.5, 1.2, 1],
+                rotate: [0, -20, 20, -20, 20, 0],
+                y: [0, -60, -120],
+                opacity: [0, 1, 1, 0],
+              }}
+              exit={{ opacity: 0 }}
+              transition={{
+                duration: 1,
+                times: [0, 0.2, 0.8, 1],
+                ease: "easeOut",
+              }}
+              className="absolute inset-0 flex items-center justify-center pointer-events-none z-20"
             >
-              <Heart className="w-24 h-24 fill-white text-white drop-shadow-2xl" />
+              <svg width="0" height="0" className="absolute">
+                <defs>
+                  <linearGradient
+                    id={`heart-gradient-${item.id}`}
+                    x1="0%"
+                    y1="0%"
+                    x2="0%"
+                    y2="100%"
+                  >
+                    <stop
+                      offset="0%"
+                      stopColor={
+                        heartColor === "orange" ? "#ff8a00" : "#ff0080"
+                      }
+                    />
+                    <stop
+                      offset="100%"
+                      stopColor={
+                        heartColor === "orange" ? "#ff0000" : "#ff66b2"
+                      }
+                    />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <Heart
+                className={cn(
+                  "w-28 h-28",
+                  heartColor === "orange"
+                    ? "drop-shadow-[0_0_30px_rgba(255,69,0,0.6)]"
+                    : "drop-shadow-[0_0_30px_rgba(255,0,128,0.6)]",
+                )}
+                style={{
+                  fill: `url(#heart-gradient-${item.id})`,
+                  stroke: "none",
+                }}
+              />
             </motion.div>
           )}
         </AnimatePresence>
@@ -162,6 +210,7 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
             </motion.button>
             <motion.button
               whileTap={{ scale: 0.8 }}
+              onClick={() => openPostDetail(item)}
               className="hover:opacity-60 transition-opacity"
             >
               <MessageCircle className="w-7 h-7" />
@@ -193,14 +242,17 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
         </div>
 
         {/* Comments */}
-        <button className="text-zinc-500 text-sm mb-2 hover:text-zinc-400 transition-colors">
+        <button
+          onClick={() => openPostDetail(item)}
+          className="text-zinc-500 text-sm mb-2 hover:text-zinc-400 transition-colors"
+        >
           View all {item.comment_count} comments
         </button>
 
         {/* Add Comment */}
         <div className="flex items-center gap-2 mt-2 relative">
           <div ref={emojiPickerRef}>
-            <button 
+            <button
               onClick={() => setShowEmojiPicker(!showEmojiPicker)}
               className="hover:opacity-60 transition-opacity"
             >
@@ -208,13 +260,13 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
             </button>
             <AnimatePresence>
               {showEmojiPicker && (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   className="absolute bottom-full left-0 mb-2 z-50"
                 >
-                  <EmojiPicker 
+                  <EmojiPicker
                     onEmojiClick={onEmojiClick}
                     theme={Theme.LIGHT}
                     autoFocusSearch={false}
@@ -225,23 +277,45 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
               )}
             </AnimatePresence>
           </div>
-          <input 
-            type="text" 
-            placeholder="Add a comment..." 
+          <textarea
+            placeholder="Add a comment..."
             value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            className="text-sm w-full outline-none bg-transparent"
+            onChange={(e) => {
+              setComment(e.target.value);
+              e.target.style.height = "auto";
+              e.target.style.height =
+                Math.min(e.target.scrollHeight, 100) + "px";
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                if (comment.trim()) {
+                  setComment("");
+                  setShowEmojiPicker(false);
+                  const target = e.target as HTMLTextAreaElement;
+                  target.style.height = "auto";
+                }
+              }
+            }}
+            rows={1}
+            className="text-sm w-full outline-none bg-transparent resize-none py-1 max-h-[100px] no-scrollbar"
           />
-          <button 
+          <button
             disabled={!comment.trim()}
             className={cn(
-              "font-semibold text-sm transition-colors",
-              comment.trim() ? "text-[#0095f6] hover:text-[#00376b]" : "text-[#0095f6]/50 cursor-default"
+              "font-semibold text-sm transition-colors pt-1",
+              comment.trim()
+                ? "text-[#0095f6] hover:text-[#00376b]"
+                : "text-[#0095f6]/50 cursor-default",
             )}
-            onClick={() => {
+            onClick={(e) => {
               if (comment.trim()) {
                 setComment("");
                 setShowEmojiPicker(false);
+                // Find the textarea in the same container and reset its height
+                const container = (e.target as HTMLElement).parentElement;
+                const textarea = container?.querySelector("textarea");
+                if (textarea) textarea.style.height = "auto";
               }
             }}
           >

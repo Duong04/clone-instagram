@@ -1,9 +1,13 @@
 import { createContext, useContext } from "react";
+import type { FeedItem } from "~/shared/types/feed";
 
 interface ModalContextType {
   isCreatePostOpen: boolean;
   openCreatePost: () => void;
   closeCreatePost: () => void;
+  selectedPost: FeedItem | null;
+  openPostDetail: (post: FeedItem) => void;
+  closePostDetail: () => void;
 }
 
 export const ModalContext = createContext<ModalContextType | undefined>(undefined);

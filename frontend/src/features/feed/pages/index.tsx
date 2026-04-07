@@ -6,9 +6,19 @@ import { Navigation } from "swiper/modules";
 import { Plus } from "lucide-react";
 import { useAuthStore } from "~/store/authStore";
 import { FeedList } from "../components/FeedList";
+import { StorySkeleton } from "~/shared/components/common/Skeleton";
+import { useEffect, useState } from "react";
 
 export const FeedPage = () => {
   const { user } = useAuthStore();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <motion.div
@@ -63,11 +73,19 @@ export const FeedPage = () => {
                   </div>
                 </motion.div>
               </SwiperSlide>
-              {MOCK_STORIES.map((story) => (
-                <SwiperSlide key={story.id}>
-                  <StoryCircle story={story} />
-                </SwiperSlide>
-              ))}
+              {isLoading ? (
+              Array.from({ length: 6 }).map((_, i) => 
+                <SwiperSlide key={i}>
+                    <StorySkeleton />
+                  </SwiperSlide>
+            )
+              ) : (
+                MOCK_STORIES.map((story) => (
+                  <SwiperSlide key={story.id}>
+                    <StoryCircle story={story} />
+                  </SwiperSlide>
+                ))
+              )}
             </Swiper>
           </div>
 
@@ -147,7 +165,7 @@ export const FeedPage = () => {
               Language • Meta Verified
             </p>
 
-            <p>© 2024 INSTAGRAM FROM META</p>
+            <p>© {new Date().getFullYear()} INSTAGRAM FROM META</p>
           </div>
         </div>
       </div>

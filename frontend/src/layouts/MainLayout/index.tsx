@@ -7,9 +7,10 @@ import { MobileHeader } from "./MobileHeader"
 import { cn } from "~/shared/utils/cn"
 import { useModal } from "~/shared/context/modal/modalContext"
 import { CreatePostModal } from "~/features/posts"
+import { PostDetailModal } from "~/features/posts/components/PostDetailModal"
 
 export default function MainLayout() {
-    const { isCreatePostOpen, closeCreatePost } = useModal();
+    const { isCreatePostOpen, closeCreatePost, selectedPost, closePostDetail } = useModal();
     const location = useLocation();
     const isReelsPage = location.pathname === "/reels";
     const isFeedPage = location.pathname === "/";
@@ -37,6 +38,11 @@ export default function MainLayout() {
         </main>
         <BottomNav />
         <CreatePostModal isOpen={isCreatePostOpen} onClose={closeCreatePost} />
+        <PostDetailModal 
+            feedId={selectedPost?.feed_id ?? null} 
+            isOpen={!!selectedPost} 
+            onClose={closePostDetail} 
+        />
         </div>
     )
 }

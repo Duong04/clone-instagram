@@ -1,8 +1,12 @@
 import { Navigate } from 'react-router-dom'
-import { useAuthStore } from '../../../store/authStore'
+import { useAuthStore } from '~/store/authStore'
 
 export const PublicRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isLoggedIn } = useAuthStore()
+  const { isLoggedIn, isLoading } = useAuthStore() 
+
+  if (isLoading) {
+    return <div>Loading...</div> 
+  }
 
   if (isLoggedIn) {
     return <Navigate to="/" replace />
