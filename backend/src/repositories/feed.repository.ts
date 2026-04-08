@@ -65,7 +65,7 @@ class FeedRepository {
   private async getDiscoveryFeed(
     viewedIds: string[],
     limit: number,
-    cursor?: string // thêm cursor
+    cursor?: string
   ): Promise<FeedResult<ResolvedFeedItem>> {
     const posts = await prisma.post.findMany({
       where: { id: { notIn: viewedIds }, deleted_at: null },

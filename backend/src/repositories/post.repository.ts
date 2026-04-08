@@ -12,13 +12,15 @@ class PostRepository {
       include: POST_INCLUDE
     })
 
-    let nextCursor: typeof cursor | undefined = undefined
+    let nextCursor: string | null = null
     let hasNextPage = false
 
     if (data.length > limit) {
       hasNextPage = true
-      const nextItem = data.pop()
-      nextCursor = nextItem?.id
+
+      data.pop()
+
+      nextCursor = data[data.length - 1]?.id ?? null
     }
 
     return {

@@ -3,6 +3,7 @@ import authRoutes from './auth.route'
 import mediaRoutes from './media.route'
 import potsRoutes from './post.route'
 import feedRoutes from './feed.route'
+import commentRouters from './comment.route'
 
 const router = Router()
 
@@ -10,5 +11,6 @@ router.use('/auth', authRoutes)
 router.use('/media', mediaRoutes)
 router.use('/posts', potsRoutes)
 router.use('/feeds', feedRoutes)
+router.use('/comments', commentRouters)
 
 export default router

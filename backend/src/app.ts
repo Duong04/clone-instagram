@@ -1,5 +1,5 @@
 import express from 'express'
-import routes from '~/routes/index.route'
+import routes from '~/routes'
 import errorHandler from '~/middlewares/error.middleware'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'

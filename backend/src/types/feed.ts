@@ -1,14 +1,9 @@
 import { ContentType } from '~/generated/prisma/client'
-
-export interface FeedMeta {
-  nextCursor: string | null
-  hasNextPage: boolean
-  limit: number
-}
+import { Meta } from '~/utils/response'
 
 export interface FeedResult<T> {
   data: T[]
-  meta: FeedMeta
+  meta: Meta
 }
 
 export interface ResolvedFeedItem {
