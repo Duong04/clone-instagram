@@ -224,4 +224,4 @@ Developed by **Nguyen Thanh Duong (SugarDev)**
 ---
 ## 📄 License
 
-This project is for educational purposes only.
+This project is for learning and development purposes.
