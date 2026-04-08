@@ -25,7 +25,6 @@ export const useFeedStore = create<FeedStore>((set, get) => ({
   loadMore: async () => {
     const { isLoading, hasMore, cursor } = get();
     if (isLoading || !hasMore) return;
-
     set({ isLoading: true, error: null });
 
     try {

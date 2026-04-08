@@ -34,9 +34,11 @@ export const FeedList = () => {
         </div>
       )}
 
-      <div className="py-8 flex justify-center">
-        <div className="w-8 h-8 border-4 border-zinc-200 border-t-[#0095f6] rounded-full animate-spin" />
-      </div>
+      {isLoading && (
+        <div className="py-8 flex justify-center">
+          <div className="w-8 h-8 border-4 border-zinc-200 border-t-[#0095f6] rounded-full animate-spin" />
+        </div>
+      )}
 
       <div ref={bottomRef} style={{ height: 1 }} />
     </div>

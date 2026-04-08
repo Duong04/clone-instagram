@@ -25,7 +25,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({ className }) => {
 
 export const PostSkeleton = () => {
   return (
-    <div className="bg-white border-b border-zinc-200 md:border md:rounded-lg mb-4 max-w-[470px] mx-auto overflow-hidden w-full">
+    <div className="bg-white border-b border-zinc-200 md:border md:rounded-lg mb-4 max-w-full mx-auto overflow-hidden w-full">
       {/* Header Skeleton */}
       <div className="flex items-center justify-between p-3">
         <div className="flex items-center gap-3">
