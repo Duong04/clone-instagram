@@ -18,6 +18,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
 import { useLike } from "~/features/feed/hooks/useLike";
 import { useFeedStore } from "~/features/feed/store/feedStore";
+import { useComment } from "~/features/feed/hooks/useComment";
 
 interface PostDetailModalProps {
   feedId: string | null;
@@ -40,8 +41,14 @@ export const PostDetailModal = ({
   const { handleLike } = useLike();
   const [expandedReplies, setExpandedReplies] = useState<number[]>([]);
   const [heartColor, setHeartColor] = useState<"orange" | "pink">("orange");
+  const { createComment, loadComments, loadReplies } = useComment(
+    item!.feed_id,
+    item!.feed_type,
+  );
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
+    console.log(loadComments);
     const handleClickOutside = (event: MouseEvent) => {
       if (
         emojiPickerRef.current &&
@@ -64,6 +71,7 @@ export const PostDetailModal = ({
       document.body.style.overflow = "unset";
     };
   }, [isOpen]);
+
   const showHeartAnimation = () => {
     setHeartColor(Math.random() > 0.5 ? "orange" : "pink");
     setShowHeart(true);
@@ -87,6 +95,18 @@ export const PostDetailModal = ({
 
   const onEmojiClick = (emojiData: EmojiClickData) => {
     setComment((prev) => prev + emojiData.emoji);
+  };
+
+  const handleCommentSubmit = () => {
+    if (!comment.trim()) return;
+
+    setComment("");
+    setShowEmojiPicker(false);
+
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
+    createComment(comment);
   };
 
   const mockComments = [
@@ -317,7 +337,7 @@ export const PostDetailModal = ({
                 <div className="hidden md:flex items-center gap-3">
                   <img
                     src={item.user.avatar?.url}
-                    alt={item.user.name}
+                    alt={item.user.username}
                     className="w-8 h-8 rounded-full object-cover border border-zinc-200"
                     referrerPolicy="no-referrer"
                   />
@@ -359,12 +379,14 @@ export const PostDetailModal = ({
                 <div className="hidden md:flex gap-3">
                   <img
                     src={item.user.avatar?.url}
-                    alt={item.user.name}
+                    alt={item.user.username}
                     className="w-8 h-8 rounded-full object-cover flex-shrink-0"
                     referrerPolicy="no-referrer"
                   />
                   <div className="text-sm">
-                    <span className="font-semibold mr-2">{item.user.name}</span>
+                    <span className="font-semibold mr-2">
+                      {item.user.username}
+                    </span>
                     <span className="text-zinc-800">{item.caption}</span>
                     <p className="text-zinc-400 text-xs mt-2 uppercase tracking-tight">
                       {formatRelativeTime(item.created_at)}
@@ -549,13 +571,7 @@ export const PostDetailModal = ({
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && !e.shiftKey) {
                           e.preventDefault();
-                          if (comment.trim()) {
-                            setComment("");
-                            setShowEmojiPicker(false);
-                            // Reset height
-                            const target = e.target as HTMLTextAreaElement;
-                            target.style.height = "auto";
-                          }
+                          handleCommentSubmit();
                         }
                       }}
                       rows={1}
@@ -571,21 +587,9 @@ export const PostDetailModal = ({
                           "font-semibold text-sm transition-colors",
                           comment.trim() ? "text-[#0095f6]" : "hidden",
                         )}
-                        onClick={(e) => {
-                          if (comment.trim()) {
-                            setComment("");
-                            setShowEmojiPicker(false);
-                            // Reset height of textarea
-                            const container = (e.target as HTMLElement).closest(
-                              ".flex-1",
-                            );
-                            const textarea =
-                              container?.querySelector("textarea");
-                            if (textarea) textarea.style.height = "auto";
-                          }
-                        }}
+                        onClick={handleCommentSubmit}
                       >
-                        Đăng
+                        Post
                       </button>
                     </div>
                   </div>

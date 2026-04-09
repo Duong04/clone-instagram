@@ -2,6 +2,8 @@ import { prisma } from '~/config/database'
 import { CreateCommentDTO } from '~/dto/comment/comment.dto'
 import { ContentType, Prisma } from '~/generated/prisma/client'
 
+type TX = Prisma.TransactionClient
+
 const userSelect = {
   id: true,
   username: true,
@@ -58,8 +60,8 @@ class CommentRepository {
     }
   }
 
-  async create(data: CreateCommentDTO) {
-    return prisma.comment.create({
+  async create(tx: TX, data: CreateCommentDTO) {
+    return tx.comment.create({
       data: {
         content: data.content,
         target_id: data.target_id,
@@ -93,15 +95,16 @@ class CommentRepository {
     })
   }
 
-  async find(id: string) {
-    return prisma.comment.findUnique({
+  async find(id: string, tx: TX = prisma) {
+    return tx.comment.findUnique({
       where: { id },
       select: {
         id: true,
         content: true,
         created_at: true,
         like_count: true,
-
+        target_id: true,
+        target_type: true,
         user: { select: userSelect },
 
         parent: {
@@ -160,10 +163,23 @@ class CommentRepository {
     }
   }
 
-  async delete(id: string) {
-    return prisma.comment.delete({
+  async delete(tx: TX, id: string) {
+    await tx.comment.deleteMany({
+      where: { parent_id: id }
+    })
+    return tx.comment.delete({
       where: { id }
     })
+  }
+
+  async updateCommentCount(tx: TX, targetId: string, targetType: ContentType, offset: number) {
+    const data = { comment_count: { increment: offset } }
+    if (targetType === ContentType.post) {
+      return tx.post.update({ where: { id: targetId }, data })
+    }
+    if (targetType === ContentType.reel) {
+      return tx.reel.update({ where: { id: targetId }, data })
+    }
   }
 }
 

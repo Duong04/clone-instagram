@@ -28,7 +28,7 @@ export const useFeedStore = create<FeedStore>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const res = await feedApi.getFeed(FEED_PAGE_SIZE, cursor ?? undefined);
+      const res = await feedApi.getFeeds(FEED_PAGE_SIZE, cursor ?? undefined);
 
       set((state) => ({
         feed: [...state.feed, ...res.data],

@@ -1,5 +1,5 @@
 import { useFeed } from "../hooks/useFeed";
-import { PostCard } from "~/shared/components/cards/PostCard";
+import { PostCard } from "~/features/posts/components/PostCard";
 import { PostSkeleton } from "~/shared/components/common/Skeleton";
 import { useIntersection } from "~/shared/hooks/useIntersection";
 

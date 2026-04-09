@@ -2,7 +2,7 @@ import api from "~/shared/libs/axios";
 import type { TargetType } from "~/shared/types/feed";
 
 export const feedApi = {
-    getFeed: async (limit: number, cursor?: string) => {
+    getFeeds: async (limit: number, cursor?: string) => {
         const res = await api.get('/feeds', {
             params: { limit, cursor },
         });
@@ -15,5 +15,12 @@ export const feedApi = {
 
     likeFeedItem: async (targetId: string, targetType: TargetType, isLiked: boolean) => {
         await api.post('/feeds/like', { targetId, targetType, isLiked });
+    },
+
+    commentFeedItem: async (targetId: string, limit: number) => {
+        const res = await api.get(`/feeds/${targetId}/comments`, {
+            params: { limit },
+        });
+        return res.data;
     }
 }

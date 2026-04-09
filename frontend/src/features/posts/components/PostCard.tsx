@@ -12,12 +12,13 @@ import { motion, AnimatePresence } from "motion/react";
 import type { FeedItem } from "~/shared/types/feed";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
-import { MediaSlide } from "./MediaSlide";
+import { MediaSlide } from "~/shared/components/cards/MediaSlide";
 import { formatRelativeTime } from "~/shared/utils/formatDate";
 import { useLike } from "~/features/feed/hooks/useLike";
 import EmojiPicker, { Theme } from "emoji-picker-react";
 import type { EmojiClickData } from "emoji-picker-react";
 import { useModal } from "~/shared/context/modal/modalContext";
+import { useComment } from "~/features/feed/hooks/useComment";
 
 interface FeedItemCardProps {
   item: FeedItem;
@@ -33,6 +34,8 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
   const emojiPickerRef = useRef<HTMLDivElement>(null);
   const [showHeart, setShowHeart] = useState(false);
   const [heartColor, setHeartColor] = useState<"orange" | "pink">("orange");
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { createComment } = useComment(item.feed_id, item.feed_type)
 
   const showHeartAnimation = () => {
     setHeartColor(Math.random() > 0.5 ? "orange" : "pink");
@@ -52,6 +55,18 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
 
   const onEmojiClick = (emojiData: EmojiClickData) => {
     setComment((prev) => prev + emojiData.emoji);
+  };
+
+  const handleCommentSubmit = () => {
+    if (!comment.trim()) return;
+
+    setComment("");
+    setShowEmojiPicker(false);
+
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
+    createComment(comment);
   };
 
   useEffect(() => {
@@ -279,6 +294,7 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
           </div>
           <textarea
             placeholder="Add a comment..."
+            ref={textareaRef}
             value={comment}
             onChange={(e) => {
               setComment(e.target.value);
@@ -289,12 +305,7 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
-                if (comment.trim()) {
-                  setComment("");
-                  setShowEmojiPicker(false);
-                  const target = e.target as HTMLTextAreaElement;
-                  target.style.height = "auto";
-                }
+                handleCommentSubmit();
               }
             }}
             rows={1}
@@ -308,16 +319,7 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
                 ? "text-[#0095f6] hover:text-[#00376b]"
                 : "text-[#0095f6]/50 cursor-default",
             )}
-            onClick={(e) => {
-              if (comment.trim()) {
-                setComment("");
-                setShowEmojiPicker(false);
-                // Find the textarea in the same container and reset its height
-                const container = (e.target as HTMLElement).parentElement;
-                const textarea = container?.querySelector("textarea");
-                if (textarea) textarea.style.height = "auto";
-              }
-            }}
+            onClick={() => handleCommentSubmit()}
           >
             Post
           </button>

@@ -26,5 +26,5 @@ export const useLike = () => {
     debouncedApi(targetId, targetType, isLiked);
   };
 
-  return { handleLike, };
+  return { handleLike };
 };

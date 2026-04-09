@@ -8,7 +8,7 @@ export function usePost() {
   const [serverError, setServerError] = useState("");
 
   const createPost = async (data: {
-    images: string[]; // base64 images
+    images: string[];
     caption: string;
     location: string;
     hashtags: string;
@@ -24,7 +24,6 @@ export function usePost() {
         return false;
       }
 
-      // ✅ dùng parsed.data thay vì data
       const files = parsed.data.images.map((base64, i) => {
         const blob = base64ToBlob(base64);
         return new File([blob], `image-${i}.jpg`, { type: "image/jpeg" });
