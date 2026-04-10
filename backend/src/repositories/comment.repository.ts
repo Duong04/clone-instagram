@@ -39,6 +39,8 @@ class CommentRepository {
           select: {
             id: true,
             content: true,
+            created_at: true,
+            like_count: true,
             user: { select: userSelect }
           }
         }

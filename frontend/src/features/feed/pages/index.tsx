@@ -57,7 +57,7 @@ export const FeedPage = () => {
                     <div className="p-[3px] rounded-full instagram-gradient">
                       <div className="p-[2px] bg-white rounded-full">
                         <img
-                          src={user?.avatar_url}
+                          src={user?.avatar?.url}
                           alt={user?.username}
                           className="w-14 h-14 rounded-full object-cover"
                           referrerPolicy="no-referrer"

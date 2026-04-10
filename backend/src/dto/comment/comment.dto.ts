@@ -11,7 +11,17 @@ export const getCommentsQuerySchema = z.object({
     }),
   cursor: z.string().optional(),
   targetType: z.enum(ContentType)
+})
 
+export const getCommentRepliesQuerySchema = z.object({
+  limit: z
+    .string()
+    .optional()
+    .transform((val) => (val ? Number(val) : 10))
+    .refine((val) => val > 0 && val <= 50, {
+      message: 'limit must be between 1 and 50'
+    }),
+  cursor: z.string().optional()
 })
 
 export const createCommentBodySchema = z.object({

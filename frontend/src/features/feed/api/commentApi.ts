@@ -2,8 +2,10 @@ import api from "~/shared/libs/axios";
 import type { TargetType } from "~/shared/types/feed";
 
 export const commentApi = {
-    getComments: async (id: string) => {
-        const res = await api.get(`/comments/${id}`);
+    getComments: async (id: string, targetType: TargetType, limit: number, cursor?: string) => {
+        const res = await api.get(`/feeds/${id}/comments`, {
+            params: { targetType, limit, cursor }
+        });
         return res.data;
     },
 

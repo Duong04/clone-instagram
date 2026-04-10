@@ -1,7 +1,7 @@
 import commentService from '~/services/comment.service'
 import { Request, Response, NextFunction } from 'express'
 import { sendSuccess, sendError } from '~/utils/response'
-import { getCommentsQuerySchema, createCommentBodySchema, updateCommentBodySchema } from '~/dto/comment/comment.dto'
+import { getCommentsQuerySchema, getCommentRepliesQuerySchema, createCommentBodySchema, updateCommentBodySchema } from '~/dto/comment/comment.dto'
 
 class CommentController {
   async allByFeed(req: Request, res: Response, next: NextFunction) {
@@ -33,7 +33,7 @@ class CommentController {
   async findReplies(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params as { id: string }
-      const { limit, cursor } = getCommentsQuerySchema.parse(req.query)
+      const { limit, cursor } = getCommentRepliesQuerySchema.parse(req.query)
       const result = await commentService.findReplies(id, limit, cursor)
       return sendSuccess({ res, data: result.data, meta: result.meta })
     } catch (error) {

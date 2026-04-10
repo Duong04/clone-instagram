@@ -3,7 +3,11 @@ export interface User {
   email: string
   username: string
   name: string
-  avatar_url?: string
+  avatar?: Avatar
+}
+
+export interface Avatar {
+  url: string
 }
  
 export interface LoginRequest {

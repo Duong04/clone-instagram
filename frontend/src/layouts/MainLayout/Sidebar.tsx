@@ -121,7 +121,7 @@ export const Sidebar = () => {
                   isActive ? "ring-2 ring-black ring-offset-2" : undefined
                 }
               >
-                <AvatarImage src={user?.avatar_url} />
+                <AvatarImage src={user?.avatar?.url} />
               </Avatar>
 
               <span className="hidden xl:block text-base">Profile</span>

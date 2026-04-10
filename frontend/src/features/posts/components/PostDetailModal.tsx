@@ -19,6 +19,7 @@ import { Pagination, Navigation } from "swiper/modules";
 import { useLike } from "~/features/feed/hooks/useLike";
 import { useFeedStore } from "~/features/feed/store/feedStore";
 import { useComment } from "~/features/feed/hooks/useComment";
+import type { Comment } from "~/shared/types/comment";
 
 interface PostDetailModalProps {
   feedId: string | null;
@@ -34,21 +35,39 @@ export const PostDetailModal = ({
   const item = useFeedStore((state) =>
     state.feed.find((i) => i.feed_id === feedId),
   );
+
   const [comment, setComment] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
   const [showHeart, setShowHeart] = useState(false);
   const { handleLike } = useLike();
-  const [expandedReplies, setExpandedReplies] = useState<number[]>([]);
+  const [expandedReplies, setExpandedReplies] = useState<string[]>([]);
   const [heartColor, setHeartColor] = useState<"orange" | "pink">("orange");
-  const { createComment, loadComments, loadReplies } = useComment(
-    item!.feed_id,
-    item!.feed_type,
-  );
+  const [replyingTo, setReplyingTo] = useState<{
+    id: string;
+    username: string;
+  } | null>(null);
+
+  const {
+    createComment,
+    hasMoreComments,
+    loadComments,
+    loadReplies,
+    comments,
+    isLoading,
+    repliesByComment,
+    replyCountByComment
+  } = useComment(item?.feed_id ?? "", item?.feed_type ?? "post");
+
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const totalReplies = (c: Comment) => (c._count.replies ?? 0) + (replyCountByComment[c.id] ?? 0);
+  useEffect(() => {
+    if (isOpen && feedId) {
+      loadComments();
+    }
+  }, [isOpen, feedId]);
 
   useEffect(() => {
-    console.log(loadComments);
     const handleClickOutside = (event: MouseEvent) => {
       if (
         emojiPickerRef.current &&
@@ -100,108 +119,17 @@ export const PostDetailModal = ({
   const handleCommentSubmit = () => {
     if (!comment.trim()) return;
 
+    createComment(comment, replyingTo?.id);
     setComment("");
+    setReplyingTo(null)
     setShowEmojiPicker(false);
 
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
     }
-    createComment(comment);
   };
 
-  const mockComments = [
-    {
-      id: 1,
-      user: {
-        username: "traveler_99",
-        avatar: "https://picsum.photos/seed/u1/50/50",
-      },
-      text: "Wow, this looks amazing! 😍",
-      timestamp: "2h",
-      likes: 12,
-      replies: [
-        {
-          id: 101,
-          user: {
-            username: "nature_lover",
-            avatar: "https://picsum.photos/seed/u2/50/50",
-          },
-          text: "Totally agree! Best spot ever.",
-          timestamp: "1h",
-        },
-        {
-          id: 102,
-          user: { username: "johndoe", avatar: MOCK_USER.avatar },
-          text: "Thanks! It was a great trip.",
-          timestamp: "30m",
-        },
-      ],
-    },
-    {
-      id: 2,
-      user: {
-        username: "photo_pro",
-        avatar: "https://picsum.photos/seed/u3/50/50",
-      },
-      text: "Great composition and lighting! What camera did you use?",
-      timestamp: "4h",
-      likes: 5,
-      replies: [
-        {
-          id: 201,
-          user: { username: "johndoe", avatar: MOCK_USER.avatar },
-          text: "Shot this on a Sony A7III with a 35mm lens.",
-          timestamp: "3h",
-        },
-      ],
-    },
-    {
-      id: 3,
-      user: {
-        username: "adventure_seeker",
-        avatar: "https://picsum.photos/seed/u4/50/50",
-      },
-      text: "Where exactly is this? Need to add it to my bucket list!",
-      timestamp: "6h",
-      likes: 2,
-      replies: [],
-    },
-    {
-      id: 4,
-      user: {
-        username: "foodie_vibe",
-        avatar: "https://picsum.photos/seed/u5/50/50",
-      },
-      text: "Did you find any good places to eat nearby?",
-      timestamp: "8h",
-      likes: 0,
-      replies: [],
-    },
-    {
-      id: 5,
-      user: {
-        username: "sunset_hunter",
-        avatar: "https://picsum.photos/seed/u6/50/50",
-      },
-      text: "The colors are just breathtaking. 🌅",
-      timestamp: "12h",
-      likes: 24,
-      replies: [],
-    },
-    {
-      id: 6,
-      user: {
-        username: "wanderlust_soul",
-        avatar: "https://picsum.photos/seed/u7/50/50",
-      },
-      text: "I was there last year, such a magical place.",
-      timestamp: "1d",
-      likes: 8,
-      replies: [],
-    },
-  ];
-
-  const toggleReplies = (id: number) => {
+  const toggleReplies = (id: string) => {
     setExpandedReplies((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
     );
@@ -394,106 +322,186 @@ export const PostDetailModal = ({
                   </div>
                 </div>
 
-                {/* Actual Comments */}
-                {mockComments.map((c) => (
-                  <div key={c.id} className="space-y-4">
-                    <div className="flex gap-3">
-                      <img
-                        src={c.user.avatar}
-                        alt={c.user.username}
-                        className="w-8 h-8 rounded-full object-cover flex-shrink-0"
-                        referrerPolicy="no-referrer"
-                      />
-                      <div className="flex-1 text-sm">
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <span className="font-semibold mr-2">
-                              {c.user.username}
-                            </span>
-                            <span className="text-zinc-800">{c.text}</span>
-                          </div>
-                          <button className="flex-shrink-0">
-                            <Heart className="w-3 h-3 text-zinc-400" />
-                          </button>
-                        </div>
-                        <div className="flex items-center gap-3 mt-2">
-                          <p className="text-zinc-400 text-xs uppercase tracking-tight">
-                            {c.timestamp}
-                          </p>
-                          {c.likes > 0 && (
-                            <button className="text-zinc-500 text-xs font-semibold">
-                              {c.likes} likes
-                            </button>
-                          )}
-                          <button className="text-zinc-500 text-xs font-semibold">
-                            Reply
-                          </button>
-                        </div>
-
-                        {/* View Replies Toggle */}
-                        {c.replies.length > 0 && (
-                          <div className="mt-4">
-                            <button
-                              onClick={() => toggleReplies(c.id)}
-                              className="flex items-center gap-3 text-zinc-500 text-xs font-semibold hover:text-zinc-800 transition-colors"
-                            >
-                              <div className="w-6 h-[1px] bg-zinc-300" />
-                              {expandedReplies.includes(c.id)
-                                ? "Hide replies"
-                                : `View replies (${c.replies.length})`}
-                            </button>
-
-                            {/* Nested Replies */}
-                            <AnimatePresence>
-                              {expandedReplies.includes(c.id) && (
-                                <motion.div
-                                  initial={{ opacity: 0, height: 0 }}
-                                  animate={{ opacity: 1, height: "auto" }}
-                                  exit={{ opacity: 0, height: 0 }}
-                                  className="mt-4 space-y-4 overflow-hidden"
-                                >
-                                  {c.replies.map((reply) => (
-                                    <div key={reply.id} className="flex gap-3">
-                                      <img
-                                        src={reply.user.avatar}
-                                        alt={reply.user.username}
-                                        className="w-6 h-6 rounded-full object-cover flex-shrink-0"
-                                        referrerPolicy="no-referrer"
-                                      />
-                                      <div className="flex-1 text-sm">
-                                        <div className="flex items-start justify-between gap-2">
-                                          <div>
-                                            <span className="font-semibold mr-2">
-                                              {reply.user.username}
-                                            </span>
-                                            <span className="text-zinc-800">
-                                              {reply.text}
-                                            </span>
-                                          </div>
-                                          <button className="flex-shrink-0">
-                                            <Heart className="w-3 h-3 text-zinc-400" />
-                                          </button>
-                                        </div>
-                                        <div className="flex items-center gap-3 mt-2">
-                                          <p className="text-zinc-400 text-xs uppercase tracking-tight">
-                                            {reply.timestamp}
-                                          </p>
-                                          <button className="text-zinc-500 text-xs font-semibold">
-                                            Reply
-                                          </button>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  ))}
-                                </motion.div>
-                              )}
-                            </AnimatePresence>
-                          </div>
-                        )}
+                {isLoading && comments.length === 0 ? (
+                  Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="flex gap-3 animate-pulse">
+                      <div className="w-8 h-8 rounded-full bg-zinc-200 flex-shrink-0" />
+                      <div className="flex-1 space-y-2">
+                        <div className="h-3 bg-zinc-200 rounded w-1/4" />
+                        <div className="h-3 bg-zinc-200 rounded w-3/4" />
+                        <div className="h-2 bg-zinc-100 rounded w-1/6 mt-1" />
                       </div>
                     </div>
+                  ))
+                ) : comments.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-10 text-zinc-400">
+                    <MessageCircle className="w-10 h-10 mb-2 opacity-30" />
+                    <p className="text-sm">Chưa có bình luận nào</p>
+                    <p className="text-xs mt-1">
+                      Hãy là người đầu tiên bình luận!
+                    </p>
                   </div>
-                ))}
+                ) : (
+                  <>
+                    {comments.map((c) => {
+                      const replies = repliesByComment[c.id];
+                      return (
+                        <div key={c.id} className="space-y-4">
+                          <div className="flex gap-3">
+                            <img
+                              src={c.user?.avatar?.url}
+                              alt={c.user?.username}
+                              className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+                              referrerPolicy="no-referrer"
+                            />
+                            <div className="flex-1 text-sm">
+                              <div className="flex items-start justify-between gap-2">
+                                <div>
+                                  <span className="font-semibold mr-2">
+                                    {c.user?.username}
+                                  </span>
+                                  <span className="text-zinc-400 text-xs uppercase tracking-tight">
+                                  {formatRelativeTime(c.created_at)}
+                                </span>
+                                </div>
+                                <button className="flex-shrink-0">
+                                  <Heart className="w-3 h-3 text-zinc-400" />
+                                </button>
+                              </div>
+                              <div>
+                                  <span className="text-zinc-800">
+                                    {c.content}
+                                  </span>
+                                </div>
+                              <div className="flex items-center gap-3 mt-2">
+                                {c.like_count > 0 && (
+                                  <button className="text-zinc-500 text-xs font-semibold">
+                                    {c.like_count} likes
+                                  </button>
+                                )}
+                                {/* ✅ Reply: focus textarea + set parentId */}
+                                <button
+                                  className="text-zinc-500 text-xs font-semibold"
+                                  onClick={() => {
+                                    setReplyingTo({
+                                      id: c.id,
+                                      username: c.user?.username,
+                                    });
+                                    textareaRef.current?.focus();
+                                  }}
+                                >
+                                  Reply
+                                </button>
+                              </div>
+
+                              {(c._count.replies > 0 || replies?.replies?.length > 0) && (
+                                <div className="mt-4">
+                                  <button
+                                    onClick={() => {
+                                      const isExpanded =
+                                        expandedReplies.includes(c.id);
+                                      if (!isExpanded) loadReplies(c.id);
+                                      toggleReplies(c.id);
+                                    }}
+                                    className="flex items-center gap-3 text-zinc-500 text-xs font-semibold hover:text-zinc-800 transition-colors"
+                                  >
+                                    <div className="w-6 h-[1px] bg-zinc-300" />
+                                    {replies?.loading
+                                      ? "Đang tải..."
+                                      : expandedReplies.includes(c.id)
+                                        ? "Ẩn replies"
+                                        : `Xem replies (${totalReplies(c) ?? 0})`}
+                                  </button>
+
+                                  <AnimatePresence>
+                                    {expandedReplies.includes(c.id) && (
+                                      <motion.div
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: "auto" }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                        className="mt-4 space-y-4 overflow-hidden"
+                                      >
+                                        {replies?.replies?.map((reply) => (
+                                          <div
+                                            key={reply.id}
+                                            className="flex gap-3"
+                                          >
+                                            <img
+                                              src={reply.user?.avatar?.url}
+                                              alt={reply.user?.username}
+                                              className="w-6 h-6 rounded-full object-cover flex-shrink-0"
+                                              referrerPolicy="no-referrer"
+                                            />
+                                            <div className="flex-1 text-sm">
+                                              <div className="flex items-start justify-between gap-2">
+                                                <div>
+                                                  <span className="font-semibold mr-2">
+                                                    {reply.user?.username}
+                                                  </span>
+                                                  <span className="text-zinc-400 text-xs uppercase tracking-tight">
+                                                  {formatRelativeTime(
+                                                    reply.created_at,
+                                                  )}
+                                                </span>
+                                                </div>
+                                                <button className="flex-shrink-0">
+                                                  <Heart className="w-3 h-3 text-zinc-400" />
+                                                </button>
+                                              </div>
+                                              <div>
+                                                <span className="text-zinc-800">
+                                                    {reply.content}
+                                                  </span>
+                                              </div>
+                                              <div className="flex items-center gap-3 mt-2">
+                                                <button
+                                                  className="text-zinc-500 text-xs font-semibold"
+                                                  onClick={() => {
+                                                    setReplyingTo({
+                                                      id: c.id,
+                                                      username:
+                                                        reply.user?.username,
+                                                    });
+                                                    textareaRef.current?.focus();
+                                                  }}
+                                                >
+                                                  Reply
+                                                </button>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        ))}
+                                        {replies?.hasMore && (
+                                          <button
+                                            onClick={() => loadReplies(c.id)}
+                                            className="text-zinc-500 text-xs font-semibold ml-9"
+                                          >
+                                            Xem thêm replies...
+                                          </button>
+                                        )}
+                                      </motion.div>
+                                    )}
+                                  </AnimatePresence>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+
+                    {/* ✅ Load more ở dưới list, không thay thế list */}
+                    {hasMoreComments && (
+                      <button
+                        onClick={loadComments}
+                        disabled={isLoading}
+                        className="w-full text-center text-xs text-zinc-500 font-semibold py-2 hover:text-zinc-800 disabled:opacity-40"
+                      >
+                        {isLoading ? "Đang tải..." : "Xem thêm bình luận..."}
+                      </button>
+                    )}
+                  </>
+                )}
               </div>
 
               {/* Actions & Input */}
@@ -551,6 +559,22 @@ export const PostDetailModal = ({
                   </p>
                 </div>
 
+                {replyingTo && (
+                  <div className="flex items-center justify-between px-1 mb-2 text-xs text-zinc-500">
+                    <span>
+                      Đang trả lời{" "}
+                      <span className="font-semibold text-zinc-700">
+                        @{replyingTo.username}
+                      </span>
+                    </span>
+                    <button
+                      onClick={() => setReplyingTo(null)}
+                      className="hover:text-zinc-800"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                )}
                 <div className="flex items-center gap-3 relative">
                   <img
                     src={MOCK_USER.avatar}

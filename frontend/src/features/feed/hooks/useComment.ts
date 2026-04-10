@@ -10,6 +10,7 @@ export const useComment = (targetId: string, targetType: TargetType) => {
 
   const {
     commentsByTarget,
+    cursorByTarget,
     repliesByComment,
     loadingTargets,
     error,
@@ -20,7 +21,10 @@ export const useComment = (targetId: string, targetType: TargetType) => {
     updateComment: storeUpdate,
     removeComment,
     setError,
+    replyCountByComment
   } = useCommentStore();
+
+  const hasMoreComments = cursorByTarget[targetId]?.hasMore ?? true;
 
   const syncFeedCommentCount = useCallback(
     (delta: number) => {
@@ -48,8 +52,8 @@ export const useComment = (targetId: string, targetType: TargetType) => {
   const isLoading = loadingTargets[targetId] ?? false;
 
   const loadComments = useCallback(() => {
-    fetchComments(targetId);
-  }, [fetchComments, targetId]);
+    fetchComments(targetId, targetType);
+  }, [fetchComments, targetId, targetType]);
 
   const loadReplies = useCallback(
     (commentId: string, limit?: number) => {
@@ -65,7 +69,6 @@ export const useComment = (targetId: string, targetType: TargetType) => {
       debounceRef.current(
         `create-${targetId}-${parentId ?? "root"}`,
         async () => {
-          // ✅
           setSubmitting(true);
           try {
             const newComment = await commentApi.createComment(
@@ -75,9 +78,9 @@ export const useComment = (targetId: string, targetType: TargetType) => {
               parentId,
             );
             if (parentId) {
-              addReply(newComment, parentId);
+              addReply(newComment.data, parentId);
             } else {
-              addComment(newComment, targetId);
+              addComment(newComment.data, targetId);
             }
             syncFeedCommentCount(+1);
           } catch (err) {
@@ -98,7 +101,7 @@ export const useComment = (targetId: string, targetType: TargetType) => {
       addReply,
       setError,
       syncFeedCommentCount,
-    ], // ✅ bỏ setDebounce
+    ],
   );
 
   const editComment = useCallback(
@@ -106,7 +109,6 @@ export const useComment = (targetId: string, targetType: TargetType) => {
       if (!content.trim()) return;
 
       debounceRef.current(`update-${id}`, async () => {
-        // ✅
         try {
           await commentApi.updateComment(id, content);
           storeUpdate(id, content, parentId, targetId);
@@ -117,7 +119,7 @@ export const useComment = (targetId: string, targetType: TargetType) => {
         }
       });
     },
-    [targetId, storeUpdate, setError], // ✅ bỏ setDebounce
+    [targetId, storeUpdate, setError],
   );
 
   const deleteComment = useCallback(
@@ -139,10 +141,12 @@ export const useComment = (targetId: string, targetType: TargetType) => {
 
   return {
     comments,
+    hasMoreComments,
     isLoading,
     submitting,
     error,
     repliesByComment,
+    replyCountByComment,
     loadComments,
     loadReplies,
     createComment,

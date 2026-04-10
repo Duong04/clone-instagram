@@ -49,7 +49,6 @@ export const StepPostDetails = (props: StepPostDetailsProps) => {
     onTogglePlay,
   } = props;
   const { user } = useAuthStore();
-  console.log(user);
 
   return (
     <motion.div
@@ -74,7 +73,7 @@ export const StepPostDetails = (props: StepPostDetailsProps) => {
           <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-yellow-400 to-purple-600 p-[1.5px]">
             <div className="w-full h-full rounded-full border-2 border-white dark:border-zinc-900 overflow-hidden">
               <img
-                src={user?.avatar_url}
+                src={user?.avatar?.url}
                 alt="User"
                 className="w-full h-full object-cover"
               />
