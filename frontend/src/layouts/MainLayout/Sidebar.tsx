@@ -43,11 +43,23 @@ export const Sidebar = () => {
     <div className="fixed left-0 top-0 h-full w-[72px] xl:w-60 border-r border-zinc-200 bg-white px-3 py-8 hidden md:flex flex-col z-50 transition-all duration-500 ease-in-out">
       <div className="mb-10 px-3">
         <NavLink to="/" className="block">
-          <Instagram className="xl:hidden w-7 h-7" />
+          <motion.div
+            animate={{
+              y: [0, -4, 0],
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            <Instagram className="xl:hidden w-7 h-7" />
+          </motion.div>
           <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="hidden xl:block font-serif italic text-2xl font-bold tracking-tight"
+            whileHover={{ scale: 1.02, x: 2 }}
+            className="hidden xl:block font-serif italic text-2xl font-bold tracking-tight origin-left"
           >
             Instagram
           </motion.span>
@@ -58,51 +70,69 @@ export const Sidebar = () => {
         {navItems.map((item) => {
           if (item.isCreate) {
             return (
-              <button
+              <motion.button
                 key={item.label}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={openCreatePost}
                 className="flex items-center gap-4 p-3 rounded-lg transition-all duration-300 hover:bg-zinc-100 group relative w-full text-left"
               >
-                <item.icon className="w-7 h-7 transition-transform duration-300 group-hover:scale-110" />
+                <motion.div
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  whileTap={{ scale: 0.9 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  <item.icon className="w-7 h-7 transition-transform duration-300" />
+                </motion.div>
                 <span className="hidden xl:block text-base">{item.label}</span>
-              </button>
+              </motion.button>
             );
           }
           return (
-          <NavLink
-            key={item.label}
-            to={item.path}
-            className={({ isActive }) =>
-              cn(
-                "flex items-center gap-4 p-3 rounded-lg transition-all duration-300 hover:bg-zinc-100 group relative",
-                isActive && item.path !== "#" ? "font-bold" : "font-normal",
-              )
-            }
-          >
-            {({ isActive }) => {
-              const isActuallyActive = isActive && item.path !== "#";
-              return (
-                <>
-                  <item.icon
-                    className={cn(
-                      "w-7 h-7 transition-transform duration-300 group-hover:scale-110",
-                      isActuallyActive && "scale-110",
-                    )}
-                  />
-                  <span className="hidden xl:block text-base">
-                    {item.label}
-                  </span>
-                  {isActuallyActive && (
+            <NavLink
+              key={item.label}
+              to={item.path}
+              className={({ isActive }) =>
+                cn(
+                  "flex items-center gap-4 p-3 rounded-lg transition-all duration-300 hover:bg-zinc-100 group relative",
+                  isActive && item.path !== "#" ? "font-bold" : "font-normal",
+                )
+              }
+            >
+              {({ isActive }) => {
+                const isActuallyActive = isActive && item.path !== "#";
+                return (
+                  <>
                     <motion.div
-                      layoutId="activeNav"
-                      className="absolute left-0 w-1 h-6 bg-black rounded-r-full"
-                    />
-                  )}
-                </>
-              );
-            }}
-          </NavLink>
-        )
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      whileTap={{ scale: 0.9 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 17,
+                      }}
+                    >
+                      <item.icon
+                        className={cn(
+                          "w-7 h-7 transition-transform duration-300",
+                          isActuallyActive && "scale-110",
+                        )}
+                      />
+                    </motion.div>
+                    <span className="hidden xl:block text-base">
+                      {item.label}
+                    </span>
+                    {isActuallyActive && (
+                      <motion.div
+                        layoutId="activeNav"
+                        className="absolute left-0 w-1 h-6 bg-black rounded-r-full"
+                      />
+                    )}
+                  </>
+                );
+              }}
+            </NavLink>
+          );
         })}
 
         <NavLink
@@ -116,13 +146,15 @@ export const Sidebar = () => {
         >
           {({ isActive }) => (
             <>
-              <Avatar
-                className={
-                  isActive ? "ring-2 ring-black ring-offset-2" : undefined
-                }
-              >
-                <AvatarImage src={user?.avatar?.url} />
-              </Avatar>
+              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                <Avatar
+                  className={
+                    isActive ? "ring-2 ring-black ring-offset-2" : undefined
+                  }
+                >
+                  <AvatarImage src={user?.avatar?.url} />
+                </Avatar>
+              </motion.div>
 
               <span className="hidden xl:block text-base">Profile</span>
             </>
@@ -134,7 +166,13 @@ export const Sidebar = () => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="flex items-center gap-4 p-3 rounded-lg transition-all duration-300 hover:bg-zinc-100 w-full group">
-              <Menu className="w-7 h-7 group-hover:scale-110 transition-transform" />
+            <motion.div
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            >
+              <Menu className="w-7 h-7 transition-transform" />
+            </motion.div>
               <span className="hidden xl:block text-base">More</span>
             </button>
           </DropdownMenuTrigger>
