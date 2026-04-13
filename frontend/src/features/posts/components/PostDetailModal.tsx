@@ -60,7 +60,11 @@ export const PostDetailModal = ({
   } = useComment(item?.feed_id ?? "", item?.feed_type ?? "post");
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const totalReplies = (c: Comment) => (c._count.replies ?? 0) + (replyCountByComment[c.id] ?? 0);
+  const totalReplies = (c: Comment) => {
+    const serverCount = c._count?.replies ?? 0;
+    const localExtra = replyCountByComment[c.id] ?? 0;
+    return serverCount + localExtra;
+  };
   useEffect(() => {
     if (isOpen && feedId) {
       loadComments();
@@ -336,9 +340,9 @@ export const PostDetailModal = ({
                 ) : comments.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-10 text-zinc-400">
                     <MessageCircle className="w-10 h-10 mb-2 opacity-30" />
-                    <p className="text-sm">Chưa có bình luận nào</p>
+                    <p className="text-sm">No comments yet.</p>
                     <p className="text-xs mt-1">
-                      Hãy là người đầu tiên bình luận!
+                      Be the first to comment!
                     </p>
                   </div>
                 ) : (
@@ -366,6 +370,9 @@ export const PostDetailModal = ({
                                 </div>
                                 <button className="flex-shrink-0">
                                   <Heart className="w-3 h-3 text-zinc-400" />
+                                  {c.like_count > 0 && (
+                                                    <span className="text-zinc-400">{c.like_count}</span>
+                                                  )}
                                 </button>
                               </div>
                               <div>
@@ -379,7 +386,6 @@ export const PostDetailModal = ({
                                     {c.like_count} likes
                                   </button>
                                 )}
-                                {/* ✅ Reply: focus textarea + set parentId */}
                                 <button
                                   className="text-zinc-500 text-xs font-semibold"
                                   onClick={() => {
@@ -394,7 +400,7 @@ export const PostDetailModal = ({
                                 </button>
                               </div>
 
-                              {(c._count.replies > 0 || replies?.replies?.length > 0) && (
+                              {(totalReplies(c) > 0 || (repliesByComment[c.id]?.replies?.length ?? 0) > 0) && (
                                 <div className="mt-4">
                                   <button
                                     onClick={() => {
@@ -407,10 +413,10 @@ export const PostDetailModal = ({
                                   >
                                     <div className="w-6 h-[1px] bg-zinc-300" />
                                     {replies?.loading
-                                      ? "Đang tải..."
+                                      ? "Loading..."
                                       : expandedReplies.includes(c.id)
-                                        ? "Ẩn replies"
-                                        : `Xem replies (${totalReplies(c) ?? 0})`}
+                                        ? "Hide replies"
+                                        : `Show replies (${totalReplies(c) ?? 0})`}
                                   </button>
 
                                   <AnimatePresence>
@@ -446,6 +452,9 @@ export const PostDetailModal = ({
                                                 </div>
                                                 <button className="flex-shrink-0">
                                                   <Heart className="w-3 h-3 text-zinc-400" />
+                                                  {reply.like_count > 0 && (
+                                                    <span className="text-zinc-400">{reply.like_count}</span>
+                                                  )}
                                                 </button>
                                               </div>
                                               <div>
@@ -476,7 +485,7 @@ export const PostDetailModal = ({
                                             onClick={() => loadReplies(c.id)}
                                             className="text-zinc-500 text-xs font-semibold ml-9"
                                           >
-                                            Xem thêm replies...
+                                            See more...
                                           </button>
                                         )}
                                       </motion.div>
@@ -490,23 +499,20 @@ export const PostDetailModal = ({
                       );
                     })}
 
-                    {/* ✅ Load more ở dưới list, không thay thế list */}
                     {hasMoreComments && (
                       <button
                         onClick={loadComments}
                         disabled={isLoading}
                         className="w-full text-center text-xs text-zinc-500 font-semibold py-2 hover:text-zinc-800 disabled:opacity-40"
                       >
-                        {isLoading ? "Đang tải..." : "Xem thêm bình luận..."}
+                        {isLoading ? "Loading..." : "See more comments..."}
                       </button>
                     )}
                   </>
                 )}
               </div>
 
-              {/* Actions & Input */}
               <div className="border-t border-zinc-100 p-4 shrink-0">
-                {/* Quick Emoji Bar */}
                 <div className="flex items-center justify-between mb-4 px-2">
                   {["❤️", "🙌", "🔥", "👏", "😢", "😍", "😮", "😂"].map(
                     (emoji) => (
@@ -562,7 +568,7 @@ export const PostDetailModal = ({
                 {replyingTo && (
                   <div className="flex items-center justify-between px-1 mb-2 text-xs text-zinc-500">
                     <span>
-                      Đang trả lời{" "}
+                      Replying{" "}
                       <span className="font-semibold text-zinc-700">
                         @{replyingTo.username}
                       </span>
@@ -584,7 +590,7 @@ export const PostDetailModal = ({
                   />
                   <div className="flex-1 flex items-start bg-zinc-50 rounded-2xl border border-zinc-200 px-4 py-2">
                     <textarea
-                      placeholder="Bạn nghĩ gì về nội dung này?"
+                      placeholder="What do you think of this content?"
                       value={comment}
                       onChange={(e) => {
                         setComment(e.target.value);

@@ -97,20 +97,25 @@ export const useCommentStore = create<CommentStore>((set, get) => ({
     }));
 
     try {
-      const data = await commentApi.getReplies(
-        commentId,
-        limit,
-        existing?.cursor,
-      );
+      const result = await commentApi.getReplies(commentId, limit, existing?.cursor);
+
       set((s) => {
-        const prev = s.repliesByComment[commentId];
+        const currentReplies = s.repliesByComment[commentId]?.replies ?? [];
+        const currentIds = new Set(currentReplies.map((r: Comment) => r.id));
+
+        const incoming = result.data ?? result.replies ?? [];
+        const nextCursor = result.meta?.nextCursor ?? result.cursor ?? undefined;
+        const hasMore = result.meta?.hasNextPage ?? result.hasMore ?? false;
+
+        const newReplies = incoming.filter((r: Comment) => !currentIds.has(r.id));
+
         return {
           repliesByComment: {
             ...s.repliesByComment,
             [commentId]: {
-              replies: [...(prev?.replies ?? []), ...data.data],
-              cursor: data.meta.nextCursor ?? undefined,
-              hasMore: !!data.meta.nextCursor,
+              replies: [...currentReplies, ...newReplies],
+              cursor: nextCursor,
+              hasMore: hasMore,
               loading: false,
             },
           },
@@ -120,7 +125,11 @@ export const useCommentStore = create<CommentStore>((set, get) => ({
       set((s) => ({
         repliesByComment: {
           ...s.repliesByComment,
-          [commentId]: { ...s.repliesByComment[commentId], loading: false },
+          [commentId]: {
+            ...(s.repliesByComment[commentId] ?? {}),
+            loading: false,
+            hasMore: true,
+          },
         },
       }));
     }

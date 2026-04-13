@@ -30,7 +30,7 @@ export const FeedPage = () => {
         {/* FEED */}
         <div className="w-full grid grid-cols-1 md:max-w-[614px] mx-auto min-w-0">
           {/* STORIES */}
-          <div className="border-b border-zinc-200 md:border md:rounded-lg px-2 py-4 my-3">
+          <div className="stories border-b border-zinc-200 md:border md:rounded-lg px-2 py-4 my-3">
             <Swiper
               modules={[Navigation]}
               navigation
