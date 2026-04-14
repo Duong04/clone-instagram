@@ -1,7 +1,8 @@
 import React, { useRef } from "react";
 import { Reorder } from "motion/react";
-import { Image as ImageIcon, Plus, GripVertical, Trash2 } from "lucide-react";
+import { Image as ImageIcon, Plus, GripVertical, Trash2, Film } from "lucide-react";
 import { toast } from "sonner";
+import { getMediaType, getMediaUrl } from "~/shared/utils/media";
 
 interface StepSelectPhotosProps {
   selectedImages: string[];
@@ -17,28 +18,30 @@ export const StepSelectPhotos = ({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []) as File[];
 
-    const oversized = files.filter((f) => f.size > 10 * 1024 * 1024);
+    const oversized = files.filter((f) => f.size > 100 * 1024 * 1024); // 100MB cho video
     if (oversized.length > 0) {
-      toast.error("Each image must be under 10MB");
+      toast.error("Each file must be under 100MB");
       return;
     }
 
     if (selectedImages.length + files.length > 10) {
-      toast.error("Maximum 10 images allowed");
+      toast.error("Maximum 10 files allowed");
       return;
     }
     if (files.length === 0) return;
 
-    const newImages: string[] = [];
+    const newItems: string[] = [];
     let processed = 0;
 
     files.forEach((file: File) => {
+      const isVideo = file.type.startsWith("video/");
       const reader = new FileReader();
       reader.onloadend = () => {
-        newImages.push(reader.result as string);
+        const prefix = isVideo ? "video::" : "image::";
+        newItems.push(prefix + (reader.result as string));
         processed++;
         if (processed === files.length) {
-          onImagesChange([...selectedImages, ...newImages]);
+          onImagesChange([...selectedImages, ...newItems]);
         }
       };
       reader.readAsDataURL(file);
@@ -67,7 +70,7 @@ export const StepSelectPhotos = ({
           ref={fileInputRef}
           onChange={handleFileChange}
           className="hidden"
-          accept="image/*"
+          accept="image/*,video/*"
           multiple
         />
       </div>
@@ -92,7 +95,7 @@ export const StepSelectPhotos = ({
           ref={fileInputRef}
           onChange={handleFileChange}
           className="hidden"
-          accept="image/*"
+          accept="image/*,video/*"
           multiple
         />
       </div>
@@ -103,33 +106,51 @@ export const StepSelectPhotos = ({
         onReorder={onImagesChange}
         className="space-y-3"
       >
-        {selectedImages.map((img, index) => (
-          <Reorder.Item
-            key={img}
-            value={img}
-            className="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl p-3 flex items-center gap-4 group cursor-grab active:cursor-grabbing"
-          >
-            <GripVertical className="w-5 h-5 text-zinc-400 shrink-0" />
-            <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0">
-              <img
-                src={img}
-                alt={`Selected ${index}`}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium text-zinc-500 truncate">
-                Image {index + 1}
-              </p>
-            </div>
-            <button
-              onClick={() => removeImage(index)}
-              className="p-2 text-zinc-400 hover:text-red-500 transition-colors"
+        {selectedImages.map((item, index) => {
+          const type = getMediaType(item);
+          const url = getMediaUrl(item);
+          return (
+            <Reorder.Item
+              key={item}
+              value={item}
+              className="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl p-3 flex items-center gap-4 group cursor-grab active:cursor-grabbing"
             >
-              <Trash2 className="w-5 h-5" />
-            </button>
-          </Reorder.Item>
-        ))}
+              <GripVertical className="w-5 h-5 text-zinc-400 shrink-0" />
+              <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-zinc-100 dark:bg-zinc-700 relative">
+                {type === "video" ? (
+                  <>
+                    <video
+                      src={url}
+                      className="w-full h-full object-cover"
+                      muted
+                      preload="metadata"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                      <Film className="w-5 h-5 text-white" />
+                    </div>
+                  </>
+                ) : (
+                  <img
+                    src={url}
+                    alt={`Selected ${index}`}
+                    className="w-full h-full object-cover"
+                  />
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-medium text-zinc-500 truncate">
+                  {type === "video" ? "Video" : "Image"} {index + 1}
+                </p>
+              </div>
+              <button
+                onClick={() => removeImage(index)}
+                className="p-2 text-zinc-400 hover:text-red-500 transition-colors"
+              >
+                <Trash2 className="w-5 h-5" />
+              </button>
+            </Reorder.Item>
+          );
+        })}
       </Reorder.Group>
     </div>
   );

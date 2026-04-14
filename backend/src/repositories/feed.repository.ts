@@ -25,6 +25,12 @@ type ReelWithRelations = Prisma.ReelGetPayload<{
   }
 }>
 
+type DiscoveryCursor = {
+  postCursor?: string
+  reelCursor?: string
+  timestamp: string
+}
+
 class FeedRepository {
   async getHomeFeed(userId: string, limit: number = 10, cursor?: string): Promise<FeedResult<ResolvedFeedItem>> {
     const viewedIds = await this.getViewedIds(userId)
@@ -67,33 +73,64 @@ class FeedRepository {
     limit: number,
     cursor?: string
   ): Promise<FeedResult<ResolvedFeedItem>> {
-    const posts = await prisma.post.findMany({
-      where: { id: { notIn: viewedIds }, deleted_at: null },
-      include: {
-        user: { select: USER_SELECT },
-        media: { include: { media: true } }
-      },
-      orderBy: { created_at: 'desc' },
-      take: limit + 1,
-      cursor: cursor ? { id: cursor } : undefined,
-      skip: cursor ? 1 : 0
-    })
+    const decoded = cursor ? this.decodeCursor(cursor) : null
 
-    const hasNextPage = posts.length > limit
-    const pageItems = posts.slice(0, limit)
+    const [posts, reels] = await Promise.all([
+      prisma.post.findMany({
+        where: { id: { notIn: viewedIds }, deleted_at: null },
+        include: { user: { select: USER_SELECT }, media: { include: { media: true } } },
+        orderBy: { created_at: 'desc' },
+        take: limit + 1,
+        cursor: decoded?.postCursor ? { id: decoded.postCursor } : undefined,
+        skip: decoded?.postCursor ? 1 : 0
+      }),
+      prisma.reel.findMany({
+        where: { id: { notIn: viewedIds }, deleted_at: null },
+        include: { user: { select: USER_SELECT }, media: true },
+        orderBy: { created_at: 'desc' },
+        take: limit + 1,
+        cursor: decoded?.reelCursor ? { id: decoded.reelCursor } : undefined,
+        skip: decoded?.reelCursor ? 1 : 0
+      })
+    ])
+
+    const combined = [
+      ...posts.map((p) => ({ ...p, feed_type: ContentType.post })),
+      ...reels.map((r) => ({ ...r, feed_type: ContentType.reel }))
+    ]
+      .sort((a, b) => b.created_at.getTime() - a.created_at.getTime())
+      .slice(0, limit + 1)
+
+    const hasNextPage = combined.length > limit
+    const pageItems = combined.slice(0, limit)
+
+    const lastPost = [...pageItems].reverse().find((i) => i.feed_type === ContentType.post)
+    const lastReel = [...pageItems].reverse().find((i) => i.feed_type === ContentType.reel)
+
+    const nextCursor = hasNextPage
+      ? this.encodeCursor({
+          postCursor: lastPost?.id ?? decoded?.postCursor,
+          reelCursor: lastReel?.id ?? decoded?.reelCursor,
+          timestamp: pageItems.at(-1)!.created_at.toISOString()
+        })
+      : null
 
     return {
       data: pageItems.map((p) => ({
         ...p,
         feed_id: p.id,
-        feed_type: ContentType.post
+        media: p.feed_type === ContentType.reel ? (p.media ? [{ media: p.media, position: 0 }] : []) : (p.media ?? [])
       })),
-      meta: {
-        nextCursor: hasNextPage ? pageItems[pageItems.length - 1].id : null,
-        hasNextPage,
-        limit
-      }
+      meta: { nextCursor, hasNextPage, limit }
     }
+  }
+
+  private encodeCursor(cursor: DiscoveryCursor): string {
+    return Buffer.from(JSON.stringify(cursor)).toString('base64')
+  }
+
+  private decodeCursor(cursor: string): DiscoveryCursor {
+    return JSON.parse(Buffer.from(cursor, 'base64').toString())
   }
 
   private async resolveFeedContent(feedItems: FeedRow[]): Promise<ResolvedFeedItem[]> {

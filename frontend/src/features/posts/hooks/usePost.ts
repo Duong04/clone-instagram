@@ -2,6 +2,7 @@ import { useState } from "react";
 import { mediaApi } from "../api/mediaApi";
 import { postApi } from "../api/postApi";
 import { createPostSchema } from "../schemas/postSchema";
+import { getMediaType, getMediaUrl } from "~/shared/utils/media";
 
 export function usePost() {
   const [isLoading, setIsLoading] = useState(false);
@@ -24,9 +25,17 @@ export function usePost() {
         return false;
       }
 
-      const files = parsed.data.images.map((base64, i) => {
-        const blob = base64ToBlob(base64);
-        return new File([blob], `image-${i}.jpg`, { type: "image/jpeg" });
+      const files = parsed.data.images.map((item, i) => {
+        const mediaType = getMediaType(item);
+        const rawUrl = getMediaUrl(item);
+
+        const blob = base64ToBlob(rawUrl);
+
+        const isVideo = mediaType === "video";
+        const mimeType = isVideo ? "video/mp4" : "image/jpeg"; 
+        const fileName = isVideo ? `video-${i}.mp4` : `image-${i}.jpg`;
+
+        return new File([blob], fileName, { type: mimeType });
       });
 
       const formData = new FormData();
@@ -49,6 +58,7 @@ export function usePost() {
       return true;
     } catch (err: unknown) {
       if (err instanceof Error) {
+        console.log(err.message);
         setServerError(err.message);
       } else {
         setServerError("Failed to create post");

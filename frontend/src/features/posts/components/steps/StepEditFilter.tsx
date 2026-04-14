@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { cn } from "~/shared/utils/cn";
 import { FILTERS } from "../../constants";
+import { getMediaUrl, getMediaType } from "~/shared/utils/media";
 
 interface Filter {
   name: string;
@@ -15,8 +16,12 @@ interface StepEditFilterProps {
 }
 
 export const StepEditFilter = (props: StepEditFilterProps) => {
-  const { selectedImages, currentImageIndex, selectedFilter, onFilterChange } =
-    props;
+  const { selectedImages, currentImageIndex, selectedFilter, onFilterChange } = props;
+
+  const currentItem = selectedImages[currentImageIndex];
+  const mediaUrl = getMediaUrl(currentItem); 
+  const mediaType = getMediaType(currentItem);
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -40,11 +45,20 @@ export const StepEditFilter = (props: StepEditFilterProps) => {
                     : "border-transparent group-hover:border-zinc-300",
                 )}
               >
-                <img
-                  src={selectedImages[currentImageIndex]}
-                  alt={filter.name}
-                  className={cn("w-full h-full object-cover", filter.class)}
-                />
+                {mediaType === "video" ? (
+                  <video
+                    src={mediaUrl}
+                    className={cn("w-full h-full object-cover", filter.class)}
+                    muted
+                    preload="metadata"
+                  />
+                ) : (
+                  <img
+                    src={mediaUrl}
+                    alt={filter.name}
+                    className={cn("w-full h-full object-cover", filter.class)}
+                  />
+                )}
               </div>
               <span
                 className={cn(

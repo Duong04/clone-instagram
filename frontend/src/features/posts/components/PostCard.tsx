@@ -122,12 +122,12 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
         </button>
       </div>
 
-      {/* Image with Double Tap Like */}
       <div
         className="flex flex-col relative aspect-square bg-zinc-100 overflow-hidden cursor-pointer"
         onDoubleClick={onDoubleTap}
       >
-        {hasMultiple ? (
+        {
+        hasMultiple ? (
           <Swiper
             modules={[Pagination, Navigation]}
             pagination={true}

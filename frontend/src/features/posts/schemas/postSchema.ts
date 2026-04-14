@@ -5,7 +5,7 @@ export const createPostSchema = z.object({
   caption: z.string().max(2200, 'Caption too long').optional(),
   location: z.string().max(255).optional(),
   hashtags: z.string().optional(),
-  musicId: z.string().uuid().optional()
+  musicId: z.string().optional()
 })
 
 export type CreatePostInput = z.infer<typeof createPostSchema>

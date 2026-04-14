@@ -17,6 +17,8 @@ import { StepEditFilter } from "./steps/StepEditFilter";
 import { StepPostDetails } from "./steps/StepPostDetails";
 import { usePost } from "../hooks/usePost";
 import { toast } from "sonner";
+import { getMediaType, getMediaUrl } from "~/shared/utils/media";
+import { VideoPreview } from "./VideoPreview";
 
 export const CreatePostModal = ({ isOpen, onClose }: CreatePostModalProps) => {
   const [step, setStep] = useState(1);
@@ -79,6 +81,7 @@ export const CreatePostModal = ({ isOpen, onClose }: CreatePostModalProps) => {
       hashtags,
       musicId: selectedMusic?.id,
     });
+    console.log(success);
     if (success) {
       toast.success("Post shared successfully!");
       handleClose();
@@ -178,18 +181,26 @@ export const CreatePostModal = ({ isOpen, onClose }: CreatePostModalProps) => {
             ) : (
               <div className="w-full h-full flex items-center justify-center p-0 md:p-4 group">
                 <AnimatePresence mode="wait">
-                  <motion.img
-                    key={currentImageIndex}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    src={selectedImages[currentImageIndex]}
-                    alt="Preview"
-                    className={cn(
-                      "max-w-full max-h-full object-contain transition-all duration-300",
-                      selectedFilter.class,
-                    )}
-                  />
+                  {getMediaType(selectedImages[currentImageIndex]) ===
+                  "video" ? (
+                    <VideoPreview
+                      src={getMediaUrl(selectedImages[currentImageIndex])}
+                      filterClass={selectedFilter.class}
+                    />
+                  ) : (
+                    <motion.img
+                      key={currentImageIndex}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      src={getMediaUrl(selectedImages[currentImageIndex])}
+                      alt="Preview"
+                      className={cn(
+                        "max-w-full max-h-full object-contain transition-all duration-300",
+                        selectedFilter.class,
+                      )}
+                    />
+                  )}
                 </AnimatePresence>
 
                 {selectedImages.length > 1 && (
