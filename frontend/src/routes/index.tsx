@@ -5,13 +5,13 @@ import AuthLayout from '~/layouts/AuthLayout'
 import MainLayout from '~/layouts/MainLayout'
 import { ExplorePage } from '~/pages/Explore'
 import { Forbidden } from '~/pages/Forbidden'
-import { FeedPage } from '~/pages/Feed'
-import { LoginPage } from '~/pages/Login'
+import { FeedPage } from '~/features/feed/pages'
+import { LoginPage } from '~/features/auth/pages/LoginPage'
 import { MessagesPage } from '~/pages/Messages'
 import { NotFound } from '~/pages/NotFound'
-import { ProfilePage } from '~/pages/Profile'
+import { ProfilePage } from '~/features/profile/pages/Profile'
 import { ReelsPage } from '~/pages/Reels'
-import { RegisterPage } from '~/pages/Register'
+import { RegisterPage } from '~/features/auth/pages/RegisterPage'
 
 export const router = createBrowserRouter([
   {

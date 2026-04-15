@@ -3,12 +3,30 @@ import type { Prisma } from '~/generated/prisma/client'
 
 class UserRepository {
   async findByEmail(email: string) {
-    return prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { email },
       include: {
-        avatar: true
+        avatar: true,
+        _count: {
+          select: {
+            followers: true,
+            following: true,
+            posts: true,
+            reels: true
+          }
+        }
       }
     })
+
+    if (!user) return null
+
+    return {
+      ...user,
+      _count: {
+        ...user._count,
+        total_content: user._count.posts + user._count.reels
+      }
+    }
   }
 
   async findByUsername(username: string) {
@@ -27,12 +45,30 @@ class UserRepository {
   }
 
   async findById(id: string) {
-    return prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id },
       include: {
-        avatar: true
+        avatar: true,
+        _count: {
+          select: {
+            followers: true,
+            following: true,
+            posts: true,
+            reels: true
+          }
+        }
       }
     })
+
+    if (!user) return null
+
+    return {
+      ...user,
+      _count: {
+        ...user._count,
+        total_content: user._count.posts + user._count.reels
+      }
+    }
   }
 }
 

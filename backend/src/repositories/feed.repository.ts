@@ -1,6 +1,6 @@
 import { prisma } from '~/config/database'
 import { ContentType, Prisma } from '~/generated/prisma/client'
-import { ResolvedFeedItem, FeedResult } from '~/types/feed'
+import { ResolvedFeedItem, FeedResult } from '~/types/feed.type'
 
 const USER_SELECT = {
   id: true,

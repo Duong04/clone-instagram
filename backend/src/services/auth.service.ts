@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs'
 import { generateAccessToken, generateRefreshToken } from '~/utils/jwt'
 import { RegisterInput } from '~/types/user.type'
 import { redis } from '~/config/redis'
+import { UserAuth } from '~/types/auth.type'
 
 class AuthService {
   async register(data: RegisterInput) {
@@ -14,7 +15,7 @@ class AuthService {
     if (userExist) throw new Error('Email already exists')
     if (userNameExist) throw new Error('Username already exists')
 
-    const hashedPassword = await bcrypt.hash(data.password, 10)
+    const hashedPassword = await bcrypt.hash(data.password, 12)
 
     const user = await userRepository.create({
       ...data,
@@ -30,6 +31,8 @@ class AuthService {
       email: user.email,
       name: user.name,
       username: user.username,
+      bio: user.bio,
+      is_private: user.is_private,
       avatar: {
         url: user.avatar?.url
       }
@@ -53,15 +56,7 @@ class AuthService {
     const refreshToken = await generateRefreshToken(user.id)
 
     return {
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        username: user.username,
-        avatar: {
-          url: user.avatar?.url
-        }
-      },
+      user: this.formatUserResponse(user),
       accessToken,
       refreshToken
     }
@@ -74,15 +69,7 @@ class AuthService {
       throw new Error('User not found')
     }
 
-    return {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      username: user.username,
-      avatar: {
-        url: user.avatar?.url
-      }
-    }
+    return this.formatUserResponse(user)
   }
 
   async refresh(refreshToken: string) {
@@ -104,15 +91,7 @@ class AuthService {
     const newRefreshToken = await generateRefreshToken(userId)
 
     return {
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        username: user.username,
-        avatar: {
-          url: user.avatar?.url
-        }
-      },
+      user: this.formatUserResponse(user),
       accessToken: newAccessToken,
       refreshToken: newRefreshToken
     }
@@ -121,6 +100,21 @@ class AuthService {
   async logout(refreshToken: string) {
     await redis.del(`refresh:${refreshToken}`)
     return { message: 'Logged out' }
+  }
+
+  private formatUserResponse(user: UserAuth) {
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      username: user.username,
+      bio: user.bio,
+      is_private: user.is_private,
+      _count: user._count,
+      avatar: {
+        url: user.avatar?.url || 'https://res.cloudinary.com/.../default_avatar.jpg'
+      }
+    }
   }
 }
 

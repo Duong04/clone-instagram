@@ -3,7 +3,18 @@ export interface User {
   email: string
   username: string
   name: string
+  bio?: string
+  is_private: boolean
   avatar?: Avatar
+  _count: Count
+}
+
+export interface Count {
+  followers: number
+  following: number
+  posts: number
+  reels: number
+  total_content: number
 }
 
 export interface Avatar {

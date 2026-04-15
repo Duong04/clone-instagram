@@ -8,8 +8,8 @@ import {
   Heart,
   MessageCircle,
 } from "lucide-react";
-import { MOCK_USER } from "../mockData";
 import { cn } from "~/shared/utils/cn";
+import { useAuthStore } from "~/store/authStore";
 
 type TabType = "posts" | "saved" | "tagged";
 
@@ -36,6 +36,7 @@ const taggedPosts = Array.from({ length: 4 }).map((_, i) => ({
 
 export const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState<TabType>("posts");
+  const { user } = useAuthStore();
 
   const getActiveData = () => {
     switch (activeTab) {
@@ -84,8 +85,8 @@ export const ProfilePage = () => {
             className="w-20 h-20 md:w-40 md:h-40 rounded-full p-1 border border-zinc-200 cursor-pointer"
           >
             <img
-              src={MOCK_USER.avatar}
-              alt={MOCK_USER.username}
+              src={user?.avatar?.url}
+              alt={user?.username}
               className="w-full h-full rounded-full object-cover"
               referrerPolicy="no-referrer"
             />
@@ -94,7 +95,7 @@ export const ProfilePage = () => {
 
         <div className="flex-1">
           <div className="flex flex-col md:flex-row items-center gap-4 mb-6">
-            <h2 className="text-xl font-normal">{MOCK_USER.username}</h2>
+            <h2 className="text-xl font-normal">{user?.username}</h2>
             <div className="flex gap-2">
               <button className="bg-zinc-100 hover:bg-zinc-200 px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors">
                 Edit Profile
@@ -110,20 +111,20 @@ export const ProfilePage = () => {
 
           <div className="flex justify-center md:justify-start gap-10 mb-6 border-y md:border-none py-3 md:py-0">
             <div className="text-center md:text-left">
-              <span className="font-bold">12</span> posts
+              <span className="font-bold">{ user?._count.total_content }</span> posts
             </div>
             <div className="text-center md:text-left">
-              <span className="font-bold">1.2K</span> followers
+              <span className="font-bold">{ user?._count.followers }</span> followers
             </div>
             <div className="text-center md:text-left">
-              <span className="font-bold">850</span> following
+              <span className="font-bold">{ user?._count.following }</span> following
             </div>
           </div>
 
           <div className="text-center md:text-left">
-            <p className="font-bold text-sm mb-1">{MOCK_USER.fullName}</p>
+            <p className="font-bold text-sm mb-1">{user?.name}</p>
             <p className="text-sm whitespace-pre-line">
-              Digital Creator 📸 Tech Enthusiast 💻 Coffee Lover ☕
+              { user?.bio ?? 'No bio.🫠' }
             </p>
           </div>
         </div>

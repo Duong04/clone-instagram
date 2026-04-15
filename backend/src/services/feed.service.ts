@@ -1,7 +1,7 @@
 import feedRepository from '~/repositories/feed.repository'
 import { ContentType } from '~/generated/prisma/client'
 import { prisma } from '~/config/database'
-import { ResolvedFeedItem } from '~/types/feed'
+import { ResolvedFeedItem } from '~/types/feed.type'
 
 class FeedService {
   async getHomeFeed(userId: string, limit: number = 10, cursor?: string) {
