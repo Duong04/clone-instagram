@@ -1,6 +1,7 @@
 import feedRepository from '~/repositories/feed.repository'
+import likeRepository from '~/repositories/like.repository'
+import saveRepository from '~/repositories/save.repository'
 import { ContentType } from '~/generated/prisma/client'
-import { prisma } from '~/config/database'
 import { ResolvedFeedItem } from '~/types/feed.type'
 
 class FeedService {
@@ -18,19 +19,13 @@ class FeedService {
   private async enrichFeedMetadata(userId: string, items: ResolvedFeedItem[]) {
     const targetIds = items.map((i) => i.id)
 
-    const [userLikes, userSaves] = await Promise.all([
-      prisma.like.findMany({
-        where: { user_id: userId, target_id: { in: targetIds } },
-        select: { target_id: true }
-      }),
-      prisma.save.findMany({
-        where: { user_id: userId, target_id: { in: targetIds } },
-        select: { target_id: true }
-      })
+    const [likedTargetIds, savedTargetIds] = await Promise.all([
+      likeRepository.getLikedTargetIds(userId, targetIds),
+      saveRepository.getSavedTargetIds(userId, targetIds)
     ])
 
-    const likedIds = new Set(userLikes.map((l) => l.target_id))
-    const savedIds = new Set(userSaves.map((s) => s.target_id))
+    const likedIds = new Set(likedTargetIds)
+    const savedIds = new Set(savedTargetIds)
 
     return items.map((item) => ({
       ...item,

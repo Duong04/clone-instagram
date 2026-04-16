@@ -4,7 +4,7 @@ import { router } from "~/routes";
 import "./App.css";
 import "swiper/swiper-bundle.css";
 import { ModalProvider } from "./shared/context/modal/modalProvider";
-import { useAuthStore } from "./store/authStore";
+import { useAuthStore } from "./store/useAuthStore";
 import { Toaster } from 'sonner'
 
 function App() {

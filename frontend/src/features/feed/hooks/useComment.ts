@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
-import { useCommentStore } from "../store/commentStore";
-import { useFeedStore } from "../store/feedStore";
+import { useCommentStore } from "../store/useCommentStore";
+import { useFeedStore } from "../store/useFeedStore";
 import { commentApi } from "../api/commentApi";
 import type { TargetType } from "~/shared/types/feed";
 import { useDebounceMap } from "~/shared/hooks/useDebounceMap";

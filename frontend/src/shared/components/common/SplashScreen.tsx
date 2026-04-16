@@ -52,7 +52,7 @@ export const SplashScreen = () => {
               className="relative z-10"
             >
               <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/600px-Instagram_icon.png"
+                src="/public/logo-favicon.png"
                 alt="Instagram"
                 className="w-20 h-20 drop-shadow-xl"
               />

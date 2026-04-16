@@ -17,7 +17,7 @@ import { MediaSlide } from "~/shared/components/cards/MediaSlide";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
 import { useLike } from "~/features/feed/hooks/useLike";
-import { useFeedStore } from "~/features/feed/store/feedStore";
+import { useFeedStore } from "~/features/feed/store/useFeedStore";
 import { useComment } from "~/features/feed/hooks/useComment";
 import type { Comment } from "~/shared/types/comment";
 

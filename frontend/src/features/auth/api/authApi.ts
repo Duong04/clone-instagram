@@ -17,7 +17,7 @@ export const authApi = {
   },
  
   getMe: async () => {
-    const res = await api.get('/auth/profile')
+    const res = await api.get('/users/me')
     return res.data
   },
 }

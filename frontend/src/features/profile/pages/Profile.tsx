@@ -9,7 +9,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { cn } from "~/shared/utils/cn";
-import { useAuthStore } from "~/store/authStore";
+import { useAuthStore } from "~/store/useAuthStore";
 
 type TabType = "posts" | "saved" | "tagged";
 

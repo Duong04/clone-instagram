@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import { Plus } from "lucide-react";
-import { useAuthStore } from "~/store/authStore";
+import { useAuthStore } from "~/store/useAuthStore";
 import { FeedList } from "../components/FeedList";
 import { StorySkeleton } from "~/shared/components/common/Skeleton";
 import { useEffect, useState } from "react";

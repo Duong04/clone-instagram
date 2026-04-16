@@ -1,4 +1,4 @@
-import { useFeedStore } from "../store/feedStore";
+import { useFeedStore } from "../store/useFeedStore";
 import { feedApi } from "../api/feedApi";
 import type { TargetType } from "~/shared/types/feed";
 import { useDebounceMap } from "~/shared/hooks/useDebounceMap";

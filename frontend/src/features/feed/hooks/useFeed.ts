@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { useFeedStore } from '../store/feedStore'
+import { useFeedStore } from '../store/useFeedStore'
 
 export const useFeed = () => {
   const feed = useFeedStore((s) => s.feed)

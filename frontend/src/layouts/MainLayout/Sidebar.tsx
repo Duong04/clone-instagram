@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { cn } from "~/shared/utils/cn";
 import { motion } from "motion/react";
-import { useAuthStore } from "~/store/authStore";
+import { useAuthStore } from "~/store/useAuthStore";
 import { Avatar, AvatarImage } from "~/shared/components/ui/avatar";
 import {
   DropdownMenu,

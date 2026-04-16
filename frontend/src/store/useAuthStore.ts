@@ -6,6 +6,7 @@ interface AuthStore {
   user: User | null
   isLoggedIn: boolean
   isLoading: boolean
+  isInitialized: boolean 
 
   register: (data: RegisterRequest) => Promise<void>
   login: (data: LoginRequest) => Promise<void>
@@ -17,6 +18,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
   user: null,
   isLoggedIn: false,
   isLoading: false,
+  isInitialized: false,
 
   register: async (data) => {
     set({ isLoading: true })
@@ -50,7 +52,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
     } catch {
       set({ user: null, isLoggedIn: false })
     } finally {
-      set({ isLoading: false })
+      set({ isInitialized: true })
     }
   }
 }))

@@ -1,11 +1,11 @@
 import { Navigate } from 'react-router-dom'
 import { SplashScreen } from '~/shared/components/common/SplashScreen'
-import { useAuthStore } from '~/store/authStore'
+import { useAuthStore } from '~/store/useAuthStore'
 
 export const PublicRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isLoggedIn, isLoading } = useAuthStore() 
+  const { isLoggedIn, isInitialized } = useAuthStore() 
 
-  if (isLoading) return <SplashScreen />
+  if (!isInitialized) return <SplashScreen />
 
   if (isLoggedIn) {
     return <Navigate to="/" replace />

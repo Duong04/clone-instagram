@@ -1,8 +1,16 @@
 import { Prisma, ContentType } from '~/generated/prisma/client'
+import { prisma } from '~/config/database'
 
 type TX = Prisma.TransactionClient
 
 class LikeRepository {
+  async getLikedTargetIds(userId: string, targetIds: string[]): Promise<string[]> {
+    const likes = await prisma.like.findMany({
+      where: { user_id: userId, target_id: { in: targetIds } },
+      select: { target_id: true }
+    })
+    return likes.map((l) => l.target_id)
+  }
   async createLike(tx: TX, userId: string, targetId: string, targetType: ContentType) {
     const existing = await tx.like.findUnique({
       where: {
