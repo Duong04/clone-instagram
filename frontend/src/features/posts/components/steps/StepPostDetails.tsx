@@ -10,7 +10,7 @@ import {
   Pause,
   X,
 } from "lucide-react";
-import type { Song } from "../../types";
+import type { Song } from "~/shared/types/post";
 import { MusicPicker } from "../MusicPicker";
 import { useAuthStore } from "~/store/useAuthStore";
 

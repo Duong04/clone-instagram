@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { cn } from "~/shared/utils/cn";
 import { FILTERS } from "../constants";
-import type { Song, CreatePostModalProps } from "../types";
+import type { Song } from "~/shared/types/post";
 import { useAudioPlayer } from "../hooks/useAudioPlayer";
 import { StepSelectPhotos } from "./steps/StepSelectPhotos";
 import { StepEditFilter } from "./steps/StepEditFilter";
@@ -19,6 +19,12 @@ import { usePost } from "../hooks/usePost";
 import { toast } from "sonner";
 import { getMediaType, getMediaUrl } from "~/shared/utils/media";
 import { VideoPreview } from "./VideoPreview";
+
+interface CreatePostModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
 
 export const CreatePostModal = ({ isOpen, onClose }: CreatePostModalProps) => {
   const [step, setStep] = useState(1);

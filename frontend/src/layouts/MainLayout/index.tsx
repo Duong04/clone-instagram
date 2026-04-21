@@ -6,7 +6,7 @@ import { BottomNav } from './BottomNav'
 import { MobileHeader } from "./MobileHeader"
 import { cn } from "~/shared/utils/cn"
 import { useModal } from "~/shared/context/modal/modalContext"
-import { CreatePostModal } from "~/features/posts"
+import { CreatePostModal } from "~/features/posts/components/CreatePostModal"
 import { PostDetailModal } from "~/features/posts/components/PostDetailModal"
 
 export default function MainLayout() {

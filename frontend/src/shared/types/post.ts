@@ -5,8 +5,3 @@ export interface Song {
   cover: string;
   previewUrl?: string;
 }
-
-export interface CreatePostModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}

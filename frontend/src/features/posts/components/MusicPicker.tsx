@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import { ArrowLeft, Search as SearchIcon, Play, Pause } from "lucide-react";
-import type { Song } from "../types";
+import type { Song } from "~/shared/types/post";
 
 interface MusicPickerProps {
   onClose: () => void;

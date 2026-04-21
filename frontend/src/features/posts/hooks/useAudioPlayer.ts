@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import type { Song } from "../types";
+import type { Song } from "~/shared/types/post";
 
 export const useAudioPlayer = (selectedMusic: Song | null, step: number) => {
   const [playingSongId, setPlayingSongId] = useState<string | null>(null);
