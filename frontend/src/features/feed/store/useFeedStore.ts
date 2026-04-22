@@ -13,7 +13,7 @@ interface FeedStore {
   reset: () => void;
 }
 
-const FEED_PAGE_SIZE = 1;
+const FEED_PAGE_SIZE = 3;
 
 export const useFeedStore = create<FeedStore>((set, get) => ({
   feed: [],

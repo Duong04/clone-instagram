@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { authApi } from '../features/auth/api/authApi'
+import { authApi } from '../api/authApi'
 import type { User, LoginRequest, RegisterRequest } from '~/shared/types/auth'
 
 interface AuthStore {

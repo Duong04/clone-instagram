@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import type { Song } from "~/shared/types/post";
 import { MusicPicker } from "../MusicPicker";
-import { useAuthStore } from "~/store/useAuthStore";
+import { useAuthStore } from "~/features/auth/store/useAuthStore";
 
 interface StepPostDetailsProps {
   caption: string;

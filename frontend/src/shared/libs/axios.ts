@@ -1,5 +1,5 @@
 import axios, { type InternalAxiosRequestConfig } from 'axios'
-import { useAuthStore } from '~/store/useAuthStore'
+import { useAuthStore } from '~/features/auth/store/useAuthStore'
 
 interface CustomConfig extends InternalAxiosRequestConfig {
   _retry?: boolean
