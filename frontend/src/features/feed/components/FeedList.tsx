@@ -2,12 +2,14 @@ import { useFeed } from "../hooks/useFeed";
 import { PostCard } from "~/features/posts/components/PostCard";
 import { PostSkeleton } from "~/shared/components/common/Skeleton";
 import { useIntersection } from "~/shared/hooks/useIntersection";
+import { useCallback } from "react";
 
 export const FeedList = () => {
   const { feed, isLoading, hasMore, error, loadMore } = useFeed();
-  const bottomRef = useIntersection(() => {
-    if (hasMore && !isLoading) loadMore();
-  });
+  const handleLoadMore = useCallback(() => {
+    if (hasMore && !isLoading && !error) loadMore();
+  }, [error, hasMore, isLoading, loadMore]);
+  const bottomRef = useIntersection(handleLoadMore);
 
   return (
     <div>
