@@ -4,7 +4,7 @@ A full-stack Instagram-inspired social media app built with React, TypeScript, E
 
 The project includes authentication, a protected feed, media upload, post creation, image filters, music selection, likes, comments, profile pages, and responsive navigation.
 
-## Screenshots
+## Interface UI
 
 | Home feed | Post detail |
 | --- | --- |
