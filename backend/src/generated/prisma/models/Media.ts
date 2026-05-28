@@ -253,6 +253,7 @@ export type MediaWhereInput = {
   story?: Prisma.StoryListRelationFilter
   reel?: Prisma.ReelListRelationFilter
   messages?: Prisma.MessageListRelationFilter
+  conversations?: Prisma.ConversationListRelationFilter
 }
 
 export type MediaOrderByWithRelationInput = {
@@ -269,6 +270,7 @@ export type MediaOrderByWithRelationInput = {
   story?: Prisma.StoryOrderByRelationAggregateInput
   reel?: Prisma.ReelOrderByRelationAggregateInput
   messages?: Prisma.MessageOrderByRelationAggregateInput
+  conversations?: Prisma.ConversationOrderByRelationAggregateInput
 }
 
 export type MediaWhereUniqueInput = Prisma.AtLeast<{
@@ -288,6 +290,7 @@ export type MediaWhereUniqueInput = Prisma.AtLeast<{
   story?: Prisma.StoryListRelationFilter
   reel?: Prisma.ReelListRelationFilter
   messages?: Prisma.MessageListRelationFilter
+  conversations?: Prisma.ConversationListRelationFilter
 }, "id" | "public_id">
 
 export type MediaOrderByWithAggregationInput = {
@@ -334,6 +337,7 @@ export type MediaCreateInput = {
   story?: Prisma.StoryCreateNestedManyWithoutMediaInput
   reel?: Prisma.ReelCreateNestedManyWithoutMediaInput
   messages?: Prisma.MessageCreateNestedManyWithoutMediaInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutAvatarInput
 }
 
 export type MediaUncheckedCreateInput = {
@@ -350,6 +354,7 @@ export type MediaUncheckedCreateInput = {
   story?: Prisma.StoryUncheckedCreateNestedManyWithoutMediaInput
   reel?: Prisma.ReelUncheckedCreateNestedManyWithoutMediaInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutMediaInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAvatarInput
 }
 
 export type MediaUpdateInput = {
@@ -366,6 +371,7 @@ export type MediaUpdateInput = {
   story?: Prisma.StoryUpdateManyWithoutMediaNestedInput
   reel?: Prisma.ReelUpdateManyWithoutMediaNestedInput
   messages?: Prisma.MessageUpdateManyWithoutMediaNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutAvatarNestedInput
 }
 
 export type MediaUncheckedUpdateInput = {
@@ -382,6 +388,7 @@ export type MediaUncheckedUpdateInput = {
   story?: Prisma.StoryUncheckedUpdateManyWithoutMediaNestedInput
   reel?: Prisma.ReelUncheckedUpdateManyWithoutMediaNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutMediaNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAvatarNestedInput
 }
 
 export type MediaCreateManyInput = {
@@ -530,6 +537,22 @@ export type MediaUpdateOneRequiredWithoutStoryNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MediaUpdateToOneWithWhereWithoutStoryInput, Prisma.MediaUpdateWithoutStoryInput>, Prisma.MediaUncheckedUpdateWithoutStoryInput>
 }
 
+export type MediaCreateNestedOneWithoutConversationsInput = {
+  create?: Prisma.XOR<Prisma.MediaCreateWithoutConversationsInput, Prisma.MediaUncheckedCreateWithoutConversationsInput>
+  connectOrCreate?: Prisma.MediaCreateOrConnectWithoutConversationsInput
+  connect?: Prisma.MediaWhereUniqueInput
+}
+
+export type MediaUpdateOneWithoutConversationsNestedInput = {
+  create?: Prisma.XOR<Prisma.MediaCreateWithoutConversationsInput, Prisma.MediaUncheckedCreateWithoutConversationsInput>
+  connectOrCreate?: Prisma.MediaCreateOrConnectWithoutConversationsInput
+  upsert?: Prisma.MediaUpsertWithoutConversationsInput
+  disconnect?: Prisma.MediaWhereInput | boolean
+  delete?: Prisma.MediaWhereInput | boolean
+  connect?: Prisma.MediaWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MediaUpdateToOneWithWhereWithoutConversationsInput, Prisma.MediaUpdateWithoutConversationsInput>, Prisma.MediaUncheckedUpdateWithoutConversationsInput>
+}
+
 export type MediaCreateNestedOneWithoutMessagesInput = {
   create?: Prisma.XOR<Prisma.MediaCreateWithoutMessagesInput, Prisma.MediaUncheckedCreateWithoutMessagesInput>
   connectOrCreate?: Prisma.MediaCreateOrConnectWithoutMessagesInput
@@ -559,6 +582,7 @@ export type MediaCreateWithoutUser_avatarsInput = {
   story?: Prisma.StoryCreateNestedManyWithoutMediaInput
   reel?: Prisma.ReelCreateNestedManyWithoutMediaInput
   messages?: Prisma.MessageCreateNestedManyWithoutMediaInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutAvatarInput
 }
 
 export type MediaUncheckedCreateWithoutUser_avatarsInput = {
@@ -574,6 +598,7 @@ export type MediaUncheckedCreateWithoutUser_avatarsInput = {
   story?: Prisma.StoryUncheckedCreateNestedManyWithoutMediaInput
   reel?: Prisma.ReelUncheckedCreateNestedManyWithoutMediaInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutMediaInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAvatarInput
 }
 
 export type MediaCreateOrConnectWithoutUser_avatarsInput = {
@@ -605,6 +630,7 @@ export type MediaUpdateWithoutUser_avatarsInput = {
   story?: Prisma.StoryUpdateManyWithoutMediaNestedInput
   reel?: Prisma.ReelUpdateManyWithoutMediaNestedInput
   messages?: Prisma.MessageUpdateManyWithoutMediaNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutAvatarNestedInput
 }
 
 export type MediaUncheckedUpdateWithoutUser_avatarsInput = {
@@ -620,6 +646,7 @@ export type MediaUncheckedUpdateWithoutUser_avatarsInput = {
   story?: Prisma.StoryUncheckedUpdateManyWithoutMediaNestedInput
   reel?: Prisma.ReelUncheckedUpdateManyWithoutMediaNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutMediaNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAvatarNestedInput
 }
 
 export type MediaCreateWithoutPost_mediaInput = {
@@ -635,6 +662,7 @@ export type MediaCreateWithoutPost_mediaInput = {
   story?: Prisma.StoryCreateNestedManyWithoutMediaInput
   reel?: Prisma.ReelCreateNestedManyWithoutMediaInput
   messages?: Prisma.MessageCreateNestedManyWithoutMediaInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutAvatarInput
 }
 
 export type MediaUncheckedCreateWithoutPost_mediaInput = {
@@ -650,6 +678,7 @@ export type MediaUncheckedCreateWithoutPost_mediaInput = {
   story?: Prisma.StoryUncheckedCreateNestedManyWithoutMediaInput
   reel?: Prisma.ReelUncheckedCreateNestedManyWithoutMediaInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutMediaInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAvatarInput
 }
 
 export type MediaCreateOrConnectWithoutPost_mediaInput = {
@@ -681,6 +710,7 @@ export type MediaUpdateWithoutPost_mediaInput = {
   story?: Prisma.StoryUpdateManyWithoutMediaNestedInput
   reel?: Prisma.ReelUpdateManyWithoutMediaNestedInput
   messages?: Prisma.MessageUpdateManyWithoutMediaNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutAvatarNestedInput
 }
 
 export type MediaUncheckedUpdateWithoutPost_mediaInput = {
@@ -696,6 +726,7 @@ export type MediaUncheckedUpdateWithoutPost_mediaInput = {
   story?: Prisma.StoryUncheckedUpdateManyWithoutMediaNestedInput
   reel?: Prisma.ReelUncheckedUpdateManyWithoutMediaNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutMediaNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAvatarNestedInput
 }
 
 export type MediaCreateWithoutReelInput = {
@@ -711,6 +742,7 @@ export type MediaCreateWithoutReelInput = {
   post_media?: Prisma.PostMediaCreateNestedManyWithoutMediaInput
   story?: Prisma.StoryCreateNestedManyWithoutMediaInput
   messages?: Prisma.MessageCreateNestedManyWithoutMediaInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutAvatarInput
 }
 
 export type MediaUncheckedCreateWithoutReelInput = {
@@ -726,6 +758,7 @@ export type MediaUncheckedCreateWithoutReelInput = {
   post_media?: Prisma.PostMediaUncheckedCreateNestedManyWithoutMediaInput
   story?: Prisma.StoryUncheckedCreateNestedManyWithoutMediaInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutMediaInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAvatarInput
 }
 
 export type MediaCreateOrConnectWithoutReelInput = {
@@ -757,6 +790,7 @@ export type MediaUpdateWithoutReelInput = {
   post_media?: Prisma.PostMediaUpdateManyWithoutMediaNestedInput
   story?: Prisma.StoryUpdateManyWithoutMediaNestedInput
   messages?: Prisma.MessageUpdateManyWithoutMediaNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutAvatarNestedInput
 }
 
 export type MediaUncheckedUpdateWithoutReelInput = {
@@ -772,6 +806,7 @@ export type MediaUncheckedUpdateWithoutReelInput = {
   post_media?: Prisma.PostMediaUncheckedUpdateManyWithoutMediaNestedInput
   story?: Prisma.StoryUncheckedUpdateManyWithoutMediaNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutMediaNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAvatarNestedInput
 }
 
 export type MediaCreateWithoutStoryInput = {
@@ -787,6 +822,7 @@ export type MediaCreateWithoutStoryInput = {
   post_media?: Prisma.PostMediaCreateNestedManyWithoutMediaInput
   reel?: Prisma.ReelCreateNestedManyWithoutMediaInput
   messages?: Prisma.MessageCreateNestedManyWithoutMediaInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutAvatarInput
 }
 
 export type MediaUncheckedCreateWithoutStoryInput = {
@@ -802,6 +838,7 @@ export type MediaUncheckedCreateWithoutStoryInput = {
   post_media?: Prisma.PostMediaUncheckedCreateNestedManyWithoutMediaInput
   reel?: Prisma.ReelUncheckedCreateNestedManyWithoutMediaInput
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutMediaInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAvatarInput
 }
 
 export type MediaCreateOrConnectWithoutStoryInput = {
@@ -833,6 +870,7 @@ export type MediaUpdateWithoutStoryInput = {
   post_media?: Prisma.PostMediaUpdateManyWithoutMediaNestedInput
   reel?: Prisma.ReelUpdateManyWithoutMediaNestedInput
   messages?: Prisma.MessageUpdateManyWithoutMediaNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutAvatarNestedInput
 }
 
 export type MediaUncheckedUpdateWithoutStoryInput = {
@@ -846,6 +884,87 @@ export type MediaUncheckedUpdateWithoutStoryInput = {
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user_avatars?: Prisma.UserUncheckedUpdateManyWithoutAvatarNestedInput
   post_media?: Prisma.PostMediaUncheckedUpdateManyWithoutMediaNestedInput
+  reel?: Prisma.ReelUncheckedUpdateManyWithoutMediaNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutMediaNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAvatarNestedInput
+}
+
+export type MediaCreateWithoutConversationsInput = {
+  id?: string
+  public_id: string
+  url: string
+  media_type: string
+  width?: number | null
+  height?: number | null
+  duration?: number | null
+  created_at?: Date | string
+  user_avatars?: Prisma.UserCreateNestedManyWithoutAvatarInput
+  post_media?: Prisma.PostMediaCreateNestedManyWithoutMediaInput
+  story?: Prisma.StoryCreateNestedManyWithoutMediaInput
+  reel?: Prisma.ReelCreateNestedManyWithoutMediaInput
+  messages?: Prisma.MessageCreateNestedManyWithoutMediaInput
+}
+
+export type MediaUncheckedCreateWithoutConversationsInput = {
+  id?: string
+  public_id: string
+  url: string
+  media_type: string
+  width?: number | null
+  height?: number | null
+  duration?: number | null
+  created_at?: Date | string
+  user_avatars?: Prisma.UserUncheckedCreateNestedManyWithoutAvatarInput
+  post_media?: Prisma.PostMediaUncheckedCreateNestedManyWithoutMediaInput
+  story?: Prisma.StoryUncheckedCreateNestedManyWithoutMediaInput
+  reel?: Prisma.ReelUncheckedCreateNestedManyWithoutMediaInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutMediaInput
+}
+
+export type MediaCreateOrConnectWithoutConversationsInput = {
+  where: Prisma.MediaWhereUniqueInput
+  create: Prisma.XOR<Prisma.MediaCreateWithoutConversationsInput, Prisma.MediaUncheckedCreateWithoutConversationsInput>
+}
+
+export type MediaUpsertWithoutConversationsInput = {
+  update: Prisma.XOR<Prisma.MediaUpdateWithoutConversationsInput, Prisma.MediaUncheckedUpdateWithoutConversationsInput>
+  create: Prisma.XOR<Prisma.MediaCreateWithoutConversationsInput, Prisma.MediaUncheckedCreateWithoutConversationsInput>
+  where?: Prisma.MediaWhereInput
+}
+
+export type MediaUpdateToOneWithWhereWithoutConversationsInput = {
+  where?: Prisma.MediaWhereInput
+  data: Prisma.XOR<Prisma.MediaUpdateWithoutConversationsInput, Prisma.MediaUncheckedUpdateWithoutConversationsInput>
+}
+
+export type MediaUpdateWithoutConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  public_id?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  media_type?: Prisma.StringFieldUpdateOperationsInput | string
+  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user_avatars?: Prisma.UserUpdateManyWithoutAvatarNestedInput
+  post_media?: Prisma.PostMediaUpdateManyWithoutMediaNestedInput
+  story?: Prisma.StoryUpdateManyWithoutMediaNestedInput
+  reel?: Prisma.ReelUpdateManyWithoutMediaNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutMediaNestedInput
+}
+
+export type MediaUncheckedUpdateWithoutConversationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  public_id?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  media_type?: Prisma.StringFieldUpdateOperationsInput | string
+  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user_avatars?: Prisma.UserUncheckedUpdateManyWithoutAvatarNestedInput
+  post_media?: Prisma.PostMediaUncheckedUpdateManyWithoutMediaNestedInput
+  story?: Prisma.StoryUncheckedUpdateManyWithoutMediaNestedInput
   reel?: Prisma.ReelUncheckedUpdateManyWithoutMediaNestedInput
   messages?: Prisma.MessageUncheckedUpdateManyWithoutMediaNestedInput
 }
@@ -863,6 +982,7 @@ export type MediaCreateWithoutMessagesInput = {
   post_media?: Prisma.PostMediaCreateNestedManyWithoutMediaInput
   story?: Prisma.StoryCreateNestedManyWithoutMediaInput
   reel?: Prisma.ReelCreateNestedManyWithoutMediaInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutAvatarInput
 }
 
 export type MediaUncheckedCreateWithoutMessagesInput = {
@@ -878,6 +998,7 @@ export type MediaUncheckedCreateWithoutMessagesInput = {
   post_media?: Prisma.PostMediaUncheckedCreateNestedManyWithoutMediaInput
   story?: Prisma.StoryUncheckedCreateNestedManyWithoutMediaInput
   reel?: Prisma.ReelUncheckedCreateNestedManyWithoutMediaInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAvatarInput
 }
 
 export type MediaCreateOrConnectWithoutMessagesInput = {
@@ -909,6 +1030,7 @@ export type MediaUpdateWithoutMessagesInput = {
   post_media?: Prisma.PostMediaUpdateManyWithoutMediaNestedInput
   story?: Prisma.StoryUpdateManyWithoutMediaNestedInput
   reel?: Prisma.ReelUpdateManyWithoutMediaNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutAvatarNestedInput
 }
 
 export type MediaUncheckedUpdateWithoutMessagesInput = {
@@ -924,6 +1046,7 @@ export type MediaUncheckedUpdateWithoutMessagesInput = {
   post_media?: Prisma.PostMediaUncheckedUpdateManyWithoutMediaNestedInput
   story?: Prisma.StoryUncheckedUpdateManyWithoutMediaNestedInput
   reel?: Prisma.ReelUncheckedUpdateManyWithoutMediaNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAvatarNestedInput
 }
 
 
@@ -937,6 +1060,7 @@ export type MediaCountOutputType = {
   story: number
   reel: number
   messages: number
+  conversations: number
 }
 
 export type MediaCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -945,6 +1069,7 @@ export type MediaCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.
   story?: boolean | MediaCountOutputTypeCountStoryArgs
   reel?: boolean | MediaCountOutputTypeCountReelArgs
   messages?: boolean | MediaCountOutputTypeCountMessagesArgs
+  conversations?: boolean | MediaCountOutputTypeCountConversationsArgs
 }
 
 /**
@@ -992,6 +1117,13 @@ export type MediaCountOutputTypeCountMessagesArgs<ExtArgs extends runtime.Types.
   where?: Prisma.MessageWhereInput
 }
 
+/**
+ * MediaCountOutputType without action
+ */
+export type MediaCountOutputTypeCountConversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ConversationWhereInput
+}
+
 
 export type MediaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1007,6 +1139,7 @@ export type MediaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   story?: boolean | Prisma.Media$storyArgs<ExtArgs>
   reel?: boolean | Prisma.Media$reelArgs<ExtArgs>
   messages?: boolean | Prisma.Media$messagesArgs<ExtArgs>
+  conversations?: boolean | Prisma.Media$conversationsArgs<ExtArgs>
   _count?: boolean | Prisma.MediaCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["media"]>
 
@@ -1050,6 +1183,7 @@ export type MediaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   story?: boolean | Prisma.Media$storyArgs<ExtArgs>
   reel?: boolean | Prisma.Media$reelArgs<ExtArgs>
   messages?: boolean | Prisma.Media$messagesArgs<ExtArgs>
+  conversations?: boolean | Prisma.Media$conversationsArgs<ExtArgs>
   _count?: boolean | Prisma.MediaCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type MediaIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1063,6 +1197,7 @@ export type $MediaPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     story: Prisma.$StoryPayload<ExtArgs>[]
     reel: Prisma.$ReelPayload<ExtArgs>[]
     messages: Prisma.$MessagePayload<ExtArgs>[]
+    conversations: Prisma.$ConversationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1472,6 +1607,7 @@ export interface Prisma__MediaClient<T, Null = never, ExtArgs extends runtime.Ty
   story<T extends Prisma.Media$storyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Media$storyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reel<T extends Prisma.Media$reelArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Media$reelArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   messages<T extends Prisma.Media$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Media$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  conversations<T extends Prisma.Media$conversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Media$conversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2014,6 +2150,30 @@ export type Media$messagesArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.MessageScalarFieldEnum | Prisma.MessageScalarFieldEnum[]
+}
+
+/**
+ * Media.conversations
+ */
+export type Media$conversationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Conversation
+   */
+  select?: Prisma.ConversationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Conversation
+   */
+  omit?: Prisma.ConversationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConversationInclude<ExtArgs> | null
+  where?: Prisma.ConversationWhereInput
+  orderBy?: Prisma.ConversationOrderByWithRelationInput | Prisma.ConversationOrderByWithRelationInput[]
+  cursor?: Prisma.ConversationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ConversationScalarFieldEnum | Prisma.ConversationScalarFieldEnum[]
 }
 
 /**

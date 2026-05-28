@@ -1,19 +1,15 @@
-import { useEffect } from "react"
-import { Navigate } from 'react-router-dom'
-import { useAuthStore } from '../../../store/authStore'
+import { Navigate } from "react-router-dom";
+import { SplashScreen } from "~/shared/components/common/SplashScreen";
+import { useAuthStore } from "../store/useAuthStore";
 
 export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { getMe, isLoggedIn, isLoading  } = useAuthStore()
+  const { isLoggedIn, isInitialized  } = useAuthStore();
 
-  useEffect(() => {
-    getMe();
-  }, []);
-
-  if (isLoading) return <div>Loading...</div>
-
+  if (!isInitialized ) return <SplashScreen />;
+  
   if (!isLoggedIn) {
-    return <Navigate to="/login" replace />
+    return <Navigate to="/login" replace />;
   }
 
-  return children
-}
+  return children;
+};

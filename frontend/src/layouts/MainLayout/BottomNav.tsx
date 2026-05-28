@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { Home, Search, PlaySquare, PlusSquare } from "lucide-react";
-import { cn } from "~/shared/libs/utils";
+import { cn } from "~/shared/utils/cn";
 import { motion } from "motion/react";
 import { useModal } from "~/shared/context/modal/modalContext";
 
@@ -18,13 +18,14 @@ export const BottomNav = () => {
       {bottomNavItems.map((item) => {
         if (item.isCreate) {
           return (
-            <button
+            <motion.button
               key={item.label}
+              whileTap={{ scale: 0.8 }}
               onClick={openCreatePost}
-              className="flex flex-col items-center justify-center w-full h-full text-zinc-500 transition-all duration-300"
+              className="flex flex-col items-center justify-center w-full h-full text-zinc-500"
             >
               <item.icon className="w-6 h-6 transition-transform duration-300" />
-            </button>
+            </motion.button>
           );
         }
         return (
@@ -42,12 +43,15 @@ export const BottomNav = () => {
               const isActuallyActive = isActive && item.path !== "#";
               return (
                 <div className="relative flex items-center justify-center w-full h-full">
-                  <item.icon
-                    className={cn(
+                  <motion.div
+                    whileTap={{ scale: 0.8 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                  >
+                    <item.icon className={cn(
                       "w-6 h-6 transition-transform duration-300",
-                      isActuallyActive && "scale-110 stroke-[2.5px]",
-                    )}
-                  />
+                      isActuallyActive && "scale-110 stroke-[2.5px]"
+                    )} />
+                  </motion.div>
                   {isActuallyActive && (
                     <motion.div
                       layoutId="activeBottomNav"

@@ -3,35 +3,38 @@ import { Prisma } from '~/generated/prisma/client'
 import { POST_INCLUDE } from '~/constants/post.constant'
 
 class PostRepository {
-  async all(page: number = 1, limit: number = 10) {
-    const skip = (page - 1) * limit
+  async all(limit: number = 10, cursor?: string) {
+    const data = await prisma.post.findMany({
+      where: { deleted_at: null },
+      take: limit + 1,
+      cursor: cursor ? { id: cursor } : undefined,
+      orderBy: { created_at: 'desc' },
+      include: POST_INCLUDE
+    })
 
-    const [data, total] = await Promise.all([
-      prisma.post.findMany({
-        where: { deleted_at: null },
-        skip,
-        take: limit,
-        orderBy: { created_at: 'desc' },
-        include: POST_INCLUDE
-      }),
-      prisma.post.count({
-        where: { deleted_at: null }
-      })
-    ])
+    let nextCursor: string | null = null
+    let hasNextPage = false
+
+    if (data.length > limit) {
+      hasNextPage = true
+
+      data.pop()
+
+      nextCursor = data[data.length - 1]?.id ?? null
+    }
 
     return {
       data,
       meta: {
-        total,
-        page,
-        limit,
-        total_pages: Math.ceil(total / limit)
+        nextCursor,
+        hasNextPage,
+        limit
       }
     }
   }
 
   async create(data: Prisma.PostCreateInput) {
-    return prisma.post.create({ data })
+    return prisma.post.create({ data, include: POST_INCLUDE })
   }
 
   async find(id: string) {

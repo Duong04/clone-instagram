@@ -1,6 +1,9 @@
-import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal, Music } from "lucide-react";
+import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal, Music, Camera } from "lucide-react";
+import { useModal } from "~/shared/context/modal/modalContext";
 
 export const ReelsPage = () => {
+  const { openCreatePost } = useModal();
+
   const reels = Array.from({ length: 5 }).map((_, i) => ({
     id: i,
     user: {
@@ -15,6 +18,14 @@ export const ReelsPage = () => {
 
   return (
     <div className="h-screen overflow-y-scroll snap-y snap-mandatory no-scrollbar">
+      <div className="hidden md:block fixed top-8 right-8 z-40">
+        <button 
+        onClick={openCreatePost}
+          className="p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-colors border border-white/20 shadow-xl group"
+        >
+          <Camera className="w-7 h-7 group-hover:scale-110 transition-transform" />
+        </button>
+      </div>
       {reels.map((reel) => (
         <div key={reel.id} className="h-screen w-full flex items-center justify-center snap-start bg-black relative">
           <div className="relative h-[90vh] aspect-[9/16] bg-zinc-900 rounded-lg overflow-hidden shadow-2xl">

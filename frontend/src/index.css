@@ -27,11 +27,11 @@ body {
   background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
 }
 
-.swiper-button-next {
+.stories .swiper-button-next {
   right: -6px !important;
 }
 
-.swiper-button-prev {
+.stories .swiper-button-prev {
   left: -6px !important;
 }
 

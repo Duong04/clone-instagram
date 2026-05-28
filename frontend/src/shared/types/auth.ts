@@ -2,8 +2,23 @@ export interface User {
   id: string
   email: string
   username: string
-  full_name: string
-  avatar_url?: string
+  name: string
+  bio?: string
+  is_private: boolean
+  avatar?: Avatar
+  _count: Count
+}
+
+export interface Count {
+  followers: number
+  following: number
+  posts: number
+  reels: number
+  total_content: number
+}
+
+export interface Avatar {
+  url: string
 }
  
 export interface LoginRequest {

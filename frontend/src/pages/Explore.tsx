@@ -1,5 +1,7 @@
 import { motion } from "motion/react";
 import { Heart, MessageCircle } from "lucide-react";
+import { Skeleton } from "~/shared/components/common/Skeleton";
+import { useEffect, useState } from "react";
 
 const images = Array.from({ length: 24 }).map((_, i) => ({
   id: i,
@@ -9,6 +11,13 @@ const images = Array.from({ length: 24 }).map((_, i) => ({
   isLarge: i % 10 === 1 || i % 10 === 6,
 }));
 export const ExplorePage = () => {
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const container = {
     hidden: { opacity: 0 },
@@ -33,30 +42,41 @@ export const ExplorePage = () => {
       className="max-w-[935px] mx-auto pt-8 pb-16 px-4"
     >
       <div className="columns-2 md:columns-3 gap-2">
-        {images.map((img) => (
-          <motion.div 
-            key={img.id} 
-            variants={item}
-            className={`relative group cursor-pointer aspect-square overflow-hidden mb-2 ${img.isLarge ? 'row-span-2 col-span-1' : ''}`}
-          >
-            <img 
-              src={img.url} 
-              alt="Explore" 
-              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-              referrerPolicy="no-referrer"
+        {isLoading ? (
+          Array.from({ length: 18 }).map((_, i) => (
+            <Skeleton 
+              key={i} 
+              className={`aspect-square rounded-none mb-2 ${
+                (i % 10 === 1 || i % 10 === 6) ? 'row-span-2 col-span-1' : ''
+              }`} 
             />
-            <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-6 text-white font-bold">
-              <div className="flex items-center gap-1">
-                <Heart className="fill-white w-6 h-6" />
-                <span>{img.likes}</span>
+          ))
+        ) : (
+          images.map((img) => (
+            <motion.div 
+              key={img.id} 
+              variants={item}
+              className={`relative group cursor-pointer aspect-square overflow-hidden mb-2 ${img.isLarge ? 'row-span-2 col-span-1' : ''}`}
+            >
+              <img 
+                src={img.url} 
+                alt="Explore" 
+                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-6 text-white font-bold">
+                <div className="flex items-center gap-1">
+                  <Heart className="fill-white w-6 h-6" />
+                  <span>{img.likes}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <MessageCircle className="fill-white w-6 h-6" />
+                  <span>{img.comments}</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <MessageCircle className="fill-white w-6 h-6" />
-                <span>{img.comments}</span>
-              </div>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          ))
+        )}
       </div>
     </motion.div>
   );

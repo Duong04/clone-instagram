@@ -1,227 +1,278 @@
-# 📸 Instagram Clone
+# Instagram Clone
 
-A full-stack Instagram clone built with Node.js, React, PostgreSQL, and Redis. Deployed via Docker with Nginx as reverse proxy.
+A full-stack Instagram-inspired social media app built with React, TypeScript, Express, Prisma, PostgreSQL, Redis, Cloudinary, Docker, and Nginx.
 
----
+The project includes authentication, a protected feed, media upload, post creation, image filters, music selection, likes, comments, profile pages, and responsive navigation.
 
-## 🧱 Tech Stack
+## Screenshots
+
+| Home feed | Post detail |
+| --- | --- |
+| ![Home feed](frontend/public/screen/Screenshot%202026-05-28-74522.png) | ![Post detail](frontend/public/screen/Screenshot-2026-05-28-222905.png) |
+
+| Edit filters | Create post |
+| --- | --- |
+| ![Edit filters](frontend/public/screen/Screenshot-2026-05-28-222920.png) | ![Create post](frontend/public/screen/Screenshot-2026-05-28-222601.png) |
+
+## Features
+
+- User authentication with access and refresh token flow.
+- Protected routes for authenticated users and public routes for login/register.
+- Instagram-style feed with stories, suggestions, post cards, and infinite loading support.
+- Create post flow with media preview, image filters, captions, hashtags, location, and music picker.
+- Like and comment interactions with optimistic frontend state management.
+- Post detail modal with media carousel and comment list.
+- Profile page and user-related API structure.
+- Cloudinary-backed media upload service.
+- PostgreSQL schema managed by Prisma migrations.
+- Redis integration for cache/session-ready infrastructure.
+- Docker Compose setup with Nginx reverse proxy.
+
+## Future Features
+
+- Real-time messaging with one-to-one and group conversations.
+- Notification system for likes, comments, follows, mentions, and tags.
+- Story and reel creation with music, views, likes, and comments.
+- Follow request flow for private accounts.
+- Explore page with search, hashtags, trending posts, and recommended users.
+- Save collections and bookmarked posts.
+- User settings for privacy, comment permissions, message permissions, and activity status.
+- Report, block, and moderation workflows.
+- Profile editing with avatar, bio, website, and account privacy controls.
+- Better media tools such as crop, multi-image ordering, video trimming, and accessibility text.
+- Email verification, forgot password, and account recovery.
+- Admin dashboard for user, content, and report management.
+- Deployment pipeline with production environment templates and CI checks.
+
+## Tech Stack
 
 | Layer | Technology |
-|---|---|
-| **Frontend** | React + TypeScript + Vite |
-| **Backend** | Node.js + TypeScript |
-| **Database** | PostgreSQL 16 |
-| **Cache** | Redis 7 |
-| **Web Server** | Nginx |
-| **Container** | Docker + Docker Compose |
+| --- | --- |
+| Frontend | React 19, TypeScript, Vite, Tailwind CSS 4, React Router, React Query, Zustand |
+| UI | shadcn/radix-ui, lucide-react, motion, sonner, swiper |
+| Backend | Node.js, Express 5, TypeScript, Prisma |
+| Database | PostgreSQL 16 |
+| Cache | Redis 7 |
+| Media | Cloudinary, Multer |
+| Validation | Zod |
+| DevOps | Docker, Docker Compose, Nginx |
 
----
+## Project Structure
 
-## 📁 Project Structure
-
-```
+```text
 clone-instagram/
-├── backend/                  # Node.js API server
-│   ├── src/
-│   ├── .env.example
-│   ├── Dockerfile
-│   ├── .dockerignore
-│   ├── package.json
-│   └── tsconfig.json
-│
-├── frontend/                 # React client
-│   ├── src/
-│   ├── public/
-│   ├── Dockerfile
-│   ├── .dockerignore
-│   ├── package.json
-│   ├── vite.config.ts
-│   └── tsconfig.json
-│
-├── docker/
-│   └── nginx/
-│       └── nginx.conf        # Nginx reverse proxy config
-│
-├── .gitignore
-├── docker-compose.yml
-└── README.md
+|-- backend/
+|   |-- prisma/
+|   |   |-- migrations/
+|   |   |-- schema.prisma
+|   |   `-- seed.ts
+|   |-- src/
+|   |   |-- config/
+|   |   |-- controllers/
+|   |   |-- dto/
+|   |   |-- middlewares/
+|   |   |-- repositories/
+|   |   |-- routes/
+|   |   |-- services/
+|   |   |-- types/
+|   |   `-- utils/
+|   |-- Dockerfile
+|   `-- package.json
+|
+|-- frontend/
+|   |-- public/
+|   |   `-- screen/
+|   |-- src/
+|   |   |-- features/
+|   |   |-- layouts/
+|   |   |-- pages/
+|   |   |-- routes/
+|   |   `-- shared/
+|   |-- Dockerfile
+|   `-- package.json
+|
+|-- docker/
+|   `-- nginx/
+|       `-- nginx.conf
+|
+|-- docker-compose.yml
+`-- README.md
 ```
 
----
+## API Overview
 
-## 🚀 Getting Started
+All backend routes are mounted under:
+
+```text
+/api/v1
+```
+
+| Module | Base route |
+| --- | --- |
+| Auth | `/api/v1/auth` |
+| Users / profile | `/api/v1/users` |
+| Media | `/api/v1/media` |
+| Posts | `/api/v1/posts` |
+| Feeds | `/api/v1/feeds` |
+| Comments | `/api/v1/comments` |
+
+## Getting Started
 
 ### Prerequisites
 
-- [Docker](https://www.docker.com/get-started) >= 24.x
-- [Docker Compose](https://docs.docker.com/compose/) >= 2.x
+- Node.js 20+
+- npm
+- Docker 24+
+- Docker Compose 2+
+- Cloudinary account for media upload
 
-### 1. Clone the repository
+### Environment Variables
 
-```bash
-git clone https://github.com/Duong04/clone-instagram.git
-cd clone-instagram
-```
-
-### 2. Configure environment variables
-
-```bash
-cp backend/.env.example backend/.env
-```
-
-Edit `backend/.env` with your configuration:
+Create `backend/.env`:
 
 ```env
-# App
 PORT=3000
-NODE_ENV=production
+VERSION_API=/api/v1
 
-# Database
-DB_HOST=postgres
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=your_password
-DB_NAME=instagram_clone
+DATABASE_URL="postgresql://postgres:password@postgres:5432/instagram_clone?schema=public"
 
-# Redis
 REDIS_HOST=redis
 REDIS_PORT=6379
 
-# JWT
 JWT_SECRET=your_jwt_secret
-JWT_EXPIRES_IN=7d
+JWT_EXPIRES=7d
+JWT_REFRESH_EXPIRES=30d
+
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
 ```
 
-### 3. Build and run with Docker
+For local frontend development, create `frontend/.env` when you need a custom API origin:
+
+```env
+VITE_API_URL=http://localhost:3000
+```
+
+If `VITE_API_URL` is not set, the frontend falls back to `http://localhost`.
+
+## Run With Docker
+
+From the project root:
 
 ```bash
-# Build and start all services
 docker compose up --build
+```
 
-# Run in background
+Run in the background:
+
+```bash
 docker compose up --build -d
 ```
 
-### 4. Access the app
+Access the app:
 
 | Service | URL |
-|---|---|
-| **App** | http://localhost |
-| **API** | http://localhost/api |
+| --- | --- |
+| Web app | http://localhost |
+| API health | http://localhost/api |
+| API base | http://localhost/api/v1 |
 
----
+Docker services:
 
-## 🐳 Docker Services
+| Service | Container | Port |
+| --- | --- | --- |
+| Frontend / Nginx | `instagram_frontend` | `80:80` |
+| Backend API | `instagram_backend` | `3000` internal |
+| PostgreSQL | `instagram_db` | `5432:5432` |
+| Redis | `instagram_redis` | `6379:6379` |
 
-```
-                    ┌─────────────────────────────┐
-                    │         Nginx :80            │
-                    │      (Reverse Proxy)         │
-                    └──────────┬──────────┬────────┘
-                               │          │
-                    /api/*     │          │    /*
-                               ▼          ▼
-                    ┌──────────────┐  ┌──────────────┐
-                    │  Backend     │  │  Frontend    │
-                    │  :3000       │  │  (static)    │
-                    └──────┬───┬──┘  └──────────────┘
-                           │   │
-              ┌────────────┘   └────────────┐
-              ▼                             ▼
-    ┌──────────────────┐        ┌──────────────────┐
-    │   PostgreSQL     │        │      Redis        │
-    │   :5432          │        │      :6379        │
-    └──────────────────┘        └──────────────────┘
+## Run Locally
+
+Start infrastructure with Docker:
+
+```bash
+docker compose up postgres redis -d
 ```
 
-| Service | Internal Port | Description |
-|---|---|---|
-| `frontend` | 80 | Nginx serves React app + proxies API |
-| `backend` | 3000 | REST API (internal only) |
-| `postgres` | 5432 | PostgreSQL database (internal only) |
-| `redis` | 6379 | Redis cache (internal only) |
+Install and run backend:
 
-> ⚠️ Only port **80** is exposed to the host. All other services communicate internally via Docker network.
-
----
-
-## 🛠️ Development
-
-### Run locally without Docker
-
-**Backend:**
 ```bash
 cd backend
 npm install
+npx prisma generate
+npx prisma migrate dev
 npm run dev
 ```
 
-**Frontend:**
+Install and run frontend:
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-### Useful Docker commands
+Vite will start the frontend on:
 
-```bash
-# View logs of all services
-docker compose logs -f
-
-# View logs of a specific service
-docker compose logs -f backend
-
-# Restart a specific service
-docker compose restart backend
-
-# Stop all services
-docker compose down
-
-# Stop and remove volumes (⚠️ deletes database data)
-docker compose down -v
-
-# Rebuild a specific service
-docker compose up --build backend
+```text
+http://localhost:5173
 ```
 
-### Access database directly
+## Useful Commands
+
+Backend:
+
+```bash
+cd backend
+npm run dev
+npm run build
+npm run lint
+npm run prettier
+npx prisma studio
+npx prisma migrate dev
+npx prisma db seed
+```
+
+Frontend:
+
+```bash
+cd frontend
+npm run dev
+npm run build
+npm run lint
+npm run preview
+```
+
+Docker:
+
+```bash
+docker compose logs -f
+docker compose logs -f backend
+docker compose restart backend
+docker compose down
+docker compose down -v
+```
+
+Database and Redis:
 
 ```bash
 docker exec -it instagram_db psql -U postgres -d instagram_clone
-```
-
-### Access Redis CLI
-
-```bash
 docker exec -it instagram_redis redis-cli
 ```
 
----
+## Notes
 
-## 📦 Environment Variables
+- The frontend calls API endpoints through `/api/v1`.
+- Nginx proxies `/api` requests to the backend container.
+- Prisma migrations are applied automatically when the backend Docker container starts.
+- Uploaded media requires valid Cloudinary credentials.
+- `docker compose down -v` removes database and Redis volumes.
 
-| Variable | Description | Default |
-|---|---|---|
-| `PORT` | Backend server port | `3000` |
-| `NODE_ENV` | Environment | `production` |
-| `DB_HOST` | PostgreSQL host | `postgres` |
-| `DB_PORT` | PostgreSQL port | `5432` |
-| `DB_USER` | PostgreSQL user | `postgres` |
-| `DB_PASSWORD` | PostgreSQL password | - |
-| `DB_NAME` | Database name | `instagram_clone` |
-| `REDIS_HOST` | Redis host | `redis` |
-| `REDIS_PORT` | Redis port | `6379` |
-| `JWT_SECRET` | JWT signing secret | - |
-| `JWT_EXPIRES_IN` | JWT expiry duration | `7d` |
+## Author
 
----
+Developed by Nguyen Thanh Duong (SugarDev).
 
-# 👨‍💻 Author
+## License
 
-Developed by **Nguyen Thanh Duong (SugarDev)**
-
----
-## 📄 License
-
-This project is for educational purposes only.
+This project is for learning and development purposes.

@@ -1,4 +1,3 @@
-import React from "react";
 import type { Story } from "~/shared/types";
 import { motion } from "motion/react";
 
@@ -6,7 +5,7 @@ interface StoryCircleProps {
   story: Story;
 }
 
-export const StoryCircle: React.FC<StoryCircleProps> = ({ story }) => {
+export const StoryCircle = ({ story }: StoryCircleProps) => {
   return (
     <motion.div 
       whileHover={{ scale: 1.05 }}

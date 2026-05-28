@@ -50,11 +50,14 @@ export const AnyNull = runtime.objectEnumValues.instances.AnyNull
 
 export const ModelName = {
   User: 'User',
+  VerificationToken: 'VerificationToken',
+  UserTag: 'UserTag',
   Account: 'Account',
   UserSetting: 'UserSetting',
   UserSession: 'UserSession',
   DeviceToken: 'DeviceToken',
   Media: 'Media',
+  Music: 'Music',
   Post: 'Post',
   PostMedia: 'PostMedia',
   Reel: 'Reel',
@@ -63,12 +66,16 @@ export const ModelName = {
   View: 'View',
   Save: 'Save',
   Comment: 'Comment',
+  CommentLike: 'CommentLike',
   Hashtag: 'Hashtag',
   PostHashtag: 'PostHashtag',
+  ReelHashtag: 'ReelHashtag',
+  Mention: 'Mention',
   Follow: 'Follow',
   Conversation: 'Conversation',
   ConversationUser: 'ConversationUser',
   Message: 'Message',
+  MessageRead: 'MessageRead',
   Notification: 'Notification',
   Feed: 'Feed',
   SearchHistory: 'SearchHistory',
@@ -109,6 +116,30 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const VerificationTokenScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  token: 'token',
+  type: 'type',
+  expires_at: 'expires_at',
+  created_at: 'created_at'
+} as const
+
+export type VerificationTokenScalarFieldEnum = (typeof VerificationTokenScalarFieldEnum)[keyof typeof VerificationTokenScalarFieldEnum]
+
+
+export const UserTagScalarFieldEnum = {
+  id: 'id',
+  tagger_id: 'tagger_id',
+  tagged_id: 'tagged_id',
+  target_type: 'target_type',
+  target_id: 'target_id',
+  created_at: 'created_at'
+} as const
+
+export type UserTagScalarFieldEnum = (typeof UserTagScalarFieldEnum)[keyof typeof UserTagScalarFieldEnum]
 
 
 export const AccountScalarFieldEnum = {
@@ -175,11 +206,25 @@ export const MediaScalarFieldEnum = {
 export type MediaScalarFieldEnum = (typeof MediaScalarFieldEnum)[keyof typeof MediaScalarFieldEnum]
 
 
+export const MusicScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  artist: 'artist',
+  url: 'url',
+  duration: 'duration',
+  cover_url: 'cover_url',
+  created_at: 'created_at'
+} as const
+
+export type MusicScalarFieldEnum = (typeof MusicScalarFieldEnum)[keyof typeof MusicScalarFieldEnum]
+
+
 export const PostScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
   caption: 'caption',
   location: 'location',
+  music_id: 'music_id',
   like_count: 'like_count',
   comment_count: 'comment_count',
   comments_disabled: 'comments_disabled',
@@ -206,6 +251,7 @@ export const ReelScalarFieldEnum = {
   media_id: 'media_id',
   caption: 'caption',
   location: 'location',
+  music_id: 'music_id',
   like_count: 'like_count',
   comment_count: 'comment_count',
   comments_disabled: 'comments_disabled',
@@ -220,6 +266,7 @@ export const StoryScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
   media_id: 'media_id',
+  music_id: 'music_id',
   expires_at: 'expires_at',
   created_at: 'created_at'
 } as const
@@ -275,6 +322,16 @@ export const CommentScalarFieldEnum = {
 export type CommentScalarFieldEnum = (typeof CommentScalarFieldEnum)[keyof typeof CommentScalarFieldEnum]
 
 
+export const CommentLikeScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  comment_id: 'comment_id',
+  created_at: 'created_at'
+} as const
+
+export type CommentLikeScalarFieldEnum = (typeof CommentLikeScalarFieldEnum)[keyof typeof CommentLikeScalarFieldEnum]
+
+
 export const HashtagScalarFieldEnum = {
   id: 'id',
   name: 'name'
@@ -292,6 +349,27 @@ export const PostHashtagScalarFieldEnum = {
 export type PostHashtagScalarFieldEnum = (typeof PostHashtagScalarFieldEnum)[keyof typeof PostHashtagScalarFieldEnum]
 
 
+export const ReelHashtagScalarFieldEnum = {
+  id: 'id',
+  reel_id: 'reel_id',
+  hashtag_id: 'hashtag_id'
+} as const
+
+export type ReelHashtagScalarFieldEnum = (typeof ReelHashtagScalarFieldEnum)[keyof typeof ReelHashtagScalarFieldEnum]
+
+
+export const MentionScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  actor_id: 'actor_id',
+  target_type: 'target_type',
+  target_id: 'target_id',
+  created_at: 'created_at'
+} as const
+
+export type MentionScalarFieldEnum = (typeof MentionScalarFieldEnum)[keyof typeof MentionScalarFieldEnum]
+
+
 export const FollowScalarFieldEnum = {
   id: 'id',
   follower_id: 'follower_id',
@@ -305,7 +383,12 @@ export type FollowScalarFieldEnum = (typeof FollowScalarFieldEnum)[keyof typeof 
 
 export const ConversationScalarFieldEnum = {
   id: 'id',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  is_group: 'is_group',
+  name: 'name',
+  avatar_id: 'avatar_id',
+  admin_id: 'admin_id',
+  last_message_at: 'last_message_at'
 } as const
 
 export type ConversationScalarFieldEnum = (typeof ConversationScalarFieldEnum)[keyof typeof ConversationScalarFieldEnum]
@@ -314,7 +397,9 @@ export type ConversationScalarFieldEnum = (typeof ConversationScalarFieldEnum)[k
 export const ConversationUserScalarFieldEnum = {
   id: 'id',
   conversation_id: 'conversation_id',
-  user_id: 'user_id'
+  user_id: 'user_id',
+  role: 'role',
+  joined_at: 'joined_at'
 } as const
 
 export type ConversationUserScalarFieldEnum = (typeof ConversationUserScalarFieldEnum)[keyof typeof ConversationUserScalarFieldEnum]
@@ -326,11 +411,23 @@ export const MessageScalarFieldEnum = {
   sender_id: 'sender_id',
   content: 'content',
   media_id: 'media_id',
+  reply_to_id: 'reply_to_id',
+  deleted_at: 'deleted_at',
   message_type: 'message_type',
   created_at: 'created_at'
 } as const
 
 export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
+
+
+export const MessageReadScalarFieldEnum = {
+  id: 'id',
+  message_id: 'message_id',
+  user_id: 'user_id',
+  read_at: 'read_at'
+} as const
+
+export type MessageReadScalarFieldEnum = (typeof MessageReadScalarFieldEnum)[keyof typeof MessageReadScalarFieldEnum]
 
 
 export const NotificationScalarFieldEnum = {

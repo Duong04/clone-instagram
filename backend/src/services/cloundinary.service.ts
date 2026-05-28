@@ -74,3 +74,23 @@ export function cloudinaryPresign(folder: string = 'general'): CloudinaryPresign
     folder: finalFolder
   }
 }
+
+export function getTransformedUrl(
+  publicId: string,
+  options?: {
+    width?: number
+    height?: number
+    crop?: 'fill' | 'scale' | 'crop' | 'thumb'
+    gravity?: 'face' | 'auto'
+  }
+): string {
+  return cloudinary.url(publicId, {
+    quality: 'auto',
+    fetch_format: 'auto',
+    width: options?.width,
+    height: options?.height,
+    crop: options?.crop,
+    gravity: options?.gravity,
+    secure: true
+  })
+}
