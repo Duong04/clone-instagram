@@ -35,6 +35,32 @@ class UserRepository {
     })
   }
 
+  async update(id: string, data: Prisma.UserUpdateInput) {
+    const user = await prisma.user.update({
+      where: { id },
+      data,
+      include: {
+        avatar: true,
+        _count: {
+          select: {
+            followers: true,
+            following: true,
+            posts: true,
+            reels: true
+          }
+        }
+      }
+    })
+
+    return {
+      ...user,
+      _count: {
+        ...user._count,
+        total_content: user._count.posts + user._count.reels
+      }
+    }
+  }
+
   async create(data: Prisma.UserCreateInput) {
     return prisma.user.create({
       data,

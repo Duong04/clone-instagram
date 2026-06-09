@@ -19,22 +19,27 @@ import { Pagination, Navigation } from "swiper/modules";
 import { useLike } from "~/features/feed/hooks/useLike";
 import { useFeedStore } from "~/features/feed/store/useFeedStore";
 import { useComment } from "~/features/feed/hooks/useComment";
+import { useRealtimeComments } from "~/features/feed/hooks/useRealtimeComments";
 import type { Comment } from "~/shared/types/comment";
+import type { FeedItem } from "~/shared/types/feed";
 
 interface PostDetailModalProps {
   feedId: string | null;
+  post?: FeedItem | null;
   isOpen: boolean;
   onClose: () => void;
 }
 
 export const PostDetailModal = ({
   feedId,
+  post,
   isOpen,
   onClose,
 }: PostDetailModalProps) => {
-  const item = useFeedStore((state) =>
+  const storeItem = useFeedStore((state) =>
     state.feed.find((i) => i.feed_id === feedId),
   );
+  const item = storeItem ?? post ?? null;
 
   const [comment, setComment] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -57,7 +62,12 @@ export const PostDetailModal = ({
     isLoading,
     repliesByComment,
     replyCountByComment
-  } = useComment(item?.feed_id ?? "", item?.feed_type ?? "post");
+  } = useComment(item?.id ?? "", item?.feed_type ?? "post", item?.feed_id ?? "");
+  const { typingUsers, sendTyping, stopTyping } = useRealtimeComments(
+    item?.id ?? "",
+    item?.feed_type ?? "post",
+    item?.feed_id ?? "",
+  );
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const totalReplies = (c: Comment) => {
@@ -66,10 +76,10 @@ export const PostDetailModal = ({
     return serverCount + localExtra;
   };
   useEffect(() => {
-    if (isOpen && feedId) {
+    if (isOpen && item?.feed_id) {
       loadComments();
     }
-  }, [isOpen, feedId]);
+  }, [isOpen, item?.feed_id, loadComments]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -107,13 +117,13 @@ export const PostDetailModal = ({
   );
   const hasMultiple = sortedMedia.length > 1;
   const onDoubleTap = () => {
-    if (!item.is_liked) handleLike(item.feed_id, item.feed_type, item.is_liked);
+    if (!item.is_liked) handleLike(item.feed_id, item.id, item.feed_type, item.is_liked);
     showHeartAnimation();
   };
 
   const oneClickTap = () => {
     if (!item.is_liked) showHeartAnimation();
-    handleLike(item.feed_id, item.feed_type, item.is_liked);
+    handleLike(item.feed_id, item.id, item.feed_type, item.is_liked);
   };
 
   const onEmojiClick = (emojiData: EmojiClickData) => {
@@ -124,6 +134,7 @@ export const PostDetailModal = ({
     if (!comment.trim()) return;
 
     createComment(comment, replyingTo?.id);
+    stopTyping();
     setComment("");
     setReplyingTo(null)
     setShowEmojiPicker(false);
@@ -581,6 +592,16 @@ export const PostDetailModal = ({
                     </button>
                   </div>
                 )}
+                {typingUsers.length > 0 && (
+                  <div className="px-1 mb-2 text-xs text-zinc-500 flex items-center gap-1">
+                    <span>
+                    {typingUsers.slice(0, 2).join(", ")}
+                    {typingUsers.length > 2 ? ` +${typingUsers.length - 2}` : ""}{" "}
+                    {typingUsers.length === 1 ? "is" : "are"} commenting
+                    </span>
+                    <TypingDots />
+                  </div>
+                )}
                 <div className="flex items-center gap-3 relative">
                   <img
                     src={MOCK_USER.avatar}
@@ -594,6 +615,11 @@ export const PostDetailModal = ({
                       value={comment}
                       onChange={(e) => {
                         setComment(e.target.value);
+                        if (e.target.value.trim()) {
+                          sendTyping();
+                        } else {
+                          stopTyping();
+                        }
                         e.target.style.height = "auto";
                         e.target.style.height =
                           Math.min(e.target.scrollHeight, 120) + "px";
@@ -660,3 +686,18 @@ export const PostDetailModal = ({
     </AnimatePresence>
   );
 };
+
+const TypingDots = () => (
+  <span className="inline-flex items-end gap-0.5 h-3" aria-hidden="true">
+    {[0, 1, 2].map((dot) => (
+      <span
+        key={dot}
+        className="w-1 h-1 rounded-full bg-zinc-400 animate-bounce"
+        style={{
+          animationDelay: `${dot * 140}ms`,
+          animationDuration: "700ms",
+        }}
+      />
+    ))}
+  </span>
+);

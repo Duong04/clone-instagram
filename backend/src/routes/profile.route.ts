@@ -7,6 +7,7 @@ const router = Router()
 
 router.use(authMiddleware)
 router.get('/me', authMiddleware, authController.profile)
+router.patch('/me', profileController.updateMe)
 router.get('/me/content', profileController.getMeContent)
 router.get('/me/saved', profileController.getUserSaved)
 router.get('/:userId/content', profileController.getProfileContent)

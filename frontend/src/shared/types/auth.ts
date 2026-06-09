@@ -4,6 +4,7 @@ export interface User {
   username: string
   name: string
   bio?: string
+  website?: string | null
   is_private: boolean
   avatar?: Avatar
   _count: Count
@@ -31,6 +32,14 @@ export interface RegisterRequest {
   name: string
   username: string
   password: string
+}
+
+export interface UpdateProfileRequest {
+  name?: string
+  username?: string
+  bio?: string | null
+  website?: string | null
+  is_private?: boolean
 }
  
 export interface AuthResponse {

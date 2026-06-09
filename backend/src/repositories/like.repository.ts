@@ -5,7 +5,7 @@ type TX = Prisma.TransactionClient
 
 class LikeRepository {
   async getLikedTargetIds(userId: string, targetIds: string[]): Promise<string[]> {
-    const likes = await prisma.like.findMany({
+    const likes: Array<{ target_id: string }> = await prisma.like.findMany({
       where: { user_id: userId, target_id: { in: targetIds } },
       select: { target_id: true }
     })

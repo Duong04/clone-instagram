@@ -1,9 +1,22 @@
 import profileRepository from '~/repositories/profile.repository'
 import likeRepository from '~/repositories/like.repository'
 import saveRepository from '~/repositories/save.repository'
+import userRepository from '~/repositories/user.repository'
 import { ResolvedFeedItem } from '~/types/feed.type'
+import { UpdateProfileBody } from '~/dto/profile/profile.dto'
 
 class ProfileService {
+  async updateMe(userId: string, data: UpdateProfileBody) {
+    if (data.username) {
+      const existing = await userRepository.findByUsername(data.username)
+      if (existing && existing.id !== userId) {
+        throw new Error('Username already exists')
+      }
+    }
+
+    return userRepository.update(userId, data)
+  }
+
   async getUserContent(
     currentUserId: string,
     targetUserId: string,

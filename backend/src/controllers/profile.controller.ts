@@ -1,9 +1,21 @@
 import { Request, Response, NextFunction } from 'express'
 import profileService from '~/services/profile.service'
 import { sendSuccess } from '~/utils/response'
-import { profileContentQuerySchema } from '~/dto/profile/profile.dto'
+import { profileContentQuerySchema, updateProfileBodySchema } from '~/dto/profile/profile.dto'
 
 class ProfileController {
+  async updateMe(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = req.user!.id
+      const body = updateProfileBodySchema.parse(req.body)
+      const result = await profileService.updateMe(userId, body)
+
+      sendSuccess({ res, data: result, message: 'Profile updated successfully' })
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async getMeContent(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = req.user!.id

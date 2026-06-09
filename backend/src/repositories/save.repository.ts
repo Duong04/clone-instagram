@@ -2,7 +2,7 @@ import { prisma } from '~/config/database'
 
 class SaveRepository {
   async getSavedTargetIds(userId: string, targetIds: string[]): Promise<string[]> {
-    const saves = await prisma.save.findMany({
+    const saves: Array<{ target_id: string }> = await prisma.save.findMany({
       where: { user_id: userId, target_id: { in: targetIds } },
       select: { target_id: true }
     })

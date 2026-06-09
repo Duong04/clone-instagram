@@ -7,23 +7,24 @@ export const useLike = () => {
   const toggleLike = useFeedStore((s) => s.toggleLike);
 
   const debouncedApi = useDebounceMap(
-    async (targetId: string, targetType: TargetType, isLiked: boolean) => {
+    async (feedId: string, targetId: string, targetType: TargetType, isLiked: boolean) => {
       try {
         await feedApi.likeFeedItem(targetId, targetType, isLiked);
       } catch {
-        toggleLike(targetId);
+        toggleLike(feedId);
       }
     },
     1000
   );
 
   const handleLike = (
+    feedId: string,
     targetId: string,
     targetType: TargetType,
     isLiked: boolean,
   ) => {
-    toggleLike(targetId);
-    debouncedApi(targetId, targetType, isLiked);
+    toggleLike(feedId);
+    debouncedApi(feedId, targetId, targetType, isLiked);
   };
 
   return { handleLike };

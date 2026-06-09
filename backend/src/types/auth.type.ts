@@ -4,6 +4,7 @@ export interface UserAuth {
   name: string
   username: string
   bio: string | null
+  website: string | null
   is_private: boolean
   _count: Count
   avatar: Avatar | null

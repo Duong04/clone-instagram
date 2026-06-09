@@ -19,6 +19,9 @@ import EmojiPicker, { Theme } from "emoji-picker-react";
 import type { EmojiClickData } from "emoji-picker-react";
 import { useModal } from "~/shared/context/modal/modalContext";
 import { useComment } from "~/features/feed/hooks/useComment";
+import { useMarkAsSeen } from "~/features/feed/hooks/useMarkAsSeen";
+import { useRealtimeComments } from "~/features/feed/hooks/useRealtimeComments";
+import { getFeedMedia } from "~/shared/utils/feedMedia";
 
 interface FeedItemCardProps {
   item: FeedItem;
@@ -26,7 +29,7 @@ interface FeedItemCardProps {
 
 export const PostCard = ({ item }: FeedItemCardProps) => {
   const { openPostDetail } = useModal();
-  const sortedMedia = [...item.media].sort((a, b) => a.position - b.position);
+  const sortedMedia = getFeedMedia(item).sort((a, b) => a.position - b.position);
   const hasMultiple = sortedMedia.length > 1;
   const { handleLike } = useLike();
   const [comment, setComment] = useState("");
@@ -35,7 +38,9 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
   const [showHeart, setShowHeart] = useState(false);
   const [heartColor, setHeartColor] = useState<"orange" | "pink">("orange");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const { createComment } = useComment(item.feed_id, item.feed_type)
+  const { createComment } = useComment(item.id, item.feed_type, item.feed_id)
+  const { sendTyping, stopTyping } = useRealtimeComments(item.id, item.feed_type, item.feed_id);
+  const seenRef = useMarkAsSeen(item.id, item.feed_type);
 
   const showHeartAnimation = () => {
     setHeartColor(Math.random() > 0.5 ? "orange" : "pink");
@@ -44,13 +49,13 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
   };
 
   const onDoubleTap = () => {
-    if (!item.is_liked) handleLike(item.feed_id, item.feed_type, item.is_liked);
+    if (!item.is_liked) handleLike(item.feed_id, item.id, item.feed_type, item.is_liked);
     showHeartAnimation();
   };
 
   const oneClickTap = () => {
     if (!item.is_liked) showHeartAnimation();
-    handleLike(item.feed_id, item.feed_type, item.is_liked);
+    handleLike(item.feed_id, item.id, item.feed_type, item.is_liked);
   };
 
   const onEmojiClick = (emojiData: EmojiClickData) => {
@@ -66,6 +71,7 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
     }
+    stopTyping();
     createComment(comment);
   };
 
@@ -84,6 +90,7 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
 
   return (
     <motion.div
+      ref={seenRef}
       initial={{ opacity: 0, scale: 0.98 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
@@ -298,6 +305,11 @@ export const PostCard = ({ item }: FeedItemCardProps) => {
             value={comment}
             onChange={(e) => {
               setComment(e.target.value);
+              if (e.target.value.trim()) {
+                sendTyping();
+              } else {
+                stopTyping();
+              }
               e.target.style.height = "auto";
               e.target.style.height =
                 Math.min(e.target.scrollHeight, 100) + "px";

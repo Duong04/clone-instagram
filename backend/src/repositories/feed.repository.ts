@@ -5,37 +5,69 @@ import { encodeCursor, decodeCursor } from '~/utils/cursor'
 import { resolveFeedContent } from './shared/feed-resolver'
 import { USER_SELECT } from './shared/feed-resolver'
 
+type HomeFeedCursor =
+  | { source: 'feed'; feedCursor?: string }
+  | { source: 'discovery'; cursor?: string }
+
+function parseHomeFeedCursor(cursor?: string): HomeFeedCursor | null {
+  if (!cursor) return null
+
+  try {
+    const decoded = decodeCursor(cursor)
+    if (decoded.source === 'discovery') return { source: 'discovery', cursor }
+    if (decoded.source === 'feed') return { source: 'feed', feedCursor: decoded.feedCursor }
+  } catch {
+    return { source: 'feed', feedCursor: cursor }
+  }
+
+  return { source: 'feed', feedCursor: cursor }
+}
+
 class FeedRepository {
   async getHomeFeed(userId: string, limit: number = 10, cursor?: string): Promise<FeedResult<ResolvedFeedItem>> {
+    const parsedCursor = parseHomeFeedCursor(cursor)
     const viewedIds = await this.getViewedIds(userId)
+
+    if (parsedCursor && parsedCursor.source === 'discovery') {
+      return this.getDiscoveryFeed(viewedIds, limit, parsedCursor.cursor)
+    }
 
     const feedItems = await prisma.feed.findMany({
       where: {
         user_id: userId,
-        target_id: { notIn: viewedIds }
+        ...(parsedCursor ? {} : { target_id: { notIn: viewedIds } })
       },
       orderBy: [{ score: 'desc' }, { id: 'desc' }],
       take: limit + 1,
-      cursor: cursor ? { id: cursor } : undefined,
-      skip: cursor ? 1 : 0
+      cursor: parsedCursor?.feedCursor ? { id: parsedCursor.feedCursor } : undefined,
+      skip: parsedCursor?.feedCursor ? 1 : 0
     })
 
     if (feedItems.length === 0) {
-      return this.getDiscoveryFeed(viewedIds, limit, cursor)
+      return this.getDiscoveryFeed(viewedIds, limit)
     }
 
     const hasNextPage = feedItems.length > limit
     const pageItems = feedItems.slice(0, limit)
-    const nextCursor = hasNextPage ? pageItems[pageItems.length - 1].id : null
+    const nextCursor = hasNextPage
+      ? encodeCursor({
+          source: 'feed',
+          feedCursor: pageItems[pageItems.length - 1].id,
+          timestamp: pageItems[pageItems.length - 1].created_at.toISOString()
+        })
+      : encodeCursor({
+          source: 'discovery',
+          timestamp: new Date().toISOString()
+        })
 
     return {
       data: await resolveFeedContent(pageItems),
-      meta: { nextCursor, hasNextPage, limit }
+      meta: { nextCursor, hasNextPage: true, limit }
     }
   }
 
   private async getViewedIds(userId: string): Promise<string[]> {
-    const views = await prisma.view.findMany({
+    const views: Array<{ target_id: string }> = await prisma.view.findMany({
       where: { user_id: userId },
       select: { target_id: true }
     })
@@ -48,10 +80,11 @@ class FeedRepository {
     cursor?: string
   ): Promise<FeedResult<ResolvedFeedItem>> {
     const decoded = cursor ? decodeCursor(cursor) : null
+    const shouldFilterViewed = !decoded?.postCursor && !decoded?.reelCursor
 
     const [posts, reels] = await Promise.all([
       prisma.post.findMany({
-        where: { id: { notIn: viewedIds }, deleted_at: null },
+        where: { ...(shouldFilterViewed ? { id: { notIn: viewedIds } } : {}), deleted_at: null },
         include: { user: { select: USER_SELECT }, media: { include: { media: true } } },
         orderBy: { created_at: 'desc' },
         take: limit + 1,
@@ -59,7 +92,7 @@ class FeedRepository {
         skip: decoded?.postCursor ? 1 : 0
       }),
       prisma.reel.findMany({
-        where: { id: { notIn: viewedIds }, deleted_at: null },
+        where: { ...(shouldFilterViewed ? { id: { notIn: viewedIds } } : {}), deleted_at: null },
         include: { user: { select: USER_SELECT }, media: true },
         orderBy: { created_at: 'desc' },
         take: limit + 1,
@@ -83,6 +116,7 @@ class FeedRepository {
 
     const nextCursor = hasNextPage
       ? encodeCursor({
+          source: 'discovery',
           postCursor: lastPost?.id ?? decoded?.postCursor,
           reelCursor: lastReel?.id ?? decoded?.reelCursor,
           timestamp: pageItems.at(-1)!.created_at.toISOString()
@@ -100,18 +134,13 @@ class FeedRepository {
   }
 
   async trackView(userId: string, targetId: string, targetType: ContentType) {
-    return prisma.$transaction([
-      prisma.view.upsert({
-        where: {
-          user_id_target_type_target_id: { user_id: userId, target_type: targetType, target_id: targetId }
-        },
-        update: {},
-        create: { user_id: userId, target_type: targetType, target_id: targetId }
-      }),
-      prisma.feed.deleteMany({
-        where: { user_id: userId, target_id: targetId }
-      })
-    ])
+    return prisma.view.upsert({
+      where: {
+        user_id_target_type_target_id: { user_id: userId, target_type: targetType, target_id: targetId }
+      },
+      update: {},
+      create: { user_id: userId, target_type: targetType, target_id: targetId }
+    })
   }
 }
 

@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { authApi } from '../api/authApi'
-import type { User, LoginRequest, RegisterRequest } from '~/shared/types/auth'
+import { profileApi } from '~/features/profile/api/profileApi'
+import type { User, LoginRequest, RegisterRequest, UpdateProfileRequest } from '~/shared/types/auth'
 
 interface AuthStore {
   user: User | null
@@ -12,6 +13,7 @@ interface AuthStore {
   login: (data: LoginRequest) => Promise<void>
   logout: () => Promise<void>
   getMe: () => Promise<void>
+  updateProfile: (data: UpdateProfileRequest) => Promise<void>
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
@@ -53,6 +55,16 @@ export const useAuthStore = create<AuthStore>((set) => ({
       set({ user: null, isLoggedIn: false })
     } finally {
       set({ isInitialized: true })
+    }
+  },
+
+  updateProfile: async (data) => {
+    set({ isLoading: true })
+    try {
+      const res = await profileApi.updateMe(data)
+      set({ user: res.data, isLoggedIn: true })
+    } finally {
+      set({ isLoading: false })
     }
   }
 }))

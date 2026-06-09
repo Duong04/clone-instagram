@@ -55,7 +55,18 @@ export async function resolveFeedContent(feedItems: FeedRow[]): Promise<Resolved
 
     if (!content) return acc
 
-    acc.push({ ...content, feed_id: item.id, feed_type: item.target_type, score: item.score })
+    acc.push({
+      ...content,
+      feed_id: item.id,
+      feed_type: item.target_type,
+      score: item.score,
+      media:
+        item.target_type === ContentType.reel
+          ? content.media
+            ? [{ media: content.media, position: 0 }]
+            : []
+          : content.media
+    })
     return acc
   }, [])
 }

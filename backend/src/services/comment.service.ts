@@ -2,6 +2,8 @@ import { ContentType, Prisma } from '~/generated/prisma/client'
 import commentRepository from '~/repositories/comment.repository'
 import type { CreateCommentDTO } from '~/dto/comment/comment.dto'
 import { prisma } from '~/config/database'
+import { emitToContent } from '~/socket'
+import { SOCKET_EVENTS } from '~/socket/events'
 
 class CommentService {
   async allByFeed(targetId: string, targetType: ContentType, limit: number = 10, cursor?: string) {
@@ -17,13 +19,22 @@ class CommentService {
   }
 
   async create(data: CreateCommentDTO) {
-    return await prisma.$transaction(async (tx) => {
+    const comment = await prisma.$transaction(async (tx) => {
       const comment = await commentRepository.create(tx, data)
       if (comment) {
         await commentRepository.updateCommentCount(tx, data.target_id, data.target_type, 1)
       }
       return comment
     })
+
+    emitToContent(data.target_type, data.target_id, SOCKET_EVENTS.COMMENT_CREATED, {
+      targetId: data.target_id,
+      targetType: data.target_type,
+      parentId: data.parent_id ?? null,
+      comment
+    })
+
+    return comment
   }
 
   async update(data: Prisma.CommentUpdateInput, id: string) {

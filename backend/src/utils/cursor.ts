@@ -1,4 +1,6 @@
 export type DiscoveryCursor = {
+  source?: 'feed' | 'discovery'
+  feedCursor?: string
   postCursor?: string
   reelCursor?: string
   timestamp: string

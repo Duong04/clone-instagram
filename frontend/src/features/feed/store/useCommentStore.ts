@@ -139,7 +139,9 @@ export const useCommentStore = create<CommentStore>((set, get) => ({
     set((s) => ({
       commentsByTarget: {
         ...s.commentsByTarget,
-        [targetId]: [...(s.commentsByTarget[targetId] ?? []), comment],
+        [targetId]: (s.commentsByTarget[targetId] ?? []).some((c) => c.id === comment.id)
+          ? (s.commentsByTarget[targetId] ?? [])
+          : [comment, ...(s.commentsByTarget[targetId] ?? [])],
       },
     }));
   },
@@ -151,7 +153,9 @@ export const useCommentStore = create<CommentStore>((set, get) => ({
         repliesByComment: {
           ...s.repliesByComment,
           [parentId]: {
-            replies: [...(slice?.replies ?? []), reply],
+            replies: (slice?.replies ?? []).some((r) => r.id === reply.id)
+              ? (slice?.replies ?? [])
+              : [...(slice?.replies ?? []), reply],
             cursor: slice?.cursor,
             hasMore: slice?.hasMore ?? true,
             loading: false,
@@ -159,7 +163,9 @@ export const useCommentStore = create<CommentStore>((set, get) => ({
         },
         replyCountByComment: {
           ...s.replyCountByComment,
-          [parentId]: (s.replyCountByComment[parentId] ?? 0) + 1,
+          [parentId]: (slice?.replies ?? []).some((r) => r.id === reply.id)
+            ? (s.replyCountByComment[parentId] ?? 0)
+            : (s.replyCountByComment[parentId] ?? 0) + 1,
         },
     };
     });

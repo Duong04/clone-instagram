@@ -8,6 +8,13 @@ import { PostWithRelations, ReelWithRelations } from './shared/feed-resolver'
 type PostFeedItem = PostWithRelations & { feed_type: typeof ContentType.post }
 type ReelFeedItem = ReelWithRelations & { feed_type: typeof ContentType.reel }
 type ContentFeedItem = PostFeedItem | ReelFeedItem
+type SavedFeedRow = {
+  id: string
+  user_id: string
+  target_id: string
+  target_type: ContentType
+  created_at: Date
+}
 
 type MergeAndPaginateParams = {
   posts: PostWithRelations[]
@@ -87,8 +94,8 @@ class ProfileRepository {
     ])
 
     const combined = [
-      ...postSaves.map((s) => ({ ...s, target_type: ContentType.post })),
-      ...reelSaves.map((s) => ({ ...s, target_type: ContentType.reel }))
+      ...postSaves.map((s: SavedFeedRow) => ({ ...s, target_type: ContentType.post })),
+      ...reelSaves.map((s: SavedFeedRow) => ({ ...s, target_type: ContentType.reel }))
     ]
       .sort((a, b) => b.created_at.getTime() - a.created_at.getTime())
       .slice(0, limit + 1)

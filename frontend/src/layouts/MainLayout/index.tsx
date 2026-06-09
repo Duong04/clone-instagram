@@ -40,6 +40,7 @@ export default function MainLayout() {
         <CreatePostModal isOpen={isCreatePostOpen} onClose={closeCreatePost} />
         <PostDetailModal 
             feedId={selectedPost?.feed_id ?? null} 
+            post={selectedPost}
             isOpen={!!selectedPost} 
             onClose={closePostDetail} 
         />

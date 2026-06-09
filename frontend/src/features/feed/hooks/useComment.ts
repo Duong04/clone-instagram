@@ -5,7 +5,7 @@ import { commentApi } from "../api/commentApi";
 import type { TargetType } from "~/shared/types/feed";
 import { useDebounceMap } from "~/shared/hooks/useDebounceMap";
 
-export const useComment = (targetId: string, targetType: TargetType) => {
+export const useComment = (targetId: string, targetType: TargetType, feedId = targetId) => {
   const [submitting, setSubmitting] = useState(false);
 
   const {
@@ -29,17 +29,17 @@ export const useComment = (targetId: string, targetType: TargetType) => {
   const syncFeedCommentCount = useCallback(
     (delta: number) => {
       const { feed } = useFeedStore.getState();
-      if (feed.some((f) => f.feed_id === targetId)) {
+      if (feed.some((f) => f.feed_id === feedId)) {
         useFeedStore.setState((fs) => ({
           feed: fs.feed.map((f) =>
-            f.feed_id === targetId
+            f.feed_id === feedId
               ? { ...f, comment_count: (f.comment_count ?? 0) + delta }
               : f,
           ),
         }));
       }
     },
-    [targetId],
+    [feedId],
   );
 
   const debounceRef = useRef(

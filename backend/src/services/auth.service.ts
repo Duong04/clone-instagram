@@ -109,6 +109,7 @@ class AuthService {
       name: user.name,
       username: user.username,
       bio: user.bio,
+      website: user.website,
       is_private: user.is_private,
       _count: user._count,
       avatar: {

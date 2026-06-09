@@ -5,6 +5,8 @@ import "./App.css";
 import "swiper/swiper-bundle.css";
 import { ModalProvider } from "~/shared/context/modal/modalProvider";
 import { useAuthStore } from "~/features/auth/store/useAuthStore";
+import { usePresenceSocket } from "~/features/realtime/hooks/usePresenceSocket";
+import { useSocketConnection } from "~/shared/hooks/useSocketConnection";
 import { Toaster } from 'sonner'
 import {
   QueryClient,
@@ -15,6 +17,9 @@ const queryClient = new QueryClient()
 
 function App() {
   const { getMe } = useAuthStore();
+  useSocketConnection();
+  usePresenceSocket();
+
   useEffect(() => {
     const init = async () => {
       await getMe();
